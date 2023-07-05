@@ -1,0 +1,83 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#header > ul {
+    background-color : black;
+    color : gray;
+}
+
+#header > ul > li {
+    list-style : none;
+    display: inline-block;
+}
+
+#header > ul > li > a {
+    text-decoration : none;
+    padding: 10px;
+    display: block;
+}
+
+#header > ul > li > a:visited {
+    color: gray;
+}
+
+#header > ul > li > a:hover {
+    color: white;
+}
+
+#footer {
+    text-align: center;
+    width: 100%;
+}
+
+/* .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+} */
+
+.loginBox {
+    width: 300px;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+.loginBoxTitle {
+    color:#000000;
+    font-weight: bold;
+    font-size: 32px;
+    text-transform: uppercase;
+    padding: 5px;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #270a09, #8ca6ce);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.button-login-box {
+    margin: 10px 0;
+}
+
+.listBox {
+    width: 1000px;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+.detailBox {
+    width: 700px;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+.filedError {
+    color: red;
+}
+
+.pagination {
+    justify-content: center;
+}

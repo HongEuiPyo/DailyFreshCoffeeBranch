@@ -1,0 +1,57 @@
+<div class="row" sec:authorize="isAuthenticated()">
+    <div>
+        <div class="input-group mb-3">
+            <textarea id="commentContent" name="content" class="form-control"></textarea>
+            <button type="button" class="btn btn-facebook" onclick="goCreateComment();">등록</button>
+        </div>
+    </div>
+</div>
+<table class="table table-bordered dataTable" id="commentTable">
+    <colgroup>
+        <col style="width: 20%;">
+        <col style="width: auto;">
+        <col style="width: 20%;">
+    </colgroup>
+    <thead>
+    <tr>
+        <th scope="col">작성자</th>
+        <th scope="col">내용</th>
+        <th scope="col">작성일시</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="commentItem : ${commentDtoPage}">
+        <td th:text="${commentItem.writer}"></td>
+        <td>
+            <div class="input-group mb-3">
+                <span th:if="${commentItem.writerEmail != #authentication.name}" th:text="${commentItem.content}"></span>
+                <input th:if="${commentItem.writerEmail == #authentication.name}" type="text" th:name="'commentContent@' + ${commentItem.id}" th:id="'commentContent@' + ${commentItem.id}" class="form-control" th:value="${commentItem.content}" disabled>
+                <button th:if="${commentItem.writerEmail == #authentication.name}" type="button" class="btn btn-danger" th:onclick="goDeleteComment([[${commentItem.id}]])">삭제</button>
+                <button th:if="${commentItem.writerEmail == #authentication.name}" type="button" class="btn btn-primary" th:onclick="goUpdateComment([[${commentItem.id}]])">수정</button>
+            </div>
+        </td>
+        <td th:text="${#temporals.format(commentItem.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<ul class="pagination" th:with="start=${T(java.lang.Math).floor(commentDtoPage.number/10)*10 + 1},last=(${start + 9 < commentDtoPage.totalPages ? start + 9 : commentDtoPage.totalPages})">
+
+    <li th:class="${commentDtoPage.first} ? 'page-item disabled' : 'page-item'">
+        <a class="page-link" th:onclick="goPage([[${commentDtoPage.number}]])" aria-label="Previous">
+            <span aria-hidden="true">이전</span>
+        </a>
+    </li>
+
+    <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == commentDtoPage.number + 1} ? 'page-item active' : 'page-item'">
+        <a class="page-link" th:text="${page}" th:onclick="goPage([[${page}]])"></a>
+    </li>
+
+    <li th:class="${commentDtoPage.last} ? 'page-item disabled' : 'page-item'">
+        <a class="page-link" th:onclick="goPage([[${commentDtoPage.number + 2}]])" aria-label="Next">
+            <span aria-hidden="true">다음</span>
+        </a>
+    </li>
+
+</ul>
+</div>

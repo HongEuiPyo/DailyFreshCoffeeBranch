@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div layout:fragment="content">
+    <div class="container">
+        <!-- 상품 상세 -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">상품 상세</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="dataTables_wrapper dt-bootstrap4">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form id="cartFrm" name="cartFrm">
+                                    <input type="hidden" name="itemId" th:value="${itemDto.id}">
+                                </form>
+                                <form id="listFrm" name="listFrm">
+                                    <input type="hidden" name="size" value="9">
+                                </form>
+                                <form id="itemFrm" name="itemFrm" th:object="${itemDto}">
+                                </form>
+                                <table class="table table-bordered dataTable">
+                                    <colgroup>
+                                        <col style="width: 30%;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tr>
+                                        <th scope="col">상품 번호</th>
+                                        <td th:text="${itemDto.id}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">상품 명</th>
+                                        <td th:text="${itemDto.title}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>상품 이미지</th>
+                                        <td>
+                                            <th:block th:each="itemImg, status: ${itemDto.getImageFileDtoList()}">
+                                                <img th:if="${not #strings.isEmpty(itemImg.getImageUrl())}" th:src="${itemImg.getImageUrl()}" style="width: 400px; height: 400px;">
+                                            </th:block>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">설명</th>
+                                        <td th:text="${itemDto.summary}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">가격</th>
+                                        <td th:text="${itemDto.price}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">재고</th>
+                                        <td th:text="${itemDto.stock}"></td>
+                                    </tr>
+                                </table>
+                                <div class="row">
+                                    <div class="input-group col-sm-12 col-md-6">
+                                        <button id="cancelBtn" type="button" class="btn btn-secondary" onclick="goList();">목록</button>
+                                        <button sec:authorize="hasRole('ROLE_ADMIN')" id="updateBtn" type="button" class="btn btn-primary" onclick="goUpdate();">수정</button>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div sec:authorize="isAuthenticated()" class="input-group">
+                                            <input type="number" class="form-control" name="count" id="count">
+                                            <button type="button" class="btn btn-facebook" onclick="addToCart();">장바구니 추가</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const itemId = [[${itemDto.id}]];
+
+    function goList(){
+        document.listFrm.action = '/items';
+        document.listFrm.method = 'GET';
+        document.listFrm.submit();
+    }
+
+    function goUpdate(){
+        document.itemFrm.action = "/admin/items/" + itemId + "/update";
+        document.itemFrm.method = "GET";
+        document.itemFrm.submit();
+    }
+
+    function addToCart(){
+        let url = 'http://localhost:8080/api/cart/items/' + itemId + '/add';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                itemId: document.cartFrm.itemId.value,
+                count: document.getElementById('count').value
+            }),
+        })
+            .then((response) => {
+                console.log('response', response);
+                if (response.status == 200){
+                    alert('장바구니에 추가 완료하였습니다.');
+                }else {
+                    alert('오류가 발생하였습니다. 관리자에게 문의하세요.');
+                }
+            })
+    }
+
+    function goCreateComment(){
+        let url = 'http://localhost:8080/api/items/'+itemId+'/comments/create';
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                content: document.getElementById("commentContent").value
+            }),
+        })
+            .then((response) => {
+                if(response.status == 200){
+                    goPage(1);
+                }else{
+                    alert('댓글 등록 중 오류가 발생했습니다. 관리자에게 문의하세요.');
+                }
+            });
+    }
+
+    function goUpdateComment(commentId){
+        let input = document.getElementById('commentContent@' + commentId);
+
+        if (input.disabled == true) {
+            input.disabled = false;
+            return false;
+        }
+
+        let url = 'http://localhost:8080/api/items/' + itemId + '/comments/' + commentId + '/update';
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                content: input.value
+            }),
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result!=null){
+                    input.disabled = true;
+                }
+            })
+        ;
+    }
+
+    function goDeleteComment(commentId){
+        let input = document.getElementById('commentContent@'+commentId);
+        let url = 'http://localhost:8080/api/items/' + itemId + '/comments/' + commentId + '/delete';
+        fetch(url, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                console.log('response', response);
+                console.log('response.status', response.status);
+                if (response.status==200) {
+                    input.parentElement.parentElement.parentElement.remove();
+                }
+            })
+        ;
+    }
+    /*]]>*/
+</script>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<div layout:fragment="content">
+<div class="container">
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">마이페이지</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="card-subtitle py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">· 회원정보</h6>
+                        </div>
+                        <div class="col-sm-12">
+                            <form id="memberFrm" name="memberFrm" th:object="${memberDto}">
+                            <table class="table table-bordered dataTable">
+                                <colgroup>
+                                    <col style="width: 30%;">
+                                    <col style="width: auto;">
+                                </colgroup>
+                                <tr>
+                                    <th scope="col">회원 번호</th>
+                                    <td th:text="${memberDto.id}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">이메일</th>
+                                    <td>
+                                        <input type="text" th:field="*{email}" class="form-control">
+                                        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="filedError">Incorrect data</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">비밀번호</th>
+                                    <td>
+                                        <input type="password" th:field="*{password}" class="form-control">
+                                        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="filedError">Incorrect data</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">비밀번호 확인</th>
+                                    <td>
+                                        <input type="password" name="password2" class="form-control">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">이름</th>
+                                    <td>
+                                        <input type="text" th:field="*{name}" class="form-control">
+                                        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="filedError">Incorrect data</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">핸드폰 번호</th>
+                                    <td>
+                                        <input type="text" th:field="*{phone}" class="form-control">
+                                        <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="filedError">Incorrect data</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">성별</th>
+                                    <td>
+                                        <select th:field="*{gender}" class="form-select">
+                                            <option value="M">남</option>
+                                            <option value="W">여</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">회원구분</th>
+                                    <td>
+                                        <select th:field="*{role}" class="form-select">
+                                            <option th:if="${memberDto.getRole() == '[ROLE_USER]' ? 'selected' : ''}" value="USER">소비자</option>
+                                            <option th:if="${memberDto.getRole() == '[ROLE_SMALL_BUSINESS]' ? 'selected' : ''}" value="SMALL_BUSINESS">소상공인</option>
+                                            <option th:if="${memberDto.getRole() == '[ROLE_ADMIN]' ? 'selected' : ''}" value="ADMIN">관리자</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">포인트</th>
+                                    <td th:text="${memberDto.point}"></td>
+                                </tr>
+                            </table>
+                            </form>
+                            <div class="row">
+                                <div class="input-group col-sm-12 col-md-6">
+                                    <button class="btn btn-warning" onclick="goCancel();">취소</button>
+                                    <button class="btn btn-danger" onclick="goDelete();">삭제</button>
+                                    <button class="btn btn-primary" onclick="goUpdate();">수정</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</html>
+
+<script th:inline="javascript">
+    const memberId = [[${memberDto.id}]];
+
+    function goCancel() {
+        window.history.go(-1);
+    }
+
+    function goDelete() {
+        document.memberFrm.method = 'POST';
+        document.memberFrm.action = '/members/' + memberId + '/delete';
+        document.memberFrm.submit();
+    }
+
+    function goUpdate() {
+        document.memberFrm.method = 'POST';
+        document.memberFrm.action = '/members/' + memberId + '/update';
+        document.memberFrm.submit();
+    }
+</script>

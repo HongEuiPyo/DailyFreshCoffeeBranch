@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div layout:fragment="content">
+    <div class="container">
+        <!-- 이벤트 상세 -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 th:if="!${boardDto?.id}" class="m-0 font-weight-bold text-primary">이벤트 등록</h6>
+                <h6 th:if="${boardDto?.id}" class="m-0 font-weight-bold text-primary">이벤트 수정</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="dataTables_wrapper dt-bootstrap4">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form id="boardFrm" name="boardFrm" th:object="${boardDto}">
+                                <table class="table table-bordered dataTable">
+                                    <colgroup>
+                                        <col style="width: 30%;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tr th:if="${boardDto?.id}">
+                                        <th scope="col">글 번호</th>
+                                        <td th:text="${boardDto.id}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">글 제목</th>
+                                        <td>
+                                            <input type="text" th:field="*{title}" class="form-control">
+                                            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="filedError">Incorrect data</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">내용</th>
+                                        <td>
+                                            <textarea th:field="*{content}" class="form-control"></textarea>
+                                            <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="filedError">Incorrect data</p>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${boardDto?.writer}">
+                                        <th scope="col">작성자</th>
+                                        <td th:text="${boardDto.writer}"></td>
+                                    </tr>
+                                    <tr th:if="${boardDto?.createdTime}">
+                                        <th scope="col">작성일시</th>
+                                        <td th:text="${boardDto.createdTime}"></td>
+                                    </tr>
+                                </table>
+                                <div class="row">
+                                    <div class="input-group col-sm-12 col-md-6">
+                                        <button th:if="!${boardDto?.id}" type="button" class="btn btn-warning" onclick="goCancel();">취소</button>
+                                        <button th:if="!${boardDto?.id}" class="btn btn-facebook" onclick="goCreate();">등록</button>
+                                        <button th:if="${boardDto?.id}" class="btn btn-secondary" onclick="goList();">목록</button>
+                                        <button th:if="${boardDto?.id}" type="button" class="btn btn-danger" onclick="goDelete();">삭제</button>
+                                        <button th:if="${boardDto?.id}" type="button" class="btn btn-primary" onclick="goUpdate();">수정</button>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const boardId = [[${boardDto.id}]];
+
+    function goList(){
+        document.boardFrm.method = "GET";
+        document.boardFrm.action = "/boards";
+        document.boardFrm.submit();
+    }
+
+    function goCancel() {
+        window.location.href = "/boards";
+    }
+
+    function goCreate() {
+        document.boardFrm.method = "POST";
+        document.boardFrm.action = "/admin/boards/create";
+        document.boardFrm.submit();
+    }
+
+    function goDelete() {
+        document.boardFrm.method = "POST";
+        document.boardFrm.action = "/admin/boards/" + boardId + "/delete";
+        document.boardFrm.submit();
+    }
+
+    function goUpdate() {
+        document.boardFrm.method = "POST";
+        document.boardFrm.action = "/admin/boards/" + boardId + "/update";
+        document.boardFrm.submit();
+    }
+    /*]]>*/
+</script>

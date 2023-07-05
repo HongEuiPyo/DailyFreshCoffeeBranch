@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<div layout:fragment="content">
+
+    <div class="container">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">음료</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="dataTables_wrapper dt-bootstrap4">
+                        <div class="row">
+                            <th:block th:each="item, status: ${itemDtoPage}">
+                                <div class="col-md-4 margin">
+                                    <div class="card" style="margin-bottom: 15px;">
+                                        <a th:href="'/items/' +${item.id}" class="text-dark" style="text-decoration: none;">
+                                            <img th:src="${item.imageFileDtoList.get(0).getImageUrl()}" class="card-img-top" th:alt="${item.title}" height="300">
+                                            <div class="card-body">
+                                                <h4 class="card-title">[[${item.title}]]</h4>
+                                                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                    [[${item.summary}]]
+                                                </div>
+                                                <h3 class="text-danger">[[${item.price}]]원</h3>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-2">
+                                <button type="button" id="createBtn" class="btn btn-facebook" sec:authorize="hasRole('ROLE_ADMIN')" th:onclick="goCreate()">등록</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="dataTables_paginate paging_simple_numbers">
+                                <ul class="pagination" th:with="start=${T(java.lang.Math).floor(itemDtoPage.number/10)*10 + 1},last=(${start + 9 < itemDtoPage.totalPages ? start + 9 : itemDtoPage.totalPages})">
+                                    <li th:class="${itemDtoPage.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                                        <a class="page-link" th:href="@{/items(page=${itemDtoPage.number},size=9)}" aria-label="Previous">
+                                            <span aria-hidden="true">이전</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == itemDtoPage.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
+                                        <a class="page-link" th:text="${page}" th:href="@{/items(page=${page},size=9)}"></a>
+                                    </li>
+                                    <li th:class="${itemDtoPage.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                                        <a class="page-link" th:href="@{/items(page=${itemDtoPage.number + 2},size=9)}" aria-label="Next">
+                                            <span aria-hidden="true">다음</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
+
+<script>
+  function goCreate(){
+    window.location.href = '/admin/items/create';
+  }
+</script>

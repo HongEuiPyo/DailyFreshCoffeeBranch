@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<div layout:fragment="content">
+<div class="container">
+    <div class="detailBox">
+        <div class="loginBoxTitle">small people project join</div>
+            <form id="joinFrm" name="joinFrm" action="/members/generalJoin" method="POST" th:object="${memberDto}">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">아이디</span>
+                    <input type="text" th:field="*{email}" class="form-control">
+                </div>
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="filedError">Incorrect data</p>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">비밀번호</span>
+                    <input type="password" th:field="*{password}" class="form-control">
+                </div>
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="filedError">Incorrect data</p>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">비밀번호 확인</span>
+                    <input type="password" name="password2" class="form-control">
+                </div>
+                <div class="input-group mb-3">
+                <span class="input-group-text">회원구분</span>
+                    <select th:field="*{role}" class="form-select">
+                        <option value="USER">소비자</option>
+                        <option value="SMALL_BUSINESS">소상공인</option>
+                        <option value="ADMIN">관리자</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">이름</span>
+                    <input type="text" th:field="*{name}" class="form-control">
+                </div>
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="filedError">Incorrect data</p>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">핸드폰 번호</span>
+                    <input type="text" th:field="*{phone}" class="form-control">
+                </div>
+                <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="filedError">Incorrect data</p>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">성별</span>
+                    <select th:field="*{gender}" class="form-select">
+                        <option value="M">남</option>
+                        <option value="W">여</option>
+                    </select>
+                </div>
+                <input type="submit" class="btn btn-primary" value="가입">
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</html>
+
+<script th:inline="javascript">
+    document.ready(function(){
+        let msg = '[[${msg}]]';
+        if(msg){
+            alert(msg);
+        }
+    });
+</script>
+

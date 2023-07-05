@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<div layout:fragment="content">
+<div class="container">
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">마이페이지</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="card-subtitle py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">· 회원정보</h6>
+                        </div>
+                        <div class="col-sm-12">
+                            <form id="memberFrm" name="memberFrm" th:object="${memberDto}">
+                            </form>
+                            <table class="table table-bordered dataTable">
+                                <colgroup>
+                                    <col style="width: 30%;">
+                                    <col style="width: auto;">
+                                </colgroup>
+                                <tr>
+                                    <th scope="col">회원 번호</th>
+                                    <td th:text="${memberDto.id}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">이메일</th>
+                                    <td th:text="${memberDto.email}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">이름</th>
+                                    <td th:text="${memberDto.name}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">핸드폰 번호</th>
+                                    <td th:text="${memberDto.phone}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">성별</th>
+                                    <td th:text="${memberDto.gender == 'M' ? '남' : '여'}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">회원구분</th>
+                                    <td th:if="${#strings.equals(memberDto.role, 'ADMIN')}">관리자</td>
+                                    <td th:if="${#strings.equals(memberDto.role, 'USER')}">일반</td>
+                                    <td th:if="${#strings.equals(memberDto.role, 'SMALL_BUSINESS')}">소상공인</td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">포인트</th>
+                                    <td>
+                                        <div class="input-group col-sm-12 col-md-6">
+                                            <input name="memberPoint" id="memberPoint" class="form-control" th:value="${memberDto.point}" disabled>
+                                        </div>
+                                        <div class="input-group col-sm-12 col-md-6">
+                                            <input type="number" name="point" id="point" class="form-control">
+                                            <button sec:authorize="isAuthenticated()" class="btn btn-facebook" onclick="addPoint();">포인트 충전</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="row">
+                                <div class="input-group col-sm-12 col-md-6">
+                                    <button id="cancelBtn" type="button" class="btn btn-secondary" onclick="goCancel();">취소</button>
+                                    <button sec:authorize="isAuthenticated()" id="updateBtn" type="button" class="btn btn-primary" onclick="goUpdate();">수정</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="card-subtitle py-3" style="margin-top: 20px;">
+                                    <h6 class="m-0 font-weight-bold text-primary">· 장바구니</h6>
+                                </div>
+                                <div id="cartDiv"></div>
+                            </div>
+                            <div class="row">
+                                <div class="card-subtitle py-3" style="margin-top: 20px;">
+                                    <h6 class="m-0 font-weight-bold text-primary">· 구매목록</h6>
+                                </div>
+                                <div id="paymentDiv"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
+
+<script th:inline="javascript">
+    const memberId = [[${memberDto.id}]];
+
+    window.onload = function (){
+        getCartItemList();
+        getPaymentList();
+    }
+
+    function goCancel() {
+        window.history.go(-1);
+    }
+
+    function goUpdate() {
+        document.memberFrm.method = 'GET';
+        document.memberFrm.action = '/members/' + memberId + '/update';
+        document.memberFrm.submit();
+    }
+
+    function getCartItemList(){
+        let url = 'http://localhost:8080/cart/items';
+        fetch(url)
+            .then((response) => response.text())
+            .then((result) => document.getElementById('cartDiv').innerHTML = (result))
+    }
+
+    function getPaymentList(){
+        let url = 'http://localhost:8080/paymentList';
+        fetch(url)
+            .then((response) => response.text())
+            .then((result) => document.getElementById('paymentDiv').innerHTML = (result))
+    }
+
+    function updateCartItem(cartItemId){
+        let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/update';
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                count: document.getElementById('count').value
+            }),
+        })
+            .then((response) => {
+                if(response.status == 200){
+                    alert('장바구니 상품을 수정 하였습니다.');
+                    getCartItemList();
+                }else{
+                    alert('장바구니 상품 수정 중 오류가 발생했습니다.');
+                }
+            })
+    }
+
+    function deleteCartItem(cartItemId){
+        let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/delete';
+        fetch(url, {
+            method: 'DELETE',
+        })
+            .then((response) => {
+                if(response.status == 200){
+                    alert('장바구니 상품을 삭제 하였습니다.');
+                    getCartItemList();
+                }else{
+                    alert('장바구니 상품 삭제 중 오류가 발생했습니다.');
+                }
+            })
+    }
+
+    function addPoint(){
+        let url = 'http://localhost:8080/api/payment/addPoint';
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                point : document.getElementById('point').value
+            }),
+        })
+            .then((response) => {
+                if(response.status == 200){
+                    alert('포인트 충전을 완료하였습니다.');
+                    window.location.reload();
+                }else{
+                    alert('포인트 충전 중 오류가 발생했습니다.');
+                }
+            })
+    }
+
+    function confirmCartItemPurchase(){
+        let url = 'http://localhost:8080/api/payment/confirmCartItemPurchase';
+
+        let itemNameArray = document.getElementsByClassName('itemName');
+        let itemNames = '';
+
+        for (let i=0; i<itemNameArray.length; i++){
+            itemNames += itemNameArray[i].innerText;
+            if (i != (itemNameArray.length-1))
+                 itemNames += ',';
+        }
+
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                itemNames: itemNames,
+                totalUsePoint : document.getElementById('totalUsePoint').innerText
+            }),
+        })
+            .then((response) => {
+            if(response.status == 200){
+                alert('구매 확정을 완료하였습니다.');
+                window.location.reload();
+            }else{
+                alert('구매 확정 중 오류가 발생했습니다.');
+            }
+        })
+    }
+
+</script>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/mainLayout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<div layout:fragment="content">
+    <div class="container">
+
+        <!-- 상품 상세 -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 th:if="!${itemFormDto?.id}" class="m-0 font-weight-bold text-primary">상품 등록</h6>
+                <h6 th:if="${itemFormDto?.id}" class="m-0 font-weight-bold text-primary">상품 수정</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="dataTables_wrapper dt-bootstrap4">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form id="listFrm" name="listFrm">
+                                    <input type="hidden" name="size" value="9">
+                                </form>
+                                <form id="itemFrm" name="itemFrm" action="/admin/items/create" method="POST" enctype="multipart/form-data" th:object="${itemFormDto}">
+                                    <table class="table table-bordered dataTable">
+                                        <colgroup>
+                                            <col style="width: 30%;">
+                                            <col style="width: auto;">
+                                        </colgroup>
+                                        <tr th:if="${itemFormDto?.id}">
+                                            <th scope="col">상품 번호</th>
+                                            <td th:text="${itemFormDto.id}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">상품명</th>
+                                            <td>
+                                                <input type="text" th:field="*{title}" class="form-control">
+                                                <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="filedError">Incorrect data</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">설명</th>
+                                            <td>
+                                                <textarea th:field="*{summary}" class="form-control"></textarea>
+                                                <p th:if="${#fields.hasErrors('summary')}" th:errors="*{summary}" class="filedError">Incorrect data</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">가격</th>
+                                            <td>
+                                                <input type="text" th:field="*{price}" class="form-control">
+                                                <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="filedError">Incorrect data</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">재고</th>
+                                            <td>
+                                                <input type="text" th:field="*{stock}" class="form-control">
+                                                <p th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}" class="filedError">Incorrect data</p>
+                                            </td>
+                                        </tr>
+                                        <th:block th:if="${#lists.isEmpty(itemFormDto.imageFileDtoList)}">
+                                            <tr>
+                                                <th scope="col">이미지1</th>
+                                                <td>
+                                                    <input type="file" name="itemImageFile" class="form-control">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">이미지2</th>
+                                                <td>
+                                                    <input type="file" name="itemImageFile" class="form-control">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">이미지3</th>
+                                                <td>
+                                                    <input type="file" name="itemImageFile" class="form-control">
+                                                </td>
+                                            </tr>
+                                        </th:block>
+                                        <th:block th:if="${not #lists.isEmpty(itemFormDto.imageFileDtoList)}">
+                                        <tr>
+                                            <th scope="col">이미지1</th>
+                                            <td>
+                                                <input th:if="${#strings.isEmpty(itemFormDto.imageFileDtoList.get(0).getOriginalImageName())}" type="file" name="itemImageFile" class="form-control">
+                                                <img th:if="${not #strings.isEmpty(itemFormDto.imageFileDtoList.get(0).getOriginalImageName())}" th:src="${itemFormDto.imageFileDtoList.get(0).getImageUrl()}" style="width: 400px; height: 400px;">
+                                                <a th:if="${not #strings.isEmpty(itemFormDto.imageFileDtoList.get(0).getOriginalImageName())}" th:text="${itemFormDto.imageFileDtoList.get(0).getOriginalImageName()}"></a>
+                                                <div th:if="${not #strings.isEmpty(itemFormDto.imageFileDtoList.get(0).getOriginalImageName())}" class="btn-group" role="group" aria-label="Default button group">
+                                                    <button type="button" class="btn btn-outline-dark" th:onclick="downloadFile([[${itemFormDto.imageFileDtoList.get(0).getSavedFileName()}]])">다운로드</button>
+                                                    <button type="button" class="btn btn-outline-dark" th:onclick="deleteFile([[${itemFormDto.imageFileDtoList.get(0).getSavedFileName()}]])">삭제</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">이미지2</th>
+                                            <td>
+                                                <input th:if="${#strings.isEmpty(itemFormDto.imageFileDtoList.get(1).getOriginalImageName())}" type="file" name="itemImageFile" class="form-control">
+                                                <img th:if="${not #strings.isEmpty(itemFormDto.imageFileDtoList.get(1).getOriginalImageName())}" th:src="${itemFormDto.imageFileDtoList.get(0).getImageUrl()}" style="width: 400px; height: 400px;">
+                                                <a th:if="${not #strings.isEmpty(itemFormDto.imageFileDtoList.get(1).getOriginalImageName())}" th:text="${itemFormDto.imageFileDtoList.get(0).getOriginalImageName()}"></a>
+                                                <div th:if="${not #strings.isEmpty(itemFormDto.imageFileDtoList.get(1).getOriginalImageName())}" class="btn-group" role="group" aria-label="Default button group">
+                                                    <button type="button" class="btn btn-outline-dark" th:onclick="downloadFile([[${itemFormDto.imageFileDtoList.get(1).getSavedFileName()}]])">다운로드</button>
+                                                    <button type="button" class="btn btn-outline-dark" th:onclick="deleteFile([[${itemFormDto.imageFileDtoList.get(1).getSavedFileName()}]])">삭제</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">이미지3</th>
+                                            <td>
+                                                <input th:if="${#strings.isEmpty(itemFormDto.imageFileDtoList.get(2).getOriginalImageName())}" type="file" name="itemImageFile" class="form-control">
+                                                <img th:if="${not #strings.isEmpty(itemFormDto.imageFileDtoList.get(2).getOriginalImageName())}" th:src="${itemFormDto.imageFileDtoList.get(0).getImageUrl()}" style="width: 400px; height: 400px;">
+                                                <a th:if="${not #strings.isEmpty(itemFormDto.imageFileDtoList.get(2).getOriginalImageName())}" th:text="${itemFormDto.imageFileDtoList.get(0).getOriginalImageName()}"></a>
+                                                <div th:if="${not #strings.isEmpty(itemFormDto.imageFileDtoList.get(2).getOriginalImageName())}" class="btn-group" role="group" aria-label="Default button group">
+                                                    <button type="button" class="btn btn-outline-dark" th:onclick="downloadFile([[${itemFormDto.imageFileDtoList.get(2).getSavedFileName()}]])">다운로드</button>
+                                                    <button type="button" class="btn btn-outline-dark" th:onclick="deleteFile([[${itemFormDto.imageFileDtoList.get(2).getSavedFileName()}]])">삭제</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </th:block>
+                                    </table>
+                                    <div class="row">
+                                        <div class="input-group col-sm-12 col-md-6">
+                                            <button th:if="!${itemFormDto?.id}" id="cancelBtn" type="button" class="btn btn-warning">취소</button>
+                                            <input th:if="!${itemFormDto?.id}" type="submit" class="btn btn-facebook" value="등록">
+                                            <button th:if="${itemFormDto?.id}" class="btn btn-secondary" onclick="goList();">목록</button>
+                                            <button id="deleteBtn" th:if="${itemFormDto?.title}" type="button" class="btn btn-danger">삭제</button>
+                                            <button id="updateBtn" th:if="${itemFormDto?.title}" type="button" class="btn btn-primary">수정</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const itemId = [[${itemFormDto.id}]];
+
+    function goList(){
+        document.listFrm.method = "GET";
+        document.listFrm.action = '/items?size=9';
+        document.listFrm.submit();
+    }
+
+    document.getElementById("cancelBtn").onclick = function(){
+        document.itemFrm.method = "GET";
+        document.itemFrm.action = '/items?size=9';
+        document.itemFrm.submit();
+    }
+
+    document.getElementById("deleteBtn").onclick = function(){
+        document.itemFrm.method = "POST";
+        document.itemFrm.action = "/admin/items/" + itemId + "/delete";
+        document.itemFrm.submit();
+    }
+
+    document.getElementById("updateBtn").onclick = function(){
+        document.itemFrm.method = "POST";
+        document.itemFrm.action = "/admin/items/" + itemId + "/update";
+        document.itemFrm.submit();
+    }
+
+    function downloadFile(savedFileName){
+        let a = document.createElement('a');
+        a.setAttribute('href', '/com/file/download?savedFileName=' + savedFileName);
+        a.click();
+    }
+
+    function deleteFile(originalFileName){
+        let url = 'http://localhost:8080/com/file/delete';
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                originalFileName: originalFileName
+            })
+        }).then(response => {
+           console.log(response);
+        });
+    }
+    /*]]>*/
+</script>
