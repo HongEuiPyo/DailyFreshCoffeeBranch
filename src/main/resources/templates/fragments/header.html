@@ -24,8 +24,8 @@
 
   <header>
     <h1 class="site-heading text-center text-faded d-none d-lg-block">
-      <span class="site-heading-upper text-primary mb-3">매일 신선한 커피,</span>
-      <span class="site-heading-lower">건강한 하루의 시작</span>
+      <span class="site-heading-upper text-primary mb-3">매일 신선한 커피와</span>
+      <span class="site-heading-lower">건강한 하루를 시작해보세요!</span>
     </h1>
   </header>
 
@@ -36,14 +36,11 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto">
-          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/">매일 신선한 커피</a></li>
-          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/boards">이벤트</a></li>
-          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/items?size=9">음료</a></li>
-          <!-- li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/products">자기소개서</a></li -->
-          <li sec:authorize="!isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/login">로그인</a></li>
-          <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/myPage">마이페이지</a></li>
-          <!-- li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/cart">장바구니</a></li -->
-          <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/logout">로그아웃</a></li>
+          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/">매일 신선한 커피란?</a></li>
+          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/boards">이벤트 살펴보기</a></li>
+          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/items?size=9">음료 살펴보기</a></li>
+          <li sec:authorize="!isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/login">로그인하기</a></li>
+          <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/myPage">마이페이지 바로가기</a></li>
         </ul>
       </div>
     </div>
