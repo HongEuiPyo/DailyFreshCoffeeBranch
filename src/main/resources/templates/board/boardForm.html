@@ -84,21 +84,27 @@
     }
 
     function goCreate() {
-        document.boardFrm.method = "POST";
-        document.boardFrm.action = "/admin/boards/create";
-        document.boardFrm.submit();
+        if(confirm('이벤트를 등록하시겠습니까?')) {
+            document.boardFrm.method = "POST";
+            document.boardFrm.action = "/admin/boards/create";
+            document.boardFrm.submit();
+        }
     }
 
     function goDelete() {
-        document.boardFrm.method = "POST";
-        document.boardFrm.action = "/admin/boards/" + boardId + "/delete";
-        document.boardFrm.submit();
+        if(confirm('이벤트를 삭제하시겠습니까?')) {
+            document.boardFrm.method = "POST";
+            document.boardFrm.action = "/admin/boards/" + boardId + "/delete";
+            document.boardFrm.submit();
+        }
     }
 
     function goUpdate() {
-        document.boardFrm.method = "POST";
-        document.boardFrm.action = "/admin/boards/" + boardId + "/update";
-        document.boardFrm.submit();
+        if(confirm('이벤트를 수정하시겠습니까?')) {
+            document.boardFrm.method = "POST";
+            document.boardFrm.action = "/admin/boards/" + boardId + "/update";
+            document.boardFrm.submit();
+        }
     }
     /*]]>*/
 </script>

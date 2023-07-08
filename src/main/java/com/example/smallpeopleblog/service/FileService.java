@@ -8,9 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Slf4j
@@ -51,9 +52,7 @@ public class FileService {
      * @return
      * @throws Exception
      */
-    public Map<String, String> deleteFile(String originalFileName) {
-
-        Map<String, String> resultMap = new HashMap<>();
+    public void deleteFile(String originalFileName) {
 
         if (StringUtils.hasText(originalFileName)) {
 
@@ -62,15 +61,14 @@ public class FileService {
                 Path filePath = Paths.get(uploadPath + "/" + originalFileName);
                 Files.deleteIfExists(filePath);
             } catch (NoSuchFileException e) {
-                resultMap.put("eMessage", "삭제하려는 파일이 없습니다.");
+                log.error("삭제하려는 파일이 없습니다.");
+                log.error(e.getMessage());
             } catch (IOException e) {
-                resultMap.put("eMessage", "알 수 없는 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.");
+                log.error("알 수 없는 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.");
                 log.error(e.getMessage());
             }
 
         }
-
-        return resultMap;
     }
 
 }

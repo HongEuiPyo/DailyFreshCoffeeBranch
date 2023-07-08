@@ -13,7 +13,7 @@ public class VIPDiscountPolicy {
     @Value("${vipDiscountPolicy.discountRate}")
     private double discountRate;
 
-    public double apply(int totalPrice, Role memberRole) {
+    public double getDiscountPrice(int totalPrice, Role memberRole) {
         if (memberRole.toString().equals(applyRole)) {
             double applyPrice = totalPrice * discountRate;
             totalPrice -= applyPrice;

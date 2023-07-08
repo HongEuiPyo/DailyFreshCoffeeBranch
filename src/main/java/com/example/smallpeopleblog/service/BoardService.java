@@ -1,11 +1,10 @@
 package com.example.smallpeopleblog.service;
 
-import com.example.smallpeopleblog.repository.CommentRepository;
 import com.example.smallpeopleblog.dto.BoardDto;
 import com.example.smallpeopleblog.entity.Board;
 import com.example.smallpeopleblog.entity.Member;
-import com.example.smallpeopleblog.repository.MemberRepository;
 import com.example.smallpeopleblog.repository.BoardRepository;
+import com.example.smallpeopleblog.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +18,6 @@ public class BoardService {
 
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
-    private final CommentRepository commentRepository;
 
     /**
      * 공지사항 목록
@@ -47,7 +45,7 @@ public class BoardService {
     public BoardDto findBoardByBoardId(Long boardId){
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("could not find board" + boardId));
-        board.increaseView(); // 조회수 증가
+        board.increaseView();
         return board.toDto();
     }
 
@@ -73,7 +71,7 @@ public class BoardService {
      * @param email
      * @return
      */
-    public BoardDto updateBoard(Long boardId, BoardDto boardDto, String email) throws Exception {
+    public BoardDto updateBoard(Long boardId, BoardDto boardDto, String email) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(()  -> new RuntimeException("could not find board" + boardId));
         if (board.getMember().getEmail().equals(email)) {
