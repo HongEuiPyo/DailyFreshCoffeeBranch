@@ -32,6 +32,10 @@ public class Cart extends BaseEntity {
     @OrderBy("id desc")
     private List<CartItem> cartItemList;
 
+    @Builder
+    public Cart(Member member) {
+        this.member = member;
+    }
 
     @Builder
     public Cart(Member member, List<CartItem> cartItemList) {

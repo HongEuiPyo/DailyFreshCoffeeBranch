@@ -10,14 +10,14 @@
         <!-- 이벤트 상세 -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">이벤트 상세</h6>
+                <h6 class="m-0 font-weight-bold text-primary">EVENT DETAIL</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <div class="dataTables_wrapper dt-bootstrap4">
                         <div class="row">
                             <div class="card-subtitle py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">· 이벤트</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">· EVENT INTRODUCTION</h6>
                             </div>
                             <div class="col-sm-12">
                                 <form id="boardFrm" name="boardFrm" th:object="${boardDto}">
@@ -27,37 +27,45 @@
                                         <col style="width: auto;">
                                     </colgroup>
                                     <tr>
-                                        <th scope="col">글 번호</th>
+                                        <th scope="col" style="text-align: center">#</th>
                                         <td th:text="${boardDto.id}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">글 제목</th>
+                                        <th scope="col" style="text-align: center">TITLE</th>
                                         <td th:text="${boardDto.title}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">내용</th>
+                                        <th scope="col" style="text-align: center">CONTENT</th>
                                         <td th:text="${boardDto.content}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">작성자</th>
+                                        <th scope="col" style="text-align: center">WRITER</th>
                                         <td th:text="${boardDto.writer}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">작성일시</th>
+                                        <th scope="col" style="text-align: center">CREATED TIME</th>
                                         <td th:text="${boardDto.createdTime}"></td>
                                     </tr>
                                 </table>
                                 <div class="row">
                                     <div class="input-group col-sm-12 col-md-6">
-                                        <button id="cancelBtn" type="button" class="btn btn-secondary" onclick="goCancel();">목록</button>
-                                        <button sec:authorize="hasRole('ROLE_ADMIN')" id="updateBtn" type="button" class="btn btn-primary" onclick="goUpdate();">수정</button>
+                                        <button id="cancelBtn" type="button" class="btn btn-secondary" onclick="goCancel();">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                                            </svg>
+                                            목록
+                                        </button>
+                                        <button sec:authorize="hasRole('ROLE_ADMIN')" id="updateBtn" type="button" class="btn btn-facebook" onclick="goUpdate();">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                            </svg>
+                                            수정
+                                        </button>
                                     </div>
                                 </div>
                                 </form>
                                 <div class="row">
-                                    <div class="card-subtitle py-3" style="margin-top: 20px;">
-                                        <h6 class="m-0 font-weight-bold text-primary">· 댓글</h6>
-                                    </div>
                                     <div id="commentDiv"></div>
                                 </div>
                             </div>
@@ -105,66 +113,70 @@
     }
 
     function goCreateComment(){
-        let url = 'http://localhost:8080/api/boards/'+boardId+'/comments/create';
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                content: document.getElementById("commentContent").value
-            }),
-        })
-            .then((response) => {
-                if(response.status == 200){
-                    goPage(1);
-                }else{
-                    alert('댓글 등록 중 오류가 발생했습니다. 관리자에게 문의하세요.');
-                }
-            });
+        if (confirm('댓글을 작성하시겠습니까?')){
+            let url = 'http://localhost:8080/api/boards/'+boardId+'/comments/create';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    content: document.getElementById("commentContent").value
+                }),
+            })
+                .then((response) => {
+                    if(response.status == 200){
+                        goPage(1);
+                    }else{
+                        alert('댓글 등록 중 오류가 발생했습니다. 관리자에게 문의하세요.');
+                    }
+                });
+        }
     }
 
     function goUpdateComment(commentId){
-        let input = document.getElementById('commentContent@' + commentId);
+        if (confirm('댓글을 수정하시겠습니까?')){
+            let input = document.getElementById('commentContent@' + commentId);
 
-        if (input.disabled == true) {
-            input.disabled = false;
-            return false;
-        }
+            if (input.disabled == true) {
+                input.disabled = false;
+                return false;
+            }
 
-        let url = 'http://localhost:8080/api/boards/' + boardId + '/comments/' + commentId + '/update';
-        fetch(url, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                content: input.value
-            }),
-        })
-            .then(response => response.json())
-            .then(result => {
-                if (result!=null){
-                    input.disabled = true;
-                }
+            let url = 'http://localhost:8080/api/boards/' + boardId + '/comments/' + commentId + '/update';
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content: input.value
+                }),
             })
-        ;
+                .then(response => response.json())
+                .then(result => {
+                    if (result!=null){
+                        input.disabled = true;
+                    }
+                });
+        }
     }
 
     function goDeleteComment(commentId){
-        let input = document.getElementById('commentContent@'+commentId);
-        let url = 'http://localhost:8080/api/boards/' + boardId + '/comments/' + commentId + '/delete';
-        fetch(url, {
-            method: 'DELETE'
-        })
-            .then(response => {
-                console.log('response', response);
-                console.log('response.status', response.status);
-                if (response.status==200) {
-                    input.parentElement.parentElement.parentElement.remove();
-                }
+        if (confirm('댓글을 삭제하시겠습니까?')){
+            let input = document.getElementById('commentContent@'+commentId);
+            let url = 'http://localhost:8080/api/boards/' + boardId + '/comments/' + commentId + '/delete';
+            fetch(url, {
+                method: 'DELETE'
             })
-        ;
+                .then(response => {
+                    console.log('response', response);
+                    console.log('response.status', response.status);
+                    if (response.status==200) {
+                        input.parentElement.parentElement.parentElement.remove();
+                    }
+                });
+        }
     }
     /*]]>*/
 </script>

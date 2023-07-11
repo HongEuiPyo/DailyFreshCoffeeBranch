@@ -104,6 +104,16 @@ public class Member extends BaseEntity implements UserDetails {
                 .build();
     }
 
+    public void update(MemberDto memberDto) {
+        email = memberDto.getEmail();
+        password = memberDto.getPassword();
+        name = memberDto.getName();
+        phone = memberDto.getPhone();
+        gender = memberDto.getGender();
+        sns = memberDto.getSns();
+        role = memberDto.getRole();
+    }
+
     public void setCart(Cart cart) {
         this.cart = cart;
     }

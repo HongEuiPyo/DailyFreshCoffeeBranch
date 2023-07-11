@@ -10,8 +10,7 @@
         <!-- 이벤트 상세 -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 th:if="!${boardDto?.id}" class="m-0 font-weight-bold text-primary">이벤트 등록</h6>
-                <h6 th:if="${boardDto?.id}" class="m-0 font-weight-bold text-primary">이벤트 수정</h6>
+                <h6 class="m-0 font-weight-bold text-primary">UPDATE EVENT</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -24,40 +23,55 @@
                                         <col style="width: 30%;">
                                         <col style="width: auto;">
                                     </colgroup>
-                                    <tr th:if="${boardDto?.id}">
-                                        <th scope="col">글 번호</th>
+                                    <tr>
+                                        <th scope="col" style="text-align: center">글 번호</th>
                                         <td th:text="${boardDto.id}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">글 제목</th>
+                                        <th scope="col" style="text-align: center">글 제목</th>
                                         <td>
                                             <input type="text" th:field="*{title}" class="form-control">
                                             <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="filedError">Incorrect data</p>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">내용</th>
+                                        <th scope="col" style="text-align: center">내용</th>
                                         <td>
                                             <textarea th:field="*{content}" class="form-control"></textarea>
                                             <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="filedError">Incorrect data</p>
                                         </td>
                                     </tr>
-                                    <tr th:if="${boardDto?.writer}">
-                                        <th scope="col">작성자</th>
+                                    <tr>
+                                        <th scope="col" style="text-align: center">작성자</th>
                                         <td th:text="${boardDto.writer}"></td>
                                     </tr>
-                                    <tr th:if="${boardDto?.createdTime}">
-                                        <th scope="col">작성일시</th>
+                                    <tr>
+                                        <th scope="col" style="text-align: center">작성일시</th>
                                         <td th:text="${boardDto.createdTime}"></td>
                                     </tr>
                                 </table>
                                 <div class="row">
                                     <div class="input-group col-sm-12 col-md-6">
-                                        <button th:if="!${boardDto?.id}" type="button" class="btn btn-danger" onclick="goCancel();">취소</button>
-                                        <button th:if="!${boardDto?.id}" class="btn btn-facebook" onclick="goCreate();">등록</button>
-                                        <button th:if="${boardDto?.id}" class="btn btn-secondary" onclick="goList();">목록</button>
-                                        <button th:if="${boardDto?.id}" type="button" class="btn btn-danger" onclick="goDelete();">삭제</button>
-                                        <button th:if="${boardDto?.id}" type="button" class="btn btn-primary" onclick="goUpdate();">수정</button>
+                                        <button type="button" class="btn btn-warning" onclick="goCancel();">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                            취소
+                                        </button>
+                                        <button type="button" class="btn btn-danger" onclick="goDelete();">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                            </svg>
+                                            삭제
+                                        </button>
+                                        <button type="button" class="btn btn-facebook" onclick="goUpdate();">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                            </svg>
+                                            수정
+                                        </button>
                                     </div>
                                 </div>
                                 </form>

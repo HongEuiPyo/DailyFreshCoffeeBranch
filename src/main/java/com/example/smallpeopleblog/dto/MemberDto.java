@@ -5,9 +5,8 @@ import com.example.smallpeopleblog.entity.Member;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,6 +27,8 @@ public class MemberDto {
     @Length(min = 8, max = 16, message = "비밀번호는 8자 이상, 16자 이하로 입력해주세요.")
     private String password;
 
+    private String password2;
+
     @Pattern(regexp = "[0-9]{10,11}", message = "핸드폰 번호는 10~11자리의 숫자로 입력해주세요.")
     private String phone;
 
@@ -39,6 +40,14 @@ public class MemberDto {
     private String sns;
 
     private Role role;
+
+    @AssertTrue(message = "비밀번호가 일치하지 않습니다.")
+    public boolean isPasswordDoubleChecked() {
+        if (password != null && password2 != null) {
+            return password.equals(password2);
+        }
+        return false;
+    }
 
     public Member toEntity() {
         return Member.builder()

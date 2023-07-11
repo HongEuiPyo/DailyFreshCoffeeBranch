@@ -10,7 +10,7 @@
         <!-- 상품 상세 -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">상품 상세</h6>
+                <h6 class="m-0 font-weight-bold text-primary">ITEM INTRODUCTION</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -28,15 +28,15 @@
                                         <col style="width: auto;">
                                     </colgroup>
                                     <tr>
-                                        <th scope="col">상품 번호</th>
+                                        <th scope="col" style="text-align: center">UNIQUE ITEM NUMBER</th>
                                         <td th:text="${itemDto.id}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">상품 명</th>
+                                        <th scope="col" style="text-align: center">BEVERAGE NAME</th>
                                         <td th:text="${itemDto.title}"></td>
                                     </tr>
                                     <tr>
-                                        <th>상품 이미지</th>
+                                        <th scope="col" style="text-align: center">DETAIL</th>
                                         <td>
                                             <th:block th:each="itemImg, status: ${itemDto.getImageFileDtoList()}">
                                                 <img th:if="${not #strings.isEmpty(itemImg.getImageUrl())}" th:src="${itemImg.getImageUrl()}" style="width: 400px; height: 400px;">
@@ -44,27 +44,44 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">설명</th>
+                                        <th scope="col" style="text-align: center">INTRODUCTION</th>
                                         <td th:text="${itemDto.summary}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">가격</th>
+                                        <th scope="col" style="text-align: center">PRICE</th>
                                         <td th:text="${itemDto.price}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">재고</th>
+                                        <th scope="col" style="text-align: center">STOCK</th>
                                         <td th:text="${itemDto.stock}"></td>
                                     </tr>
                                 </table>
                                 <div class="row">
                                     <div class="input-group col-sm-12 col-md-6">
-                                        <button id="cancelBtn" type="button" class="btn btn-secondary" onclick="goList();">목록</button>
-                                        <button sec:authorize="hasRole('ROLE_ADMIN')" id="updateBtn" type="button" class="btn btn-primary" onclick="goUpdate();">수정</button>
+                                        <button id="cancelBtn" type="button" class="btn btn-secondary" onclick="goList();">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                                            </svg>
+                                            목록
+                                        </button>
+                                        <button sec:authorize="hasRole('ROLE_ADMIN')" id="updateBtn" type="button" class="btn btn-facebook" onclick="goUpdate();">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                            </svg>
+                                            수정
+                                        </button>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div sec:authorize="isAuthenticated()" class="input-group">
-                                            <input type="number" class="form-control" name="count" id="count">
-                                            <button type="button" class="btn btn-facebook" onclick="addToCart();">장바구니 추가</button>
+                                            <input type="number" class="form-control" name="count" id="count" value="1">
+                                            <button type="button" class="btn btn-facebook" onclick="addToCart();">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
+                                                    <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
+                                                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                                </svg>
+                                                장바구니 추가
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -92,25 +109,26 @@
     }
 
     function addToCart(){
-        let url = 'http://localhost:8080/api/cart/items/' + itemId + '/add';
-
-        fetch(url, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                itemId: document.cartFrm.itemId.value,
-                count: document.getElementById('count').value
-            }),
-        })
-            .then((response) => {
-                console.log('response', response);
-                if (response.status == 200){
-                    alert('장바구니에 추가 완료하였습니다.');
-                    document.getElementById('count').value = '';
-                }else {
-                    alert('오류가 발생하였습니다. 관리자에게 문의하세요.');
-                }
+        if (confirm('장바구니에 추가하시겠습니까?')){
+            let url = 'http://localhost:8080/api/cart/items/' + itemId + '/add';
+            fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    itemId: document.cartFrm.itemId.value,
+                    count: document.getElementById('count').value
+                }),
             })
+                .then((response) => {
+                    console.log('response', response);
+                    if (response.status == 200){
+                        alert('장바구니에 추가 완료하였습니다.');
+                        document.getElementById('count').value = '';
+                    }else {
+                        alert('오류가 발생하였습니다. 관리자에게 문의하세요.');
+                    }
+                })
+        }
     }
     /*]]>*/
 </script>

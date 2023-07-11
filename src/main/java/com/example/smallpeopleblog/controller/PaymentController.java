@@ -16,6 +16,13 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
+
+    /**
+     * 영수증 목록
+     * @param principal
+     * @param model
+     * @return
+     */
     @GetMapping("/paymentList")
     public String paymentList(Principal principal, Model model) {
         List<PaymentDto> paymentDtoList = paymentService.getPaymentList(principal.getName());

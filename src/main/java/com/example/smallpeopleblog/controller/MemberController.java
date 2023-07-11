@@ -18,6 +18,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
+
     /**
      * 로그인
      * @return
@@ -100,9 +101,13 @@ public class MemberController {
      * @return
      */
     @PostMapping("/{id}/update")
-    public String updateMember(@PathVariable String id, @Valid MemberDto memberDto, BindingResult result) {
-        if (result.hasErrors()) return "member/memberForm";
-        return "redirect:/members";
+    public String updateMember(@PathVariable Long id, @Valid MemberDto memberDto, BindingResult result) {
+        if (result.hasErrors())
+            return "member/memberForm";
+
+        memberService.updateMember(id, memberDto);
+
+        return "redirect:/members/logout";
     }
 
     /**
@@ -111,8 +116,9 @@ public class MemberController {
      * @return
      */
     @PostMapping("/{id}/delete")
-    public String deleteMember(@PathVariable String id) {
-        return "redirect:/members";
+    public String deleteMember(@PathVariable Long id) {
+        memberService.deleteMember(id);
+        return "redirect:/";
     }
 
 }
