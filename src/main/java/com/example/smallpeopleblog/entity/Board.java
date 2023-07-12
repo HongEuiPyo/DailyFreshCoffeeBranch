@@ -60,8 +60,8 @@ public class Board extends BaseEntity {
     }
 
     public void update(BoardDto boardDto) {
-        this.title = boardDto.getTitle();
-        this.content = boardDto.getContent();
+        title = boardDto.getTitle();
+        content = boardDto.getContent();
     }
 
     public void increaseView() {

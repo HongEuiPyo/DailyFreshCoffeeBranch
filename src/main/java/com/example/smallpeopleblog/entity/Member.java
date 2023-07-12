@@ -2,6 +2,7 @@ package com.example.smallpeopleblog.entity;
 
 import com.example.smallpeopleblog.constant.Role;
 import com.example.smallpeopleblog.dto.MemberDto;
+import com.example.smallpeopleblog.dto.MemberUpdateDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -112,6 +113,16 @@ public class Member extends BaseEntity implements UserDetails {
         gender = memberDto.getGender();
         sns = memberDto.getSns();
         role = memberDto.getRole();
+    }
+
+    public void updateWithMemberUpdateDto(MemberUpdateDto memberUpdateDto) {
+        email = memberUpdateDto.getEmail();
+        password = memberUpdateDto.getPassword();
+        name = memberUpdateDto.getName();
+        phone = memberUpdateDto.getPhone();
+        gender = memberUpdateDto.getGender();
+        sns = memberUpdateDto.getSns();
+        role = memberUpdateDto.getRole();
     }
 
     public void setCart(Cart cart) {

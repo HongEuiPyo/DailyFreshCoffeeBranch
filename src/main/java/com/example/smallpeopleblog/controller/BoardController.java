@@ -84,7 +84,7 @@ public class BoardController {
             boardService.createBoard(boardDto, email);
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "boardUpdateForm";
+            return "board/boardUpdateForm";
         }
 
         return "redirect:/boards";

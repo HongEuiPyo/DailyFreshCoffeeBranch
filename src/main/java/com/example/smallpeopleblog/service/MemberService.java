@@ -1,6 +1,7 @@
 package com.example.smallpeopleblog.service;
 
 import com.example.smallpeopleblog.dto.MemberDto;
+import com.example.smallpeopleblog.dto.MemberUpdateDto;
 import com.example.smallpeopleblog.entity.Cart;
 import com.example.smallpeopleblog.entity.Member;
 import com.example.smallpeopleblog.exception.MemberNotFoundException;
@@ -33,7 +34,7 @@ public class MemberService implements UserDetailsService {
      * @return
      */
     @Transactional
-    public Member join(MemberDto memberDto) {
+    public void join(MemberDto memberDto) {
         memberDto.setPassword(bCryptPasswordEncoder.encode(memberDto.getPassword()));
         Member entity = memberDto.toEntity();
 
@@ -41,9 +42,10 @@ public class MemberService implements UserDetailsService {
 
         Member member = memberRepository.save(entity);
 
-        member.setCart(createMemberCart(member));
+        Cart cart = cartRepository.findByMemberId(member.getId())
+                        .orElseGet(() -> createMemberCart(member));
 
-        return member;
+        member.setCart(cart);
     }
 
     /**
@@ -62,25 +64,26 @@ public class MemberService implements UserDetailsService {
      * @param memberId
      * @return
      */
-    public MemberDto getMemberDetailByMemberId(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException("회원 상세정보가 없습니다. 괸리자에게 문의하세요."))
-                .toDto();
+    public MemberUpdateDto getMemberDetailByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException("회원 상세정보가 없습니다. 괸리자에게 문의하세요."));
+        return MemberUpdateDto.of(member);
     }
 
     /**
      * 회원정보 수정처리
      * @param id
-     * @param memberDto
+     * @param memberUpdateDto
      */
     @Transactional
-    public void updateMember(Long id, MemberDto memberDto) {
-        memberDto.setPassword(bCryptPasswordEncoder.encode(memberDto.getPassword()));
+    public void updateMember(Long id, MemberUpdateDto memberUpdateDto) {
+        memberUpdateDto.setPassword(bCryptPasswordEncoder.encode(memberUpdateDto.getPassword()));
 
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException("회원을 조회하실 수 없습니다."));
 
-        member.update(memberDto);
+        member.updateWithMemberUpdateDto(memberUpdateDto);
+        memberRepository.save(member);
     }
 
     /**

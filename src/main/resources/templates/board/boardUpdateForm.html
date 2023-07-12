@@ -7,10 +7,10 @@
 </head>
 <div layout:fragment="content">
     <div class="container">
-        <!-- 이벤트 상세 -->
+
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">UPDATE EVENT</h6>
+                <h6 class="m-0 font-weight-bold text-primary">공지사항 수정</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -24,11 +24,11 @@
                                         <col style="width: auto;">
                                     </colgroup>
                                     <tr>
-                                        <th scope="col" style="text-align: center">글 번호</th>
+                                        <th scope="col" style="text-align: center">번호</th>
                                         <td th:text="${boardDto.id}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col" style="text-align: center">글 제목</th>
+                                        <th scope="col" style="text-align: center">제목</th>
                                         <td>
                                             <input type="text" th:field="*{title}" class="form-control">
                                             <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="filedError">Incorrect data</p>
@@ -37,8 +37,8 @@
                                     <tr>
                                         <th scope="col" style="text-align: center">내용</th>
                                         <td>
-                                            <textarea th:field="*{content}" class="form-control"></textarea>
-                                            <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="filedError">Incorrect data</p>
+                                            <p th:if="${#fields.hasErrors('contentBlank')}" th:errors="*{contentBlank}" class="filedError">Incorrect data</p>
+                                            <textarea id="content" name="content" th:field="*{content}" class="form-control" style="width: 700px;"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
@@ -83,8 +83,26 @@
         </div>
     </div>
 
+<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+
 <script th:inline="javascript">
     /*<![CDATA[*/
+    let oEditors = [];
+
+    smartEditor = function() {
+        // console.log("Naver SmartEditor")
+        nhn.husky.EZCreator.createInIFrame({
+            oAppRef: oEditors,
+            elPlaceHolder: "content",
+            sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+            fCreator: "createSEditor2"
+        })
+    }
+
+    window.onload = function(){
+        smartEditor();
+    }
+
     const boardId = [[${boardDto.id}]];
 
     function goList(){
@@ -97,16 +115,8 @@
         window.location.href = "/boards";
     }
 
-    function goCreate() {
-        if(confirm('이벤트를 등록하시겠습니까?')) {
-            document.boardFrm.method = "POST";
-            document.boardFrm.action = "/admin/boards/create";
-            document.boardFrm.submit();
-        }
-    }
-
     function goDelete() {
-        if(confirm('이벤트를 삭제하시겠습니까?')) {
+        if(confirm('공지사항을 삭제하시겠습니까?')) {
             document.boardFrm.method = "POST";
             document.boardFrm.action = "/admin/boards/" + boardId + "/delete";
             document.boardFrm.submit();
@@ -114,7 +124,9 @@
     }
 
     function goUpdate() {
-        if(confirm('이벤트를 수정하시겠습니까?')) {
+        if(confirm('공지사항을 수정하시겠습니까?')) {
+            oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+
             document.boardFrm.method = "POST";
             document.boardFrm.action = "/admin/boards/" + boardId + "/update";
             document.boardFrm.submit();

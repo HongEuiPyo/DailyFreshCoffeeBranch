@@ -16,56 +16,54 @@
             <div class="table-responsive">
                 <div class="dataTables_wrapper dt-bootstrap4">
                     <div class="row">
-                        <div class="card-subtitle py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">· 회원정보</h6>
-                        </div>
                         <div class="col-sm-12">
-                            <form id="memberFrm" name="memberFrm" th:object="${memberDto}">
+                            <form id="memberFrm" name="memberFrm" th:object="${memberUpdateDto}">
                             <table class="table table-bordered dataTable">
                                 <colgroup>
                                     <col style="width: 30%;">
                                     <col style="width: auto;">
                                 </colgroup>
                                 <tr>
-                                    <th scope="col" style="text-align: center">회원 번호</th>
-                                    <td th:text="${memberDto.id}"></td>
+                                    <th scope="col">번호</th>
+                                    <td th:text="${memberUpdateDto.id}"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">이메일</th>
+                                    <th scope="col">이메일</th>
                                     <td>
-                                        <span th:text="${memberDto.email}"></span>
+                                        <input type="hidden" name="email" th:value="${memberUpdateDto.email}">
+                                        <span th:text="${memberUpdateDto.email}"></span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">비밀번호</th>
+                                    <th scope="col">비밀번호</th>
                                     <td>
                                         <input type="password" th:field="*{password}" class="form-control">
                                         <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="filedError">Incorrect data</p>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">비밀번호 확인</th>
+                                    <th scope="col">비밀번호 확인</th>
                                     <td>
                                         <input type="password" name="password2" class="form-control">
                                         <p th:if="${#fields.hasErrors('passwordDoubleChecked')}" th:errors="*{passwordDoubleChecked}" class="filedError">Incorrect data</p>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">이름</th>
+                                    <th scope="col">이름</th>
                                     <td>
                                         <input type="text" th:field="*{name}" class="form-control">
                                         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="filedError">Incorrect data</p>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">핸드폰 번호</th>
+                                    <th scope="col">핸드폰 번호</th>
                                     <td>
                                         <input type="text" th:field="*{phone}" class="form-control">
                                         <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="filedError">Incorrect data</p>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">성별</th>
+                                    <th scope="col">성별</th>
                                     <td>
                                         <select th:field="*{gender}" class="form-select">
                                             <option value="M">남</option>
@@ -74,12 +72,12 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">회원구분</th>
+                                    <th scope="col">회원구분</th>
                                     <td>
                                         <select th:field="*{role}" class="form-select">
-                                            <option th:if="${memberDto.getRole() == '[ROLE_USER]' ? 'selected' : ''}" value="USER">소비자</option>
-                                            <option th:if="${memberDto.getRole() == '[ROLE_SMALL_BUSINESS]' ? 'selected' : ''}" value="SMALL_BUSINESS">소상공인</option>
-                                            <option th:if="${memberDto.getRole() == '[ROLE_ADMIN]' ? 'selected' : ''}" value="ADMIN">관리자</option>
+                                            <option th:if="${memberUpdateDto.getRole() == '[ROLE_USER]' ? 'selected' : ''}" value="USER">소비자</option>
+                                            <option th:if="${memberUpdateDto.getRole() == '[ROLE_SMALL_BUSINESS]' ? 'selected' : ''}" value="SMALL_BUSINESS">소상공인</option>
+                                            <option th:if="${memberUpdateDto.getRole() == '[ROLE_ADMIN]' ? 'selected' : ''}" value="ADMIN">관리자</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -120,7 +118,8 @@
 </html>
 
 <script th:inline="javascript">
-    const memberId = [[${memberDto.id}]];
+
+    const memberId = [[${memberUpdateDto.id}]];
 
     function goCancel() {
         window.history.go(-1);
@@ -137,4 +136,5 @@
         document.memberFrm.action = '/members/' + memberId + '/update';
         document.memberFrm.submit();
     }
+
 </script>

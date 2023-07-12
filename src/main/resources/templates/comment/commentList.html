@@ -1,16 +1,15 @@
 <div class="card-subtitle py-3" style="margin-top: 20px;">
-    <h6 class="m-0 font-weight-bold text-primary">· COMMENTS</h6>
+    <h6 class="m-0 font-weight-bold text-primary">· 댓글</h6>
 </div>
 
 <div sec:authorize="isAuthenticated()">
     <div>
         <div class="input-group mb-3">
-            <textarea id="commentContent" name="content" class="form-control"></textarea>
+            <textarea id="commentContent" name="content" class="form-control" placeholder="댓글을 입력하세요."></textarea>
             <button type="button" class="btn btn-facebook" onclick="goCreateComment();">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                     <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
                 </svg>
-                작성
             </button>
         </div>
     </div>
@@ -23,13 +22,13 @@
     </colgroup>
     <thead>
     <tr>
-        <th scope="col" style="text-align: center">WRITER</th>
-        <th scope="col" style="text-align: center">COMMENT</th>
-        <th scope="col" style="text-align: center">COMMENTED TIME</th>
+        <th scope="col" style="text-align: center">작성자</th>
+        <th scope="col" style="text-align: center">내용</th>
+        <th scope="col" style="text-align: center">작성일시</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="commentItem : ${commentDtoPage}">
+    <tr th:if="!${commentDtoPage?.isEmpty()}" th:each="commentItem : ${commentDtoPage}">
         <td th:text="${commentItem.writer}" style="text-align: center"></td>
         <td>
             <div class="input-group mb-3">
@@ -40,27 +39,29 @@
                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                         <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                     </svg>
-                    삭제
                 </button>
                 <button th:if="${commentItem.writerEmail == #authentication.name}" type="button" class="btn btn-facebook" th:onclick="goUpdateComment([[${commentItem.id}]])">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                     </svg>
-                    수정
                 </button>
             </div>
         </td>
         <td th:text="${#temporals.format(commentItem.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
     </tr>
+    <tr th:if="${commentDtoPage?.isEmpty()}">
+        <td colspan="3" style="text-align: center;">등록된 댓글이 없습니다.</td>
+    </tr>
     </tbody>
 </table>
 
+<th:block th:if="!${commentDtoPage?.isEmpty()}">
 <ul class="pagination" th:with="start=${T(java.lang.Math).floor(commentDtoPage.number/10)*10 + 1},last=(${start + 9 < commentDtoPage.totalPages ? start + 9 : commentDtoPage.totalPages})">
 
     <li th:class="${commentDtoPage.first} ? 'page-item disabled' : 'page-item'">
-        <a class="page-link" th:onclick="goPage([[${commentDtoPage.number}]])" aria-label="Previous">
-            <span aria-hidden="true">PREV</span>
+        <a class="page-link" th:onclick="goPage([[${commentDtoPage.number}]])" aria-label="이전">
+            <span aria-hidden="true">이전</span>
         </a>
     </li>
 
@@ -69,10 +70,12 @@
     </li>
 
     <li th:class="${commentDtoPage.last} ? 'page-item disabled' : 'page-item'">
-        <a class="page-link" th:onclick="goPage([[${commentDtoPage.number + 2}]])" aria-label="Next">
-            <span aria-hidden="true">NEXT</span>
+        <a class="page-link" th:onclick="goPage([[${commentDtoPage.number + 2}]])" aria-label="다음">
+            <span aria-hidden="true">다음</span>
         </a>
     </li>
 
 </ul>
+</th:block>
+
 </div>

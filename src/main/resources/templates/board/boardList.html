@@ -3,13 +3,13 @@
       layout:decorate="~{layouts/mainLayout}">
 <head>
     <meta charset="UTF-8">
-    <title>EVENTS</title>
+    <title>매일 신선한 커피</title>
 </head>
 <div layout:fragment="content">
   <div class="container">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">EVENTS</h6>
+        <h6 class="m-0 font-weight-bold text-primary">공지사항 목록</h6>
       </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -26,11 +26,11 @@
                     </colgroup>
                     <thead>
                     <tr>
-                      <th scope="col" style="text-align: center">#</th>
-                      <th scope="col" style="text-align: center">TITLE</th>
-                      <th scope="col" style="text-align: center">WRITER</th>
-                      <th scope="col" style="text-align: center">VIEW</th>
-                      <th scope="col" style="text-align: center">CREATED TIME</th>
+                      <th scope="col" style="text-align: center">번호</th>
+                      <th scope="col" style="text-align: center">제목</th>
+                      <th scope="col" style="text-align: center">글쓴이</th>
+                      <th scope="col" style="text-align: center">조회수</th>
+                      <th scope="col" style="text-align: center">작성일시</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -51,7 +51,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                           <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
                         </svg>
-                        이벤트 등록
+                        공지사항 등록
                       </button>
                     </div>
                   </div>
@@ -59,16 +59,16 @@
                     <div class="dataTables_paginate paging_simple_numbers">
                       <ul class="pagination" th:with="start=${T(java.lang.Math).floor(boardList.number/10)*10 + 1},last=(${start + 9 < boardList.totalPages ? start + 9 : boardList.totalPages})">
                         <li th:class="${boardList.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                          <a class="page-link" th:href="@{/boards(page=${boardList.number})}" aria-label="Previous">
-                            <span aria-hidden="true">PREV</span>
+                          <a class="page-link" th:href="@{/boards(page=${boardList.number})}" aria-label="이전">
+                            <span aria-hidden="true">이전</span>
                           </a>
                         </li>
                         <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boardList.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
                           <a class="page-link" th:text="${page}" th:href="@{/boards(page=${page})}"></a>
                         </li>
                         <li th:class="${boardList.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                          <a class="page-link" th:href="@{/boards(page=${boardList.number + 2})}" aria-label="Next">
-                            <span aria-hidden="true">NEXT</span>
+                          <a class="page-link" th:href="@{/boards(page=${boardList.number + 2})}" aria-label="다음">
+                            <span aria-hidden="true">다음</span>
                           </a>
                         </li>
                       </ul>

@@ -7,17 +7,17 @@
 </head>
 <div layout:fragment="content">
     <div class="container">
-        <!-- 이벤트 상세 -->
+
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">EVENT DETAIL</h6>
+                <h6 class="m-0 font-weight-bold text-primary">공지사항 상세</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <div class="dataTables_wrapper dt-bootstrap4">
                         <div class="row">
                             <div class="card-subtitle py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">· EVENT INTRODUCTION</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">· 공지사항 상세</h6>
                             </div>
                             <div class="col-sm-12">
                                 <form id="boardFrm" name="boardFrm" th:object="${boardDto}">
@@ -27,23 +27,23 @@
                                         <col style="width: auto;">
                                     </colgroup>
                                     <tr>
-                                        <th scope="col" style="text-align: center">#</th>
+                                        <th scope="col">번호</th>
                                         <td th:text="${boardDto.id}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col" style="text-align: center">TITLE</th>
+                                        <th scope="col">제목</th>
                                         <td th:text="${boardDto.title}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col" style="text-align: center">CONTENT</th>
-                                        <td th:text="${boardDto.content}"></td>
+                                        <th scope="col">내용</th>
+                                        <td id="content" th:utext="${boardDto.content}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col" style="text-align: center">WRITER</th>
+                                        <th scope="col">글쓴이</th>
                                         <td th:text="${boardDto.writer}"></td>
                                     </tr>
                                     <tr>
-                                        <th scope="col" style="text-align: center">CREATED TIME</th>
+                                        <th scope="col">작성일시</th>
                                         <td th:text="${boardDto.createdTime}"></td>
                                     </tr>
                                 </table>

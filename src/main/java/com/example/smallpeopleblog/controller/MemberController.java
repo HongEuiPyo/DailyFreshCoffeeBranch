@@ -1,6 +1,7 @@
 package com.example.smallpeopleblog.controller;
 
 import com.example.smallpeopleblog.dto.MemberDto;
+import com.example.smallpeopleblog.dto.MemberUpdateDto;
 import com.example.smallpeopleblog.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -91,7 +92,7 @@ public class MemberController {
      */
     @GetMapping("/{id}/update")
     public String memberForm(@PathVariable Long id, Model model) {
-        model.addAttribute("memberDto", memberService.getMemberDetailByMemberId(id));
+        model.addAttribute("memberUpdateDto", memberService.getMemberDetailByMemberId(id));
         return "member/memberForm";
     }
 
@@ -101,11 +102,11 @@ public class MemberController {
      * @return
      */
     @PostMapping("/{id}/update")
-    public String updateMember(@PathVariable Long id, @Valid MemberDto memberDto, BindingResult result) {
+    public String updateMember(@PathVariable Long id, @Valid MemberUpdateDto memberUpdateDto, BindingResult result) {
         if (result.hasErrors())
             return "member/memberForm";
 
-        memberService.updateMember(id, memberDto);
+        memberService.updateMember(id, memberUpdateDto);
 
         return "redirect:/members/logout";
     }

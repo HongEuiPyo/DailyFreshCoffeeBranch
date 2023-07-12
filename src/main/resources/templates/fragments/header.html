@@ -14,7 +14,6 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="/css/styles.css" rel="stylesheet" />
 
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
@@ -28,23 +27,23 @@
 
   <header>
     <h1 class="site-heading text-center text-faded d-none d-lg-block">
-      <span class="site-heading-upper text-primary mb-3">Daily Fresh Coffee와</span>
-      <span class="site-heading-lower">행복한 하루를 시작해보세요!</span>
+      <span class="site-heading-upper text-primary mb-3">매일 신선한 커피와</span>
+      <span class="site-heading-lower">건강한 하루를 보내세요!</span>
     </h1>
   </header>
 
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
     <div class="container">
-      <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="/">Daily Fresh Coffee</a>
+      <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="/">매일 신선한 커피</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto">
-          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/">Daily Fresh Coffee</a></li>
-          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/boards">Events</a></li>
-          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/items?size=9">Beverages</a></li>
-          <li sec:authorize="!isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/login">Login</a></li>
-          <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/myPage">Mypage</a></li>
+          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/">홈</a></li>
+          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/boards">공지사항</a></li>
+          <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/items">상품</a></li>
+          <li sec:authorize="!isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/login">로그인</a></li>
+          <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/myPage">마이페이지</a></li>
         </ul>
       </div>
     </div>

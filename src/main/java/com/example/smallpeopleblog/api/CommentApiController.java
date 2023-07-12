@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -15,6 +17,7 @@ import java.security.Principal;
 public class CommentApiController {
 
     private final CommentService commentService;
+
 
     /**
      * 댓글 등록
@@ -25,7 +28,8 @@ public class CommentApiController {
      */
     @PostMapping("/boards/{id}/comments/create")
     public ResponseEntity<CommentDto> createComment(@PathVariable Long id, @RequestBody CommentDto commentDto, Principal principal) {
-        return ResponseEntity.ok(commentService.createComment(principal.getName(), id, commentDto));
+        CommentDto comment = commentService.createComment(principal.getName(), id, commentDto);
+        return ResponseEntity.ok(comment);
     }
 
     /**
@@ -48,9 +52,14 @@ public class CommentApiController {
      * @return
      */
     @DeleteMapping("/boards/{boardId}/comments/{commentId}/delete")
-    public ResponseEntity<String> deleteComment(@PathVariable Long boardId, @PathVariable Long commentId) {
+    public ResponseEntity<Map<String, String>> deleteComment(@PathVariable Long boardId, @PathVariable Long commentId) {
+        Map<String, String> resultMap = new HashMap<>();
+
         commentService.deleteComment(boardId, commentId);
-        return ResponseEntity.ok("댓글이 성공적으로 삭제되었습니다.");
+
+        resultMap.put("msg", "댓글이 성공적으로 삭제되었습니다.");
+
+        return ResponseEntity.ok(resultMap);
     }
 
 }

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -21,16 +20,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
+        http.headers().frameOptions().sameOrigin();
+
         http.authorizeHttpRequests()
                 .mvcMatchers("/", "/item/**","/images/**", "/cs/**", "/js/**").permitAll()
-                .antMatchers("/user/**")
-                .authenticated()
-                .antMatchers("/admin/**")
-                .hasRole("ADMIN")
-                .antMatchers("/smallPeople/**")
-                .hasRole("SMALL_PEOPLE")
-                .anyRequest()
-                .permitAll();
+                .antMatchers("/user/**").authenticated()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/smallPeople/**").hasRole("SMALL_PEOPLE")
+                .anyRequest().permitAll();
 
         http.formLogin()
                 .loginPage("/members/login")
@@ -48,11 +45,11 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .antMatchers("/js/**", "/css/**", "/error");
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring()
+//                .antMatchers("/js/**", "/css/**", "/error");
+//    }
 
     @Bean
     public AuthenticationSuccessHandler loginSuccessHandler() {

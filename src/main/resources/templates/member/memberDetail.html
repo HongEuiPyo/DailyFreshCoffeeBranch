@@ -3,14 +3,14 @@
       layout:decorate="~{layouts/mainLayout}">
 <head>
   <meta charset="UTF-8">
-  <title>MYPAGE</title>
+  <title></title>
 </head>
 <div layout:fragment="content">
 <div class="container">
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">MYPAGE</h6>
+            <h6 class="m-0 font-weight-bold text-primary">마이페이지</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -28,43 +28,42 @@
                                     <col style="width: auto;">
                                 </colgroup>
                                 <tr>
-                                    <th scope="col" style="text-align: center">회원 번호</th>
+                                    <th scope="col">번호</th>
                                     <td th:text="${memberDto.id}"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">이메일</th>
+                                    <th scope="col">이메일</th>
                                     <td th:text="${memberDto.email}"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">이름</th>
+                                    <th scope="col">이름</th>
                                     <td th:text="${memberDto.name}"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">핸드폰 번호</th>
+                                    <th scope="col">핸드폰 번호</th>
                                     <td th:text="${memberDto.phone}"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">성별</th>
+                                    <th scope="col">성별</th>
                                     <td th:text="${memberDto.gender == 'M' ? '남' : '여'}"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">회원구분</th>
+                                    <th scope="col">회원구분</th>
                                     <td th:if="${#strings.equals(memberDto.role, 'ADMIN')}">관리자</td>
                                     <td th:if="${#strings.equals(memberDto.role, 'USER')}">일반</td>
                                     <td th:if="${#strings.equals(memberDto.role, 'SMALL_BUSINESS')}">소상공인</td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" style="text-align: center">보유 포인트</th>
+                                    <th scope="col">포인트</th>
                                     <td>
                                         <div class="input-group col-sm-12 col-md-6">
                                             <input name="memberPoint" id="memberPoint" class="form-control" th:value="${memberDto.point}" disabled>
                                         </div>
                                         <div class="input-group col-sm-12 col-md-6">
-                                            <input type="number" name="point" id="point" class="form-control">
+                                            <input type="number" name="point" id="point" class="form-control" value="0">
                                             <button sec:authorize="isAuthenticated()" class="btn btn-facebook" onclick="addPoint();">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-2-back" viewBox="0 0 16 16">
-                                                    <path d="M11 5.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1z"/>
-                                                    <path d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2zm13 2v5H1V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm-1 9H2a1 1 0 0 1-1-1v-1h14v1a1 1 0 0 1-1 1z"/>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
                                                 </svg>
                                                 입금
                                             </button>
@@ -128,37 +127,46 @@
     }
 
     function updateCartItem(cartItemId){
-        let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/update';
-        fetch(url, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                count: document.getElementById('count').value
-            }),
-        })
-            .then((response) => {
-                if(response.status == 200){
-                    alert('장바구니 상품을 수정 하였습니다.');
-                    getCartItemList();
-                }else{
-                    alert('장바구니 상품 수정 중 오류가 발생했습니다.');
-                }
+        if (confirm('장바구니 상품을 수정하시겠습니까?')){
+            let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/update';
+            fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    count: document.getElementById('count').value
+                }),
             })
+                .then((response) => {
+                    if(response.ok){
+                        let promise = response.json();
+                        promise.then(promise => alert(promise.msg));
+                        getCartItemList();
+                    }else if (response.status == 400){
+                        let promise = response.json();
+                        promise.then(promise => alert(promise.count));
+                    }else{
+                        alert('장바구니 상품 수정 중 오류가 발생했습니다.');
+                    }
+                })
+        }
     }
 
     function deleteCartItem(cartItemId){
-        let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/delete';
-        fetch(url, {
-            method: 'DELETE',
-        })
-            .then((response) => {
-                if(response.status == 200){
-                    alert('장바구니 상품을 삭제 하였습니다.');
-                    getCartItemList();
-                }else{
-                    alert('장바구니 상품 삭제 중 오류가 발생했습니다.');
-                }
+        if (confirm('장바구니 상품을 취소하시겠습니까?')){
+            let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/delete';
+            fetch(url, {
+                method: 'DELETE',
             })
+                .then((response) => {
+                    if(response.status == 200){
+                        let promise = response.json();
+                        promise.then(promise => alert(promise.msg));
+                        getCartItemList();
+                    }else{
+                        alert('장바구니 상품 삭제 중 오류가 발생했습니다.');
+                    }
+                })
+        }
     }
 
     function addPoint(){
@@ -172,44 +180,51 @@
                 }),
             })
                 .then((response) => {
-                    if(response.status == 200){
-                        alert('입금을 완료하였습니다.');
+                    if(response.ok){
+                        let promise = response.json();
+                        promise.then(promise => alert(promise.msg));
                         window.location.reload();
+                    }else if (response.status == 400){
+                        let promise = response.json();
+                        promise.then(promise => alert(promise.point));
                     }else{
-                        alert('입금 중 오류가 발생했습니다. 입금 시도하신 금액은 취소처리되었습니다.');
+                        alert('입금 중 오류가 발생했습니다.');
                     }
                 });
         }
     }
 
     function confirmCartItemPurchase(){
-        let url = 'http://localhost:8080/api/payment/confirmCartItemPurchase';
+        if (confirm('구매확정을 하시겠습니까?')){
+            let url = 'http://localhost:8080/api/payment/confirmCartItemPurchase';
 
-        let itemNameArray = document.getElementsByClassName('itemName');
-        let itemNames = '';
+            let itemNameArray = document.getElementsByClassName('itemName');
+            let itemNames = '';
 
-        for (let i=0; i<itemNameArray.length; i++){
-            itemNames += itemNameArray[i].innerText;
-            if (i != (itemNameArray.length-1))
-                 itemNames += ',';
-        }
-
-        fetch(url, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                itemNames: itemNames,
-                totalUsePoint : document.getElementById('totalUsePoint').innerText
-            }),
-        })
-            .then((response) => {
-            if(response.status == 200){
-                alert('구매 확정을 완료하였습니다.');
-                window.location.reload();
-            }else{
-                alert('구매 확정 중 오류가 발생했습니다.');
+            for (let i=0; i<itemNameArray.length; i++){
+                itemNames += itemNameArray[i].innerText;
+                if (i != (itemNameArray.length-1))
+                    itemNames += ',';
             }
-        })
+
+            fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    itemNames: itemNames,
+                    totalUsePoint : document.getElementById('totalUsePoint').innerText
+                }),
+            })
+                .then((response) => {
+                    if(response.status == 200){
+                        let promise = response.json();
+                        promise.then(promise => alert(promise.msg));
+                        window.location.reload();
+                    }else{
+                        alert('구매 확정 중 오류가 발생했습니다.');
+                    }
+                })
+        }
     }
 
 </script>

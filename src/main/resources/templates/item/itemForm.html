@@ -8,11 +8,10 @@
 <div layout:fragment="content">
     <div class="container">
 
-        <!-- 상품 상세 -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 th:if="!${itemFormDto?.id}" class="m-0 font-weight-bold text-primary">REGISTER ITEM</h6>
-                <h6 th:if="${itemFormDto?.id}" class="m-0 font-weight-bold text-primary">UPDATE ITEM</h6>
+                <h6 th:if="!${itemFormDto?.id}" class="m-0 font-weight-bold text-primary">상품 등록</h6>
+                <h6 th:if="${itemFormDto?.id}" class="m-0 font-weight-bold text-primary">상품 수정</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -29,70 +28,82 @@
                                             <col style="width: auto;">
                                         </colgroup>
                                         <tr th:if="${itemFormDto?.id}">
-                                            <th scope="col" style="text-align: center">상품 번호</th>
+                                            <th scope="col">번호</th>
                                             <td th:text="${itemFormDto.id}"></td>
                                         </tr>
                                         <tr>
-                                            <th scope="col" style="text-align: center">상품명</th>
+                                            <th scope="col">상품명</th>
                                             <td>
                                                 <input type="text" th:field="*{title}" class="form-control">
                                                 <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="filedError">Incorrect data</p>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th scope="col" style="text-align: center">설명</th>
+                                            <th scope="col">설명</th>
                                             <td>
                                                 <textarea th:field="*{summary}" class="form-control"></textarea>
                                                 <p th:if="${#fields.hasErrors('summary')}" th:errors="*{summary}" class="filedError">Incorrect data</p>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th scope="col" style="text-align: center">가격</th>
+                                            <th scope="col">가격</th>
                                             <td>
                                                 <input type="text" th:field="*{price}" class="form-control">
                                                 <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="filedError">Incorrect data</p>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th scope="col" style="text-align: center">재고</th>
+                                            <th scope="col">재고</th>
                                             <td>
                                                 <input type="text" th:field="*{stock}" class="form-control">
                                                 <p th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}" class="filedError">Incorrect data</p>
                                             </td>
                                         </tr>
                                         <tr th:each="imageFile, index : ${itemFormDto.imageFileDtoList}">
-                                            <th scope="col" th:text="'이미지(' + ${index.count} + ')'" style="text-align: center"></th>
+                                            <th scope="col" th:text="'사진(' + ${index.count} + ')'"></th>
                                             <td th:id="'imageFile_' + ${imageFile.getId()}">
                                                 <img th:src="${imageFile.getImageUrl()}" style="width: 400px; height: 400px;">
                                                 <a th:text="${imageFile.getOriginalImageName()}"></a>
                                                 <div class="btn-group" role="group" aria-label="Default button group">
-                                                    <button type="button" class="btn btn-outline-dark" th:onclick="downloadFile([[${imageFile.getSavedFileName()}]])">다운로드</button>
-                                                    <button type="button" class="btn btn-outline-dark" th:onclick="deleteFile([[${imageFile.getId()}]])">삭제</button>
+                                                    <button type="button" class="btn btn-danger" th:onclick="deleteFile([[${imageFile.getId()}]])">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                                        </svg>
+                                                        삭제
+                                                    </button>
+                                                    <button type="button" class="btn btn-facebook" th:onclick="downloadFile([[${imageFile.getSavedFileName()}]])">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                                        </svg>
+                                                        다운로드
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr th:if="${not #lists.isEmpty(itemFormDto.imageFileDtoList) && itemFormDto.imageFileDtoList.size() < 3}" th:each="num, index : ${#numbers.sequence(itemFormDto.imageFileDtoList.size() + 1, 3)}">
-                                            <th scope="col" th:text="'이미지(' + ${itemFormDto.getImageFileDtoList().size() + index.count} + ')'" style="text-align: center"></th>
+                                            <th scope="col" th:text="'사진(' + ${itemFormDto.getImageFileDtoList().size() + index.count} + ')'"></th>
                                             <td>
                                                 <input type="file" name="itemImageFile" class="form-control">
                                             </td>
                                         </tr>
                                         <th:block th:if="${#lists.isEmpty(itemFormDto.imageFileDtoList)}">
                                         <tr>
-                                            <th scope="col" style="text-align: center">이미지(1)</th>
+                                            <th scope="col">사진(1)</th>
                                             <td>
                                                 <input type="file" name="itemImageFile" class="form-control">
                                                 <span th:text="${errorMessage}" class="filedError"></span>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th scope="col" style="text-align: center">이미지(2)</th>
+                                            <th scope="col">사진(2)</th>
                                             <td>
                                                 <input type="file" name="itemImageFile" class="form-control">
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th scope="col" style="text-align: center">이미지(3)</th>
+                                            <th scope="col">사진(3)</th>
                                             <td>
                                                 <input type="file" name="itemImageFile" class="form-control">
                                             </td>
@@ -108,9 +119,8 @@
                                                 목록
                                             </button>
                                             <button th:if="!${itemFormDto?.id}" type="submit" class="btn btn-facebook">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
                                                 </svg>
                                                 등록
                                             </button>

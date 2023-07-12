@@ -58,8 +58,12 @@ public class CartItem {
                 .build();
     }
 
-    // 수량 수정
-    public void updateCount(CartItemDto cartItemDto) {
-        this.count = cartItemDto.getCount();
+    public void setCount(int count) {
+        this.count = count;
     }
+
+    public void addCount(int count) {
+        this.count += count;
+    }
+
 }

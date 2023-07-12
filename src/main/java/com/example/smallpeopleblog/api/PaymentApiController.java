@@ -1,16 +1,22 @@
 package com.example.smallpeopleblog.api;
 
-import com.example.smallpeopleblog.dto.MemberDto;
+import com.example.smallpeopleblog.dto.MemberPointUpDto;
 import com.example.smallpeopleblog.dto.PaymentDto;
 import com.example.smallpeopleblog.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -19,28 +25,65 @@ public class PaymentApiController {
 
     private final PaymentService paymentService;
 
+
     /**
      * 포인트 충전
-     * @param memberDto
+     * @param memberPointUpDto
      * @param principal
      * @return
      */
     @PostMapping("/payment/addPoint")
-    public ResponseEntity<?> addPoint(@RequestBody MemberDto memberDto, Principal principal) {
-        MemberDto upMemberDto = paymentService.addPoint(principal.getName(), memberDto);
-        return ResponseEntity.ok().body(upMemberDto);
+    public ResponseEntity<Map<String, String>> addPoint(
+            @Valid @RequestBody MemberPointUpDto memberPointUpDto,
+            BindingResult result,
+            Principal principal
+    ) {
+        Map<String, String> resultMap = new HashMap<>();
+
+        if (result.hasErrors()) {
+
+            for (FieldError error : result.getFieldErrors()) {
+                resultMap.put(error.getField(), error.getDefaultMessage());
+            }
+
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+
+        paymentService.addPoint(principal.getName(), memberPointUpDto);
+
+        resultMap.put("msg", "포인트 충전을 완료하였습니다.");
+
+        return ResponseEntity.ok().body(resultMap);
     }
 
     /**
-     * 장바구니 상품 구매 확정
+     * 장바구니 상품 구매확정
      * @param paymentDto
      * @param principal
      * @return
      */
     @PostMapping("/payment/confirmCartItemPurchase")
-    public ResponseEntity<?> confirmCartItemPurchase(@RequestBody PaymentDto paymentDto, Principal principal) {
+    public ResponseEntity<Map<String, String>> confirmCartItemPurchase(
+            @Valid @RequestBody PaymentDto paymentDto,
+            BindingResult result,
+            Principal principal
+    ) {
+        Map<String, String> resultMap = new HashMap<>();
+
+        if (result.hasErrors()) {
+
+            for (FieldError error : result.getFieldErrors()) {
+                resultMap.put(error.getField(), error.getDefaultMessage());
+            }
+
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+
         paymentService.confirmCartItemPurchase(principal.getName(), paymentDto);
-        return ResponseEntity.ok().body("장바구니 상품 구매 확정을 완료하였습니다.");
+
+        resultMap.put("msg", "구매확정을 완료하였습니다.");
+
+        return ResponseEntity.ok().body(resultMap);
     }
 
 }

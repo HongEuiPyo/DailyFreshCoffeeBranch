@@ -1,6 +1,7 @@
 package com.example.smallpeopleblog.api;
 
 import com.example.smallpeopleblog.dto.CartItemDto;
+import com.example.smallpeopleblog.dto.CartItemUpdateDto;
 import com.example.smallpeopleblog.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ public class CartApiController {
 
     private final CartService cartService;
 
+
     /**
      * 장바구니 상품 등록
      * @param id
@@ -30,42 +32,60 @@ public class CartApiController {
      * @return
      */
     @PostMapping(value = "/cart/items/{id}/add")
-    public ResponseEntity<?> addToCart(
+    public ResponseEntity<Map<String, String>> addToCart(
             @PathVariable Long id,
             @Valid @RequestBody CartItemDto cartItemDto,
             BindingResult bindingResult,
             Principal principal
     ) {
+        Map<String, String> resultMap = new HashMap<>();
+
         if (bindingResult.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
 
             for (FieldError error : bindingResult.getFieldErrors()) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
+                resultMap.put(error.getField(), error.getDefaultMessage());
             }
 
-            return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
 
-        CartItemDto savedCartItemDto = cartService.addToCart(principal.getName(), id, cartItemDto);
+        cartService.addToCart(principal.getName(), id, cartItemDto);
 
-        return ResponseEntity.ok().body(savedCartItemDto);
+        resultMap.put("msg", "장바구니에 추가 완료하였습니다.");
+
+        return ResponseEntity.ok().body(resultMap);
     }
 
     /**
      * 장바구니 상품 수정
      * @param id
-     * @param cartItemDto
+     * @param cartItemUpdateDto
      * @param principal
      * @return
      */
     @PostMapping(value = "/cart/items/{id}/update")
-    public ResponseEntity<?> updateCartItem(
+    public ResponseEntity<Map<String, String>> updateCartItem(
             @PathVariable Long id,
-            @RequestBody CartItemDto cartItemDto,
+            @Valid @RequestBody CartItemUpdateDto cartItemUpdateDto,
+            BindingResult result,
             Principal principal
     ) {
-        CartItemDto upCartItem = cartService.updateCartItem(principal.getName(), id, cartItemDto);
-        return ResponseEntity.ok().body(upCartItem);
+        Map<String, String> resultMap = new HashMap<>();
+
+        if (result.hasErrors()) {
+
+            for (FieldError error : result.getFieldErrors()) {
+                resultMap.put(error.getField(), error.getDefaultMessage());
+            }
+
+            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+
+        cartService.updateCartItem(principal.getName(), id, cartItemUpdateDto);
+
+        resultMap.put("msg", "장바구니 상품 수정을 완료하였습니다.");
+
+        return ResponseEntity.ok().body(resultMap);
     }
 
     /**
@@ -75,9 +95,14 @@ public class CartApiController {
      * @return
      */
     @DeleteMapping("/cart/items/{id}/delete")
-    public ResponseEntity<?> deleteCartItem(@PathVariable Long id, Principal principal) {
+    public ResponseEntity<Map<String, String>> deleteCartItem(@PathVariable Long id, Principal principal) {
+        Map<String, String> resultMap = new HashMap<>();
+
         cartService.deleteCartItem(id, principal.getName());
-        return ResponseEntity.ok("장바구니 상품이 성공적으로 삭제처리 되었습니다.");
+
+        resultMap.put("msg", "장바구니 상품을 삭제 하였습니다.");
+
+        return ResponseEntity.ok(resultMap);
     }
 
 }

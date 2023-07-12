@@ -76,8 +76,9 @@ public class BoardService {
                 .orElseThrow(()  -> new RuntimeException("could not find board" + boardId));
         if (board.getMember().getEmail().equals(email)) {
             board.update(boardDto);
+            boardRepository.save(board);
         } else {
-            throw new RuntimeException("공지사항의 담당자가 아닌 관계로 수정이 불가능합니다." + email);
+            throw new RuntimeException("공지사항의 글쓴이만 게시글 수정권한이 있습니다." + email);
         }
         return board.toDto();
     }

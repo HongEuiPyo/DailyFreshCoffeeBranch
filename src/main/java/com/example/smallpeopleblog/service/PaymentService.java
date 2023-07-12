@@ -1,13 +1,13 @@
 package com.example.smallpeopleblog.service;
 
-import com.example.smallpeopleblog.entity.*;
-import com.example.smallpeopleblog.repository.*;
-import com.example.smallpeopleblog.dto.MemberDto;
+import com.example.smallpeopleblog.com.VIPDiscountPolicy;
+import com.example.smallpeopleblog.dto.MemberPointUpDto;
 import com.example.smallpeopleblog.dto.PaymentDto;
+import com.example.smallpeopleblog.entity.*;
 import com.example.smallpeopleblog.exception.CartNotFoundException;
 import com.example.smallpeopleblog.exception.MemberNotFoundException;
 import com.example.smallpeopleblog.exception.OutOfPointException;
-import com.example.smallpeopleblog.com.VIPDiscountPolicy;
+import com.example.smallpeopleblog.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +26,7 @@ public class PaymentService {
     private final ItemRepository itemRepository;
     private final VIPDiscountPolicy vipDiscountPolicy;
 
+
     /**
      * 구매 목록
      * @param email
@@ -43,15 +44,14 @@ public class PaymentService {
     /**
      * 포인트 충전
      * @param email
-     * @param memberDto
+     * @param memberPointUpDto
      * @return
      */
     @Transactional
-    public MemberDto addPoint(String email, MemberDto memberDto) {
+    public void addPoint(String email, MemberPointUpDto memberPointUpDto) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException("회원을 조회할 수 없습니다."));
-        member.addPoint(memberDto.getPoint());
-        return member.toDto();
+        member.addPoint(memberPointUpDto.getPoint());
     }
 
     /**
