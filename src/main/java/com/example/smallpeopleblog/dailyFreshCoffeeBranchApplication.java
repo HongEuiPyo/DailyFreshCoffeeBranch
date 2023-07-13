@@ -6,10 +6,10 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @SpringBootApplication
 @ServletComponentScan
-public class SmallPeopleBlogApplication {
+public class dailyFreshCoffeeBranchApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SmallPeopleBlogApplication.class, args);
+        SpringApplication.run(dailyFreshCoffeeBranchApplication.class, args);
     }
 
 }
