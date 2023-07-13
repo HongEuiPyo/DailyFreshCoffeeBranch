@@ -28,4 +28,5 @@ public class VIPDiscountPolicy {
     public double getDiscountRate() {
         return discountRate;
     }
+
 }

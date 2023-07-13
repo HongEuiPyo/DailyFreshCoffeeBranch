@@ -42,6 +42,9 @@ public class Item extends BaseEntity {
     @ColumnDefault("0")
     private int stock;
 
+    @ColumnDefault("0")
+    private int purchaseCnt;
+
     @OneToMany(mappedBy = "item", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @OrderBy("id asc")
     List<ImageFile> imageFileList;
