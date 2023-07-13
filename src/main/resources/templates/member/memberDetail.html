@@ -100,6 +100,7 @@
 
 <script th:inline="javascript">
     const memberId = [[${memberDto.id}]];
+    let isFunctionAddPointRunning = false;
 
     window.onload = function (){
         getCartItemList();
@@ -171,6 +172,12 @@
 
     function addPoint(){
         if (confirm('입금하시겠습니까?')){
+            if (isFunctionAddPointRunning == true){
+                return;
+            }
+
+            isFunctionAddPointRunning = true;
+
             let url = 'http://localhost:8080/api/payment/addPoint';
             fetch(url, {
                 method: 'POST',
@@ -187,8 +194,10 @@
                     }else if (response.status == 400){
                         let promise = response.json();
                         promise.then(promise => alert(promise.point));
+                        isFunctionAddPointRunning = false;
                     }else{
                         alert('입금 중 오류가 발생했습니다.');
+                        isFunctionAddPointRunning = false;
                     }
                 });
         }
