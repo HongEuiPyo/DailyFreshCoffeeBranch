@@ -81,7 +81,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" th:if="not ${itemPage?.isEmpty()}">
                             <div class="dataTables_paginate paging_simple_numbers">
                                 <ul class="pagination" th:with="start=${T(java.lang.Math).floor(itemPage.number/10)*10 + 1},last=(${start + 9 < itemPage.totalPages ? start + 9 : itemPage.totalPages})">
                                     <li th:class="${itemPage.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
