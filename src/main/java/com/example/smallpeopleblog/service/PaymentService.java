@@ -84,6 +84,7 @@ public class PaymentService {
         for (CartItem cartItem : cart.getCartItemList()) {
             Item item = cartItem.getItem();
             item.decreaseStock(cartItem.getCount());
+            item.addPurchaseCount(cartItem.getCount());
             itemRepository.save(item);
         }
 

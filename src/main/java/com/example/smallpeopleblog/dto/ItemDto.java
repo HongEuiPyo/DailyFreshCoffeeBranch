@@ -33,6 +33,8 @@ public class ItemDto {
 
     private List<ImageFileDto> imageFileDtoList = new ArrayList<>();
 
+    private int purchaseCnt;
+
 
     public Item toEntity() {
         return Item.builder()
@@ -41,6 +43,7 @@ public class ItemDto {
                 .summary(this.summary)
                 .stock(this.stock)
                 .itemStatus(this.itemStatus)
+                .purchaseCnt(purchaseCnt)
                 .build();
     }
 

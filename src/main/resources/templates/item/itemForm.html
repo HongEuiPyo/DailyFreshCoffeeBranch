@@ -58,6 +58,10 @@
                                                 <input type="text" th:field="*{stock}" class="form-control">
                                                 <p th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}" class="filedError">Incorrect data</p>
                                             </td>
+                                        <tr th:if="${itemFormDto?.id}">
+                                            <th scope="col">구매수량</th>
+                                            <td th:text="${itemFormDto.purchaseCnt}"></td>
+                                        </tr>
                                         </tr>
                                         <tr th:each="imageFile, index : ${itemFormDto.imageFileDtoList}">
                                             <th scope="col" th:text="'사진(' + ${index.count} + ')'"></th>

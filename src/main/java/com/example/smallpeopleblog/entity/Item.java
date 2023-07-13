@@ -51,12 +51,13 @@ public class Item extends BaseEntity {
 
 
     @Builder
-    public Item(String title, String summary, ItemStatus itemStatus, int price, int stock) {
+    public Item(String title, String summary, ItemStatus itemStatus, int price, int stock, int purchaseCnt) {
         this.title = title;
         this.summary = summary;
         this.itemStatus = itemStatus;
         this.price = price;
         this.stock = stock;
+        this.purchaseCnt = purchaseCnt;
     }
 
     public ItemDto toDto() {
@@ -74,6 +75,7 @@ public class Item extends BaseEntity {
                 .stock(stock)
                 .itemStatus(itemStatus)
                 .imageFileDtoList(imageFileDtoList)
+                .purchaseCnt(purchaseCnt)
                 .build();
     }
 
@@ -99,9 +101,14 @@ public class Item extends BaseEntity {
         this.stock += stock;
     }
 
-    // 아이템 상태 변경
+    // 상품 상태 변경
     public void updateItemStatus(ItemStatus itemStatus) {
         this.itemStatus = itemStatus;
+    }
+
+    // 상품 구매수량 증가
+    public void addPurchaseCount(int count) {
+        purchaseCnt += count;
     }
 
 }
