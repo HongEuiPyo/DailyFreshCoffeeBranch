@@ -1,6 +1,7 @@
 package com.example.smallpeopleblog.controller;
 
 import com.example.smallpeopleblog.dto.ItemDto;
+import com.example.smallpeopleblog.dto.ItemSearchDto;
 import com.example.smallpeopleblog.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +33,12 @@ public class ItemController {
      * @return
      */
     @GetMapping("/items")
-    public String itemList(@PageableDefault(size = 9) Pageable pageable, Model model) {
-        Page<ItemDto> itemDtoPage = itemService.getItemList(pageable);
-        model.addAttribute("itemDtoPage", itemDtoPage);
+    public String itemList(
+            @PageableDefault(size = 9) Pageable pageable,
+            @ModelAttribute("searchDto") ItemSearchDto searchDto,
+            Model model) {
+        Page<ItemDto> itemPage = itemService.getItemList(pageable, searchDto);
+        model.addAttribute("itemPage", itemPage);
         return "item/itemList";
     }
 

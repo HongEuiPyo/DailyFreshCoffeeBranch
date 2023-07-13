@@ -1,6 +1,8 @@
 package com.example.smallpeopleblog.service;
 
+import com.example.smallpeopleblog.constant.ItemCategory;
 import com.example.smallpeopleblog.dto.ItemDto;
+import com.example.smallpeopleblog.dto.ItemSearchDto;
 import com.example.smallpeopleblog.entity.ImageFile;
 import com.example.smallpeopleblog.entity.Item;
 import com.example.smallpeopleblog.exception.ImageFileNotFoundException;
@@ -24,14 +26,50 @@ public class ItemService {
     private final ImageFileRepository imageFileRepository;
     private final FileService fileService;
 
+
     /**
      * 상품 목록
      * @param pageable
      * @return
      */
-    public Page<ItemDto> getItemList(Pageable pageable) {
-        return itemRepository.findAll(pageable)
-                .map(Item::toDto);
+    public Page<ItemDto> getItemList(Pageable pageable, ItemSearchDto searchDto) {
+        ItemCategory searchCategory1 = searchDto.getSearchCategory1();
+        String searchType = searchDto.getSearchType();
+        String searchKeyword = searchDto.getSearchKeyword();
+
+        Page<ItemDto> itemPage = null;
+
+        if (!searchCategory1.equals(ItemCategory.ALL) && !"".equals(searchKeyword)) {
+            if ("title".equals(searchType)) {
+                itemPage = itemRepository.findByTitleLikeAndItemCategory(searchKeyword, searchCategory1, pageable)
+                        .map(Item::toDto);
+            } else if ("summary".equals(searchType)) {
+                itemPage = itemRepository.findBySummaryLikeAndItemCategory(searchKeyword, searchCategory1, pageable)
+                        .map(Item::toDto);
+            } else {
+                itemPage = itemRepository.findByTitleLikeOrSummaryLikeAndItemCategory(searchKeyword, searchCategory1, pageable)
+                        .map(Item::toDto);
+            }
+        } else if (!"".equals(searchKeyword)) {
+            if ("title".equals(searchType)) {
+                itemPage = itemRepository.findByTitleLike(searchKeyword, pageable)
+                        .map(Item::toDto);
+            } else if ("summary".equals(searchType)) {
+                itemPage = itemRepository.findBySummaryLike(searchKeyword, pageable)
+                        .map(Item::toDto);
+            } else {
+                itemPage = itemRepository.findByTitleLikeOrSummaryLike(searchKeyword, pageable)
+                        .map(Item::toDto);
+            }
+        } else if (!searchCategory1.equals(ItemCategory.ALL)) {
+            itemPage = itemRepository.findByItemCategory(searchCategory1, pageable)
+                    .map(Item::toDto);
+        } else {
+            itemPage = itemRepository.findAll(pageable)
+                    .map(Item::toDto);
+        }
+
+        return itemPage;
     }
 
     /**
@@ -150,4 +188,5 @@ public class ItemService {
 
         imageFileRepository.deleteById(imageFile.getId());
     }
+
 }

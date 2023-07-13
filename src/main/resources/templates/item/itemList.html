@@ -15,8 +15,40 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <div class="dataTables_wrapper dt-bootstrap4">
+                        <form name="listFrm" id="listFrm">
                         <div class="row">
-                            <th:block th:each="item, status: ${itemDtoPage}">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">카테고리</span>
+                                        <select id="searchCategory1" name="searchCategory1" class="custom-select form-control">
+                                            <option value="ALL">모든 음료</option>
+                                            <option value="COLD_BREW" th:selected="${searchDto.searchCategory1 != null && searchDto.searchCategory1.key == 'COLD_BREW'}">콜드 브루 커피</option>
+                                            <option value="BROOD" th:selected="${searchDto.searchCategory1 != null && searchDto.searchCategory1.key == 'BROOD'}">브루드 커피</option>
+                                            <option value="ESPRESSO" th:selected="${searchDto.searchCategory1 != null && searchDto.searchCategory1.key == 'ESPRESSO'}">에스프레소</option>
+                                            <option value="FRAPPUCCINO" th:selected="${searchDto.searchCategory1 != null && searchDto.searchCategory1.key == 'FRAPPUCCINO'}">프라푸치노</option>
+                                            <option value="REFRESHER" th:selected="${searchDto.searchCategory1 != null && searchDto.searchCategory1.key == 'REFRESHER'}">리프레셔</option>
+                                            <option value="TEA" th:selected="${searchDto.searchCategory1 != null && searchDto.searchCategory1.key == 'TEA'}">티</option>
+                                            <option value="BOTTLED" th:selected="${searchDto.searchCategory1 != null && searchDto.searchCategory1.key == 'BOTTLED'}">병음료</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-group mb-3">
+                                    <select id="searchType" name="searchType" class="custom-select form-control">
+                                        <option value="">전체</option>
+                                        <option value="title" th:selected="${searchDto.searchType == 'title'}">상품명</option>
+                                        <option value="summary" th:selected="${searchDto.searchType == 'summary'}">설명</option>
+                                    </select>
+                                    <input type="search" id="searchKeyword" name="searchKeyword" class="form-control w-50" placeholder="" th:value="${searchDto.searchKeyword}">
+                                    <button class="btn btn-facebook">검색</button>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                        <div class="row">
+                            <th:block th:each="item, status: ${itemPage}">
                                 <div class="col-md-4 margin">
                                     <div class="card" style="margin-bottom: 15px;">
                                         <a th:href="'/items/' +${item.id}" class="text-dark" style="text-decoration: none;">
@@ -34,6 +66,11 @@
                                 </div>
                             </th:block>
                         </div>
+                        <th:block th:if="${itemPage?.isEmpty()}">
+                        <div class="row mt-5 mb-5" style="text-align: center;">
+                            <h5>검색결과가 없습니다.</h5>
+                        </div>
+                        </th:block>
                         <div class="row">
                             <div class="col-sm-12 col-md-2">
                                 <button type="button" id="createBtn" class="btn btn-facebook" sec:authorize="hasRole('ROLE_ADMIN')" th:onclick="goCreate()">
@@ -46,17 +83,17 @@
                         </div>
                         <div class="row">
                             <div class="dataTables_paginate paging_simple_numbers">
-                                <ul class="pagination" th:with="start=${T(java.lang.Math).floor(itemDtoPage.number/10)*10 + 1},last=(${start + 9 < itemDtoPage.totalPages ? start + 9 : itemDtoPage.totalPages})">
-                                    <li th:class="${itemDtoPage.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                                        <a class="page-link" th:href="@{/items(page=${itemDtoPage.number})}" aria-label="이전">
+                                <ul class="pagination" th:with="start=${T(java.lang.Math).floor(itemPage.number/10)*10 + 1},last=(${start + 9 < itemPage.totalPages ? start + 9 : itemPage.totalPages})">
+                                    <li th:class="${itemPage.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                                        <a class="page-link" th:href="@{/items(page=${itemPage.number})}" aria-label="이전">
                                             <span aria-hidden="true">이전</span>
                                         </a>
                                     </li>
-                                    <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == itemDtoPage.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
+                                    <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == itemPage.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
                                         <a class="page-link" th:text="${page}" th:href="@{/items(page=${page})}"></a>
                                     </li>
-                                    <li th:class="${itemDtoPage.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                                        <a class="page-link" th:href="@{/items(page=${itemDtoPage.number + 2})}" aria-label="다음">
+                                    <li th:class="${itemPage.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                                        <a class="page-link" th:href="@{/items(page=${itemPage.number + 2})}" aria-label="다음">
                                             <span aria-hidden="true">다음</span>
                                         </a>
                                     </li>
@@ -75,4 +112,17 @@
   function goCreate(){
     window.location.href = '/admin/items/create';
   }
+
+  function goSearch(){
+      document.listFrm.action = '/items';
+      document.listFrm.method = 'GET';
+      document.listFrm.submit();
+  }
+
+  document.getElementById('searchCategory1').onchange = function(){
+      document.listFrm.action = '/items';
+      document.listFrm.method = 'GET';
+      document.listFrm.submit();
+  }
+
 </script>

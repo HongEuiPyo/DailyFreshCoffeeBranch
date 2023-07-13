@@ -1,5 +1,6 @@
 package com.example.smallpeopleblog.entity;
 
+import com.example.smallpeopleblog.constant.ItemCategory;
 import com.example.smallpeopleblog.constant.ItemStatus;
 import com.example.smallpeopleblog.dto.ImageFileDto;
 import com.example.smallpeopleblog.dto.ItemDto;
@@ -35,6 +36,9 @@ public class Item extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;
+
+    @Enumerated(EnumType.STRING)
+    private ItemCategory itemCategory;
 
     @Column(nullable = false)
     private int price;

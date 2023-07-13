@@ -1,7 +1,16 @@
 package com.example.smallpeopleblog.constant;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum Role {
-    USER
-    , SMALL_BUSINESS
-    , ADMIN
+    USER("ROLE_USER", "사용자")
+    , SMALL_BUSINESS("ROLE_SMALL_BUSINESS", "소상공인")
+    , ADMIN("ROLE_ADMIN", "관리자");
+
+    private final String key;
+    private final String title;
+
 }
