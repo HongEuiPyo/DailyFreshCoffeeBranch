@@ -6,11 +6,9 @@ import com.example.dailyFreshCoffeeBranch.dto.ReverseGeocodingRequestDto;
 import com.example.dailyFreshCoffeeBranch.dto.StaticMapRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 
 @RequiredArgsConstructor
@@ -27,10 +25,10 @@ public class NaverMapApiController {
      * @return
      */
     @GetMapping("/staticMap")
-    public Mono<byte[]> staticMap(@RequestBody StaticMapRequestDto requestDto) {
+    public byte[] staticMap(StaticMapRequestDto requestDto) {
 
         WebClient client = WebClient.builder()
-                .baseUrl("http://localhost:8080/api/naver/map/staticMap")
+                .baseUrl("https://naveropenapi.apigw.ntruss.com/map-static/v2/raster")
                 .build();
 
         return client.get()
@@ -43,7 +41,8 @@ public class NaverMapApiController {
                 .header("X-NCP-APIGW-API-KEY-ID", naverClient.getCLIENT_ID())
                 .header("X-NCP-APIGW-API-KEY", naverClient.getCLIENT_SECRET())
                 .retrieve()
-                .bodyToMono(byte[].class);
+                .bodyToMono(byte[].class)
+                .block();
     }
 
     /**
@@ -51,8 +50,8 @@ public class NaverMapApiController {
      * @param requestDto
      * @return
      */
-    @GetMapping("/geocoding")
-    public Mono<String> geocoding(@RequestBody GeocodingRequestDto requestDto) {
+    @GetMapping(value = "/geocoding")
+    public String geocoding(GeocodingRequestDto requestDto) {
 
         WebClient client =  WebClient.builder()
                 .baseUrl("https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode")
@@ -66,7 +65,8 @@ public class NaverMapApiController {
                 .header("X-NCP-APIGW-API-KEY-ID", naverClient.getCLIENT_ID())
                 .header("X-NCP-APIGW-API-KEY", naverClient.getCLIENT_SECRET())
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(String.class)
+                .block();
     }
 
     /**
@@ -75,7 +75,7 @@ public class NaverMapApiController {
      * @return
      */
     @GetMapping("/reverseGeocoding")
-    public Mono<String> reverseGeocoding(@RequestBody ReverseGeocodingRequestDto requestDto) {
+    public String reverseGeocoding(ReverseGeocodingRequestDto requestDto) {
 
         WebClient client =  WebClient.builder()
                 .baseUrl("https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc")
@@ -92,7 +92,8 @@ public class NaverMapApiController {
                 .header("X-NCP-APIGW-API-KEY-ID", naverClient.getCLIENT_ID())
                 .header("X-NCP-APIGW-API-KEY", naverClient.getCLIENT_SECRET())
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(String.class)
+                .block();
     }
 
     /**
@@ -101,7 +102,7 @@ public class NaverMapApiController {
      * @return
      */
     @GetMapping("/naver/map/directions5")
-    public Mono<String> directions5(@RequestBody Directions5RequestDto requestDto) {
+    public String directions5(Directions5RequestDto requestDto) {
 
         WebClient client =  WebClient.builder()
                 .baseUrl("https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving")
@@ -116,7 +117,8 @@ public class NaverMapApiController {
                 .header("X-NCP-APIGW-API-KEY-ID", naverClient.getCLIENT_ID())
                 .header("X-NCP-APIGW-API-KEY", naverClient.getCLIENT_SECRET())
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(String.class)
+                .block();
     }
 
 }
