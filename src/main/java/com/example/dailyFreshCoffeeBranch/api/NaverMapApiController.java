@@ -102,7 +102,7 @@ public class NaverMapApiController {
      * @param requestDto
      * @return
      */
-    @GetMapping("/naver/map/directions5")
+    @GetMapping("/directions5")
     public String directions5(Directions5RequestDto requestDto) {
 
         WebClient client =  WebClient.builder()
