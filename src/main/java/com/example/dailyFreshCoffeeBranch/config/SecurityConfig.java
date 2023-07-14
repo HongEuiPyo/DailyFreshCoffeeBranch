@@ -14,6 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @RequiredArgsConstructor
 @Configuration
@@ -21,6 +25,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Slf4j
 public class SecurityConfig {
 
+    private final DataSource dataSource;
     private final ClientRegistrationRepository clientRegistrationRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
 
@@ -57,6 +62,13 @@ public class SecurityConfig {
                     .deleteCookies("remember-me", "JSESSION_ID")
                     .logoutSuccessUrl("/members/login")
 
+                .and()
+                    .rememberMe()
+                    .rememberMeParameter("rememberMe")
+                    .tokenRepository(persistentTokenRepository())
+                    .tokenValiditySeconds(3600)
+                    .alwaysRemember(false)
+
                 // OAuth 로그인
                 .and()
                     // Customizing the Authorization Request
@@ -72,10 +84,10 @@ public class SecurityConfig {
                                     )
 
                     .oauth2Login()
-                            .loginPage("/members/login")
-                            .defaultSuccessUrl("/")
-                            .userInfoEndpoint()
-                            .userService(customOAuth2UserService);
+                    .loginPage("/members/login")
+                    .defaultSuccessUrl("/")
+                    .userInfoEndpoint()
+                    .userService(customOAuth2UserService);
 
         return http.build();
     }
@@ -99,6 +111,13 @@ public class SecurityConfig {
     @Bean
     public MyLoginFailureHandler myLoginFailureHandler() {
         return new MyLoginFailureHandler();
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+        repo.setDataSource(dataSource);
+        return repo;
     }
 
 }

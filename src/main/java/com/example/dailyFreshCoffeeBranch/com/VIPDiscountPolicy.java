@@ -1,9 +1,11 @@
 package com.example.dailyFreshCoffeeBranch.com;
 
 import com.example.dailyFreshCoffeeBranch.constant.Role;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@Getter
 @Component
 public class VIPDiscountPolicy {
 
@@ -19,14 +21,6 @@ public class VIPDiscountPolicy {
             totalPrice -= applyPrice;
         }
         return totalPrice;
-    }
-
-    public String getApplyRole() {
-        return applyRole;
-    }
-
-    public double getDiscountRate() {
-        return discountRate;
     }
 
 }
