@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
+import com.example.dailyFreshCoffeeBranch.com.MySecurityUtils;
 import com.example.dailyFreshCoffeeBranch.dto.MemberDto;
 import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateDto;
-import com.example.dailyFreshCoffeeBranch.security.SessionUser;
 import com.example.dailyFreshCoffeeBranch.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -81,13 +81,7 @@ public class MemberController {
      */
     @GetMapping("/myPage")
     public String memberDetail(Principal principal, Model model, HttpSession session) {
-        SessionUser user = (SessionUser) session.getAttribute("user");
-        String memberEmail = "";
-        if (user == null) {
-            memberEmail = principal.getName();
-        } else {
-            memberEmail = user.getEmail();
-        }
+        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
         model.addAttribute("memberDto", memberService.getMemberDetailByEmail(memberEmail));
         return "member/memberDetail";
     }

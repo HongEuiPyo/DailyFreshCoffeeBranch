@@ -2,8 +2,8 @@ package com.example.dailyFreshCoffeeBranch.service;
 
 import com.example.dailyFreshCoffeeBranch.entity.Member;
 import com.example.dailyFreshCoffeeBranch.repository.MemberRepository;
-import com.example.dailyFreshCoffeeBranch.security.OAuthAttributes;
-import com.example.dailyFreshCoffeeBranch.security.SessionUser;
+import com.example.dailyFreshCoffeeBranch.security.socialLogin.google.OAuthAttributes;
+import com.example.dailyFreshCoffeeBranch.security.socialLogin.SessionUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

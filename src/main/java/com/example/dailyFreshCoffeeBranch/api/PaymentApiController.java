@@ -1,5 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.api;
 
+import com.example.dailyFreshCoffeeBranch.com.MySecurityUtils;
 import com.example.dailyFreshCoffeeBranch.dto.MemberPointUpDto;
 import com.example.dailyFreshCoffeeBranch.dto.PaymentDto;
 import com.example.dailyFreshCoffeeBranch.service.PaymentService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
@@ -36,7 +38,8 @@ public class PaymentApiController {
     public ResponseEntity<Map<String, String>> addPoint(
             @Valid @RequestBody MemberPointUpDto memberPointUpDto,
             BindingResult result,
-            Principal principal
+            Principal principal,
+            HttpSession session
     ) {
         Map<String, String> resultMap = new HashMap<>();
 
@@ -49,7 +52,9 @@ public class PaymentApiController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
 
-        paymentService.addPoint(principal.getName(), memberPointUpDto);
+        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+
+        paymentService.addPoint(memberEmail, memberPointUpDto);
 
         resultMap.put("msg", "포인트 충전을 완료하였습니다.");
 
@@ -66,7 +71,8 @@ public class PaymentApiController {
     public ResponseEntity<Map<String, String>> confirmCartItemPurchase(
             @Valid @RequestBody PaymentDto paymentDto,
             BindingResult result,
-            Principal principal
+            Principal principal,
+            HttpSession session
     ) {
         Map<String, String> resultMap = new HashMap<>();
 
@@ -79,7 +85,9 @@ public class PaymentApiController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
 
-        paymentService.confirmCartItemPurchase(principal.getName(), paymentDto);
+        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+
+        paymentService.confirmCartItemPurchase(memberEmail, paymentDto);
 
         resultMap.put("msg", "구매확정을 완료하였습니다.");
 

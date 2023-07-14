@@ -1,4 +1,4 @@
-package com.example.dailyFreshCoffeeBranch.security;
+package com.example.dailyFreshCoffeeBranch.security.socialLogin;
 
 import com.example.dailyFreshCoffeeBranch.entity.Member;
 import lombok.Getter;

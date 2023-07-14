@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
-import com.example.dailyFreshCoffeeBranch.security.SessionUser;
-import com.example.dailyFreshCoffeeBranch.service.CartService;
+import com.example.dailyFreshCoffeeBranch.com.MySecurityUtils;
 import com.example.dailyFreshCoffeeBranch.dto.CartDto;
+import com.example.dailyFreshCoffeeBranch.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,13 +25,7 @@ public class CartController {
      */
     @GetMapping(value = "/cart/items")
     public String cartItemList(Principal principal, HttpSession session, Model model) {
-        SessionUser user = (SessionUser) session.getAttribute("user");
-        String memberEmail = "";
-        if (user == null) {
-            memberEmail = principal.getName();
-        } else {
-            memberEmail = user.getEmail();
-        }
+        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
         CartDto cartDto = cartService.getCartItemList(memberEmail);
         model.addAttribute("cartDto", cartDto);
         return "cart/cartList";

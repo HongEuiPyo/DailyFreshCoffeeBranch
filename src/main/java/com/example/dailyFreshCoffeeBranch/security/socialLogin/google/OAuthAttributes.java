@@ -1,4 +1,4 @@
-package com.example.dailyFreshCoffeeBranch.security;
+package com.example.dailyFreshCoffeeBranch.security.socialLogin.google;
 
 import com.example.dailyFreshCoffeeBranch.constant.Role;
 import com.example.dailyFreshCoffeeBranch.entity.Member;

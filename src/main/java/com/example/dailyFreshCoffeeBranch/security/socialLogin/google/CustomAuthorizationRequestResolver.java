@@ -1,4 +1,4 @@
-package com.example.dailyFreshCoffeeBranch.security;
+package com.example.dailyFreshCoffeeBranch.security.socialLogin.google;
 
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
@@ -48,7 +48,7 @@ public class CustomAuthorizationRequestResolver implements OAuth2AuthorizationRe
 
         Map<String, Object> additionalParameters =
                 new LinkedHashMap<>(authorizationRequest.getAdditionalParameters());
-        additionalParameters.put("prompt", "select_account");
+        additionalParameters.put("prompt", "consent");
 
         return OAuth2AuthorizationRequest.from(authorizationRequest)
                 .additionalParameters(additionalParameters)

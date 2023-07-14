@@ -1,11 +1,13 @@
 package com.example.dailyFreshCoffeeBranch.api;
 
-import com.example.dailyFreshCoffeeBranch.service.CommentService;
+import com.example.dailyFreshCoffeeBranch.com.MySecurityUtils;
 import com.example.dailyFreshCoffeeBranch.dto.CommentDto;
+import com.example.dailyFreshCoffeeBranch.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +29,9 @@ public class CommentApiController {
      * @return
      */
     @PostMapping("/boards/{id}/comments/create")
-    public ResponseEntity<CommentDto> createComment(@PathVariable Long id, @RequestBody CommentDto commentDto, Principal principal) {
-        CommentDto comment = commentService.createComment(principal.getName(), id, commentDto);
+    public ResponseEntity<CommentDto> createComment(@PathVariable Long id, @RequestBody CommentDto commentDto, Principal principal, HttpSession session) {
+        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+        CommentDto comment = commentService.createComment(memberEmail, id, commentDto);
         return ResponseEntity.ok(comment);
     }
 

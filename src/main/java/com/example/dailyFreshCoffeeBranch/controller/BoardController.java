@@ -1,5 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
+import com.example.dailyFreshCoffeeBranch.com.MySecurityUtils;
 import com.example.dailyFreshCoffeeBranch.dto.BoardDto;
 import com.example.dailyFreshCoffeeBranch.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -74,14 +76,14 @@ public class BoardController {
      * @return
      */
     @PostMapping("/admin/boards/create")
-    public String createBoard(@Valid BoardDto boardDto, BindingResult bindingResult, Principal principal, Model model) {
+    public String createBoard(@Valid BoardDto boardDto, BindingResult bindingResult, Principal principal, HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
             return "board/boardUpdateForm";
         }
 
         try {
-            String email = principal.getName();
-            boardService.createBoard(boardDto, email);
+            String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+            boardService.createBoard(boardDto, memberEmail);
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "board/boardUpdateForm";
@@ -96,13 +98,15 @@ public class BoardController {
      * @return
      */
     @PostMapping("/admin/boards/{id}/update")
-    public String updateBoard(@PathVariable Long id, @Valid BoardDto boardDto, BindingResult bindingResult, Principal principal, Model model) {
+    public String updateBoard(@PathVariable Long id, @Valid BoardDto boardDto, BindingResult bindingResult, Principal principal, HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
             return "board/boardUpdateForm";
         }
 
+        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+
         try {
-            boardService.updateBoard(id, boardDto, principal.getName());
+            boardService.updateBoard(id, boardDto, memberEmail);
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "board/boardUpdateForm";

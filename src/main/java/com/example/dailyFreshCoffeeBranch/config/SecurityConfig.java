@@ -1,6 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.config;
 
-import com.example.dailyFreshCoffeeBranch.security.CustomAuthorizationRequestResolver;
+import com.example.dailyFreshCoffeeBranch.security.socialLogin.google.CustomAuthorizationRequestResolver;
 import com.example.dailyFreshCoffeeBranch.security.MyLoginFailureHandler;
 import com.example.dailyFreshCoffeeBranch.security.MyLoginSuccessHandler;
 import com.example.dailyFreshCoffeeBranch.service.CustomOAuth2UserService;
