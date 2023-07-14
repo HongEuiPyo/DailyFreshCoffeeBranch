@@ -1,0 +1,4 @@
+# VIP 할인 정책
+vipDiscountPolicy:
+  applyRole: SMALL_BUSINESS
+  discountRate: 0.1

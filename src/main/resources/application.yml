@@ -4,6 +4,9 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    include: oauth2,policy
+
   # DB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -33,18 +36,6 @@ spring:
       max-file-size: 10MB
       max-request-size: 50MB
 
-  # security
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 877156848028-1ccncpcu7as3m0tb786ofi46o76jk79o.apps.googleusercontent.com
-            client-secret: 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
-            scope:
-              - email
-              - profile
-
 # 파일 업로드
 itemImgLocation: /Users/hongeuipyo/Documents/upload/images
 uploadPath: file:///Users/hongeuipyo/Documents/upload/images/
@@ -55,8 +46,3 @@ logging:
     org.hibernate:
       type:
         descriptor.sql: trace
-
-# VIP 할인 정책
-vipDiscountPolicy:
-  applyRole: SMALL_BUSINESS
-  discountRate: 0.1
