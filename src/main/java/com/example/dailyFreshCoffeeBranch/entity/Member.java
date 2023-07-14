@@ -6,7 +6,6 @@ import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,8 +45,7 @@ public class Member extends BaseEntity implements UserDetails {
     @Column
     private String sns;
 
-    @Column(columnDefinition = "double")
-    @ColumnDefault("0")
+    @Column(columnDefinition = "double DEFAULT '0'")
     private Double point;
 
     @Enumerated(EnumType.STRING)
@@ -102,7 +100,7 @@ public class Member extends BaseEntity implements UserDetails {
                 .phone(phone)
                 .gender(gender)
                 .sns(sns)
-                .point(point.doubleValue())
+                .point(point)
                 .role(role)
                 .build();
     }
