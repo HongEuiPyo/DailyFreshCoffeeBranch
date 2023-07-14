@@ -5,6 +5,7 @@ import com.example.dailyFreshCoffeeBranch.dto.GeocodingRequestDto;
 import com.example.dailyFreshCoffeeBranch.dto.ReverseGeocodingRequestDto;
 import com.example.dailyFreshCoffeeBranch.dto.StaticMapRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class NaverMapApiController {
      * @param requestDto
      * @return
      */
-    @GetMapping("/staticMap")
+    @GetMapping(value = "/staticMap", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] staticMap(StaticMapRequestDto requestDto) {
 
         WebClient client = WebClient.builder()
@@ -50,7 +51,7 @@ public class NaverMapApiController {
      * @param requestDto
      * @return
      */
-    @GetMapping(value = "/geocoding")
+    @GetMapping("/geocoding")
     public String geocoding(GeocodingRequestDto requestDto) {
 
         WebClient client =  WebClient.builder()
