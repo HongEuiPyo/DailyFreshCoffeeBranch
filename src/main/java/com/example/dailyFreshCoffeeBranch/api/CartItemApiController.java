@@ -3,7 +3,7 @@ package com.example.dailyFreshCoffeeBranch.api;
 import com.example.dailyFreshCoffeeBranch.com.MySecurityUtils;
 import com.example.dailyFreshCoffeeBranch.dto.CartItemDto;
 import com.example.dailyFreshCoffeeBranch.dto.CartItemUpdateDto;
-import com.example.dailyFreshCoffeeBranch.service.CartService;
+import com.example.dailyFreshCoffeeBranch.service.CartItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,9 @@ import java.util.Map;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
-public class CartApiController {
+public class CartItemApiController {
 
-    private final CartService cartService;
+    private final CartItemService cartService;
 
 
     /**

@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class CartService {
+public class CartItemService {
 
     private final MemberRepository memberRepository;
     private final CartRepository cartRepository;

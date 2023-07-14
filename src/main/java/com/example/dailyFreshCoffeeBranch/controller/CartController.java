@@ -2,7 +2,7 @@ package com.example.dailyFreshCoffeeBranch.controller;
 
 import com.example.dailyFreshCoffeeBranch.com.MySecurityUtils;
 import com.example.dailyFreshCoffeeBranch.dto.CartDto;
-import com.example.dailyFreshCoffeeBranch.service.CartService;
+import com.example.dailyFreshCoffeeBranch.service.CartItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import java.security.Principal;
 @Controller
 public class CartController {
 
-    private final CartService cartService;
+    private final CartItemService cartService;
 
     /**
      * 장바구니 조회

@@ -44,6 +44,7 @@
           <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/items">상품</a></li>
           <li sec:authorize="!isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/login">로그인</a></li>
           <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/myPage">마이페이지</a></li>
+          <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="#">배송</a></li>
           <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/myPage">통계</a></li>
         </ul>
       </div>
