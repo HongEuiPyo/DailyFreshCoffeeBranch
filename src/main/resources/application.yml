@@ -44,6 +44,7 @@ spring:
             scope:
               - email
               - profile
+
 # 파일 업로드
 itemImgLocation: /Users/hongeuipyo/Documents/upload/images
 uploadPath: file:///Users/hongeuipyo/Documents/upload/images/

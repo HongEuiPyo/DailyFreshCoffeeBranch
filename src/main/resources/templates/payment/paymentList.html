@@ -27,6 +27,9 @@
         <td th:text="${paymentItem.getTotalUsePoint() - paymentItem.getTotalUsePoint() * paymentItem.getDiscount()}"></td>
         <td th:text="${#temporals.format(paymentItem.getModifiedTime(), 'yyyy-MM-dd HH:mm:ss')}"></td>
     </tr>
+    <tr th:if="${paymentDtoList.isEmpty()}" style="text-align: center;">
+        <td colspan="5">구매목록이 없습니다.</td>
+    </tr>
     </tbody>
 </table>
 </div>
