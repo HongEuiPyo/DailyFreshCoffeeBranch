@@ -5,7 +5,7 @@ import com.example.dailyFreshCoffeeBranch.service.HomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,7 +21,7 @@ public class HomeController {
      * 홈 화면
      * @return
      */
-    @RequestMapping("/")
+    @GetMapping("/")
     public String home(Model model) {
         // 1. 현재 날짜 계산
         LocalDate localDate = LocalDate.now();
@@ -34,6 +34,15 @@ public class HomeController {
         List<ItemDto> top3ItemList = homeService.getTop3ItemList();
         model.addAttribute("top3ItemList", top3ItemList);
         return "index";
+    }
+
+    /**
+     * 오시는 길
+     * @return
+     */
+    @GetMapping("/store")
+    public String store() {
+        return "store";
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.dailyFreshCoffeeBranch.security.socialLogin.google;
+package com.example.dailyFreshCoffeeBranch.security.socialLogin;
 
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
