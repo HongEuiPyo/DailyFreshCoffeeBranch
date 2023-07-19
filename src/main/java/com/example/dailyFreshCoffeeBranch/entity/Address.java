@@ -1,6 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.entity;
 
+import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateDto;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +12,7 @@ import javax.persistence.*;
 @Table(name = "address")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 public class Address extends BaseEntity {
 
@@ -18,13 +21,24 @@ public class Address extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int latitude;
+    private String latitude;
 
-    private int longitude;
+    private String longitude;
 
-    private String StreetNameAddress;
+    private String roadAddress;
 
     @OneToOne
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    public void update(MemberUpdateDto dto) {
+        String[] array = dto.getLatlng()
+                .replace("(", "")
+                .replace(")", "")
+                .split(",");
+        this.latitude = array[0];
+        this.longitude = array[2];
+        this.roadAddress = dto.getRoadAddress();
+    }
 
 }

@@ -48,6 +48,10 @@
                                     <td th:text="${memberDto.gender}"></td>
                                 </tr>
                                 <tr>
+                                    <th scope="col">주소</th>
+                                    <td th:text="${memberDto.roadAddress}"></td>
+                                </tr>
+                                <tr>
                                     <th scope="col">회원구분</th>
                                     <td th:if="${#strings.equals(memberDto.role, 'ADMIN')}">관리자</td>
                                     <td th:if="${#strings.equals(memberDto.role, 'USER')}">일반</td>

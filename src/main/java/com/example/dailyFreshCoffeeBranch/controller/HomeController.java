@@ -1,5 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
+import com.example.dailyFreshCoffeeBranch.dto.AddressDto;
 import com.example.dailyFreshCoffeeBranch.dto.ItemDto;
 import com.example.dailyFreshCoffeeBranch.service.HomeService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import java.util.List;
 public class HomeController {
 
     private final HomeService homeService;
-
 
     /**
      * 홈 화면
@@ -41,7 +41,9 @@ public class HomeController {
      * @return
      */
     @GetMapping("/store")
-    public String store() {
+    public String store(Model model) {
+        AddressDto storeLocation = homeService.getStoreLocation();
+        model.addAttribute("storeLocation", storeLocation);
         return "store";
     }
 

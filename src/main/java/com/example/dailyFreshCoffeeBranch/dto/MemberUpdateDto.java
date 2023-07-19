@@ -40,6 +40,10 @@ public class MemberUpdateDto {
 
     private Role role;
 
+    private String roadAddress;
+
+    private String latlng;
+
     @AssertTrue(message = "비밀번호가 일치하지 않습니다.")
     public boolean isPasswordDoubleChecked() {
         if (password != null && password2 != null) {
@@ -63,6 +67,13 @@ public class MemberUpdateDto {
     }
 
     public static MemberUpdateDto of(Member member) {
+        String roadAddress = "";
+        String latlng = "";
+
+        if (member.getAddress() != null) {
+            roadAddress = member.getAddress().getRoadAddress();
+            latlng = member.getAddress().getLatitude() + "," + member.getAddress().getLongitude();
+        }
         return MemberUpdateDto.builder()
                 .id(member.getId())
                 .email(member.getEmail())
@@ -73,6 +84,8 @@ public class MemberUpdateDto {
                 .sns(member.getSns())
                 .role(member.getRole())
                 .point(member.getPoint())
+                .roadAddress(roadAddress)
+                .latlng(latlng)
                 .build();
     }
 

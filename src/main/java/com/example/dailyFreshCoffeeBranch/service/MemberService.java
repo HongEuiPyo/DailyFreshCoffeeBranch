@@ -2,9 +2,11 @@ package com.example.dailyFreshCoffeeBranch.service;
 
 import com.example.dailyFreshCoffeeBranch.dto.MemberDto;
 import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateDto;
+import com.example.dailyFreshCoffeeBranch.entity.Address;
 import com.example.dailyFreshCoffeeBranch.entity.Cart;
 import com.example.dailyFreshCoffeeBranch.entity.Member;
 import com.example.dailyFreshCoffeeBranch.exception.MemberNotFoundException;
+import com.example.dailyFreshCoffeeBranch.repository.AddressRepository;
 import com.example.dailyFreshCoffeeBranch.repository.CartRepository;
 import com.example.dailyFreshCoffeeBranch.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import javax.transaction.Transactional;
 public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+    private final AddressRepository addressRepository;
     private final CartRepository cartRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -42,6 +45,22 @@ public class MemberService implements UserDetailsService {
 
         Member member = memberRepository.save(entity);
 
+        String[] array = memberDto.getLatlng()
+                .replace("(", "")
+                .replace(")", "")
+                .split(",");
+
+        Address address = Address.builder()
+                .roadAddress(memberDto.getRoadAddress())
+                .latitude(array[0])
+                .longitude(array[1])
+                .member(member)
+                .build();
+
+        addressRepository.save(address);
+
+        member.setAddress(address);
+
         Cart cart = cartRepository.findByMemberId(member.getId())
                         .orElseGet(() -> createMemberCart(member));
 
@@ -54,9 +73,9 @@ public class MemberService implements UserDetailsService {
      * @return
      */
     public MemberDto getMemberDetailByEmail(String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new MemberNotFoundException("회원 상세정보가 없습니다. 괸리자에게 문의하세요."))
-                .toDto();
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new MemberNotFoundException("회원 상세정보가 없습니다. 괸리자에게 문의하세요."));
+        return MemberDto.of(member);
     }
 
     /**
@@ -73,17 +92,34 @@ public class MemberService implements UserDetailsService {
     /**
      * 회원정보 수정처리
      * @param id
-     * @param memberUpdateDto
+     * @param dto
      */
     @Transactional
-    public void updateMember(Long id, MemberUpdateDto memberUpdateDto) {
-        memberUpdateDto.setPassword(bCryptPasswordEncoder.encode(memberUpdateDto.getPassword()));
+    public void updateMember(Long id, MemberUpdateDto dto) {
+        dto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
 
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException("회원을 조회하실 수 없습니다."));
 
-        member.updateWithMemberUpdateDto(memberUpdateDto);
+        member.updateWithMemberUpdateDto(dto);
         memberRepository.save(member);
+
+        if (member.getAddress() != null) {
+            member.getAddress().update(dto);
+        } else {
+            String[] array = dto.getLatlng()
+                    .replace("(", "")
+                    .replace(")", "")
+                    .split(",");
+            Address address = Address.builder()
+                    .latitude(array[0])
+                    .longitude(array[1])
+                    .roadAddress(dto.getRoadAddress())
+                    .member(member)
+                    .build();
+            addressRepository.save(address);
+        }
+
     }
 
     /**

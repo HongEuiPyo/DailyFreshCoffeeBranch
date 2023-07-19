@@ -20,11 +20,36 @@
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
 
-    <!-- 부트스트랩 아이콘 (20230711) -->
+    <!-- 부트스트랩 아이콘 라이브러리 (20230711) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
-    <!-- 파비콘 적용 (20230714) -->
+    <!-- 파비콘 (20230714) -->
     <link rel="favicon" href="/img/favicon.ico">
+
+    <!-- 제이쿼리 라이브러리 -->
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+    <!-- script>
+      export default {
+        mounted() {
+          // 네이버 지도 API 로드
+          const script = document.createElement("script");
+          script.src =
+                  "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=k18d8834sg";
+          script.async = true;
+          script.defer = true;
+          document.head.appendChild(script);
+
+          script.onload = () => {
+            // 네이버 지도 생성
+            new window.naver.maps.Map("map", {
+              center: new window.naver.maps.LatLng(37.5670135, 126.9783740),
+              zoom: 10
+            });
+          };
+        }
+      };
+    </script -->
 
   </head>
 

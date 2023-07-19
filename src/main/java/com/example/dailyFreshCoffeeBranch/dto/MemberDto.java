@@ -5,7 +5,10 @@ import com.example.dailyFreshCoffeeBranch.entity.Member;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 
 @NoArgsConstructor
@@ -41,6 +44,10 @@ public class MemberDto {
 
     private Role role;
 
+    private String roadAddress;
+
+    private String latlng;
+
     @AssertTrue(message = "비밀번호가 일치하지 않습니다.")
     public boolean isPasswordDoubleChecked() {
         if (password != null && password2 != null) {
@@ -60,6 +67,29 @@ public class MemberDto {
                 .sns(sns)
                 .role(role)
                 .point(point)
+                .build();
+    }
+
+    public static MemberDto of(Member member) {
+        String roadAddress = "";
+        String latlng = "";
+
+        if (member.getAddress() != null) {
+            roadAddress = member.getAddress().getRoadAddress();
+            latlng = member.getAddress().getLatitude() + "," + member.getAddress().getLongitude();
+        }
+        return MemberDto.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .password(member.getPassword())
+                .name(member.getName())
+                .phone(member.getPhone())
+                .gender(member.getGender())
+                .sns(member.getSns())
+                .role(member.getRole())
+                .point(member.getPoint())
+                .roadAddress(roadAddress)
+                .latlng(latlng)
                 .build();
     }
 

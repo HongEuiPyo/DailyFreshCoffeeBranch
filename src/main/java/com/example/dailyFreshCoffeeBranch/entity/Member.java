@@ -5,6 +5,7 @@ import com.example.dailyFreshCoffeeBranch.dto.MemberDto;
 import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +20,7 @@ import java.util.List;
 @Table(name = "member")
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @Builder
 public class Member extends BaseEntity implements UserDetails {
 
@@ -55,41 +57,9 @@ public class Member extends BaseEntity implements UserDetails {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public String getSns() {
-        return sns;
-    }
-
-    public double getPoint() {
-        return point;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
+    @OneToOne(mappedBy = "member")
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     public MemberDto toDto() {
         return MemberDto.builder()
@@ -133,6 +103,8 @@ public class Member extends BaseEntity implements UserDetails {
     public void setCart(Cart cart) {
         this.cart = cart;
     }
+
+    public void setAddress(Address address) {this.address = address;}
 
     public void addPoint(double point) {
         this.point += point;
