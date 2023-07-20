@@ -1,16 +1,13 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
+import com.example.dailyFreshCoffeeBranch.annotation.LoginUserInfo;
 import com.example.dailyFreshCoffeeBranch.dto.DeliveryDto;
+import com.example.dailyFreshCoffeeBranch.security.oauth2.UserInfo;
 import com.example.dailyFreshCoffeeBranch.service.DeliveryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import javax.servlet.http.HttpSession;
-import java.security.Principal;
-
-import static com.example.dailyFreshCoffeeBranch.com.MySecurityUtils.findMemberEmail;
 
 @RequiredArgsConstructor
 @Controller
@@ -21,15 +18,13 @@ public class DeliveryController {
     /**
      * 회원 배송 조회
      *
-     * @param session
-     * @param principal
+     * @param userInfo
      * @param model
      * @return
      */
     @GetMapping("/delivery")
-    public String getMemberDeliveryList(HttpSession session, Principal principal, Model model) {
-        String memberEmail = findMemberEmail(principal, session);
-        DeliveryDto memberDelivery = deliveryService.getMemberDeliveryList(memberEmail);
+    public String getMemberDeliveryList(@LoginUserInfo UserInfo userInfo, Model model) {
+        DeliveryDto memberDelivery = deliveryService.getMemberDeliveryList(userInfo.getEmail());
         model.addAttribute("memberDelivery", memberDelivery);
         return "delivery/deliveryList";
     }

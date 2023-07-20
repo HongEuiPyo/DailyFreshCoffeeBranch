@@ -1,8 +1,9 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
-import com.example.dailyFreshCoffeeBranch.com.MySecurityUtils;
+import com.example.dailyFreshCoffeeBranch.annotation.LoginUserInfo;
 import com.example.dailyFreshCoffeeBranch.dto.MemberDto;
 import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateDto;
+import com.example.dailyFreshCoffeeBranch.security.oauth2.UserInfo;
 import com.example.dailyFreshCoffeeBranch.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,9 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.security.Principal;
 
 @RequiredArgsConstructor
 @RequestMapping("/members")
@@ -75,14 +74,13 @@ public class MemberController {
 
     /**
      * 회원 상세
-     * @param principal
+     * @param
      * @param model
      * @return
      */
     @GetMapping("/myPage")
-    public String memberDetail(Principal principal, Model model, HttpSession session) {
-        String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
-        model.addAttribute("memberDto", memberService.getMemberDetailByEmail(memberEmail));
+    public String memberDetail(@LoginUserInfo UserInfo userInfo, Model model) {
+        model.addAttribute("memberDto", memberService.getMemberDetailByEmail(userInfo.getEmail()));
         return "member/memberDetail";
     }
 

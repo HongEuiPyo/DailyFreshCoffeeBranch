@@ -3,7 +3,7 @@ package com.example.dailyFreshCoffeeBranch.service;
 import com.example.dailyFreshCoffeeBranch.entity.Member;
 import com.example.dailyFreshCoffeeBranch.repository.MemberRepository;
 import com.example.dailyFreshCoffeeBranch.security.oauth2.OAuthAttributes;
-import com.example.dailyFreshCoffeeBranch.security.oauth2.SessionUser;
+import com.example.dailyFreshCoffeeBranch.security.oauth2.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -40,7 +40,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         Member member = saveOrUpdate(attributes);
 
-        httpSession.setAttribute("user", new SessionUser(member));
+        httpSession.setAttribute("user", new UserInfo(member));
 
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(member.getRole().getKey())),
                 attributes.getAttributes(),
