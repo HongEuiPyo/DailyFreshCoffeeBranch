@@ -82,7 +82,7 @@ public class BoardController {
         }
 
         try {
-            String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+            String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
             boardService.createBoard(boardDto, memberEmail);
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -103,7 +103,7 @@ public class BoardController {
             return "board/boardUpdateForm";
         }
 
-        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+        String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
 
         try {
             boardService.updateBoard(id, boardDto, memberEmail);

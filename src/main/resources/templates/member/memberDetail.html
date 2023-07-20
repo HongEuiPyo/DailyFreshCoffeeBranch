@@ -45,7 +45,8 @@
                                 </tr>
                                 <tr>
                                     <th scope="col">성별</th>
-                                    <td th:text="${memberDto.gender}"></td>
+                                    <td th:if="!${memberDto?.gender}"></td>
+                                    <td th:if="${memberDto?.gender}" th:text="${memberDto.gender == 'M' ? '남' : '여'}"></td>
                                 </tr>
                                 <tr>
                                     <th scope="col">주소</th>

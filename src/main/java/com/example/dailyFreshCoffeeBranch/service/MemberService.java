@@ -45,15 +45,10 @@ public class MemberService implements UserDetailsService {
 
         Member member = memberRepository.save(entity);
 
-        String[] array = memberDto.getLatlng()
-                .replace("(", "")
-                .replace(")", "")
-                .split(",");
-
         Address address = Address.builder()
                 .roadAddress(memberDto.getRoadAddress())
-                .latitude(array[0])
-                .longitude(array[1])
+                .latitude(memberDto.getLatitude())
+                .longitude(memberDto.getLongitude())
                 .member(member)
                 .build();
 
@@ -92,29 +87,25 @@ public class MemberService implements UserDetailsService {
     /**
      * 회원정보 수정처리
      * @param id
-     * @param dto
+     * @param updateDto
      */
     @Transactional
-    public void updateMember(Long id, MemberUpdateDto dto) {
-        dto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+    public void updateMember(Long id, MemberUpdateDto updateDto) {
+        updateDto.setPassword(bCryptPasswordEncoder.encode(updateDto.getPassword()));
 
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException("회원을 조회하실 수 없습니다."));
 
-        member.updateWithMemberUpdateDto(dto);
+        member.updateWithMemberUpdateDto(updateDto);
         memberRepository.save(member);
 
         if (member.getAddress() != null) {
-            member.getAddress().update(dto);
+            member.getAddress().update(updateDto);
         } else {
-            String[] array = dto.getLatlng()
-                    .replace("(", "")
-                    .replace(")", "")
-                    .split(",");
             Address address = Address.builder()
-                    .latitude(array[0])
-                    .longitude(array[1])
-                    .roadAddress(dto.getRoadAddress())
+                    .latitude(updateDto.getLatitude())
+                    .longitude(updateDto.getLongitude())
+                    .roadAddress(updateDto.getRoadAddress())
                     .member(member)
                     .build();
             addressRepository.save(address);

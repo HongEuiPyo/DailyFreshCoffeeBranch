@@ -1,4 +1,4 @@
-package com.example.dailyFreshCoffeeBranch.security.socialLogin;
+package com.example.dailyFreshCoffeeBranch.security.oauth2;
 
 import com.example.dailyFreshCoffeeBranch.constant.Role;
 import com.example.dailyFreshCoffeeBranch.entity.Member;

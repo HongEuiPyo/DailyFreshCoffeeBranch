@@ -75,16 +75,16 @@
                                     <th scope="col" style="text-align: center">주소</th>
                                     <td>
                                         <div class="search input-group mb-3" style="">
-                                            <input id="address" type="text" class="form-control" placeholder="검색할 주소" value="불정로 6" />
+                                            <input id="address" type="text" class="form-control" placeholder="검색할 주소"/>
                                             <input id="addressSrchBtn" type="button" class="btn btn-facebook" value="주소 검색" />
                                         </div>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">회원주소</span>
-                                            <input id="roadAddress" name="roadAddress" type="text" class="form-control" value="불정로 6"/>
-                                            <input type="hidden" id="latlng" name="latlng">
+                                            <input id="roadAddress" name="roadAddress" type="text" class="form-control"/>
+                                            <input type="hidden" id="latitude" name="latitude">
+                                            <input type="hidden" id="longitude" name="longitude">
                                         </div>
-                                        <div id="map" style="width:800px;height:800px;">
-                                        </div>
+                                        <div id="map" style="width:800px;height:800px;"></div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -137,7 +137,8 @@
 
 <script th:inline="javascript">
 
-    const memberId = [[${memberUpdateDto.id}]];
+    const memberId = '[[${memberUpdateDto.id}]]';
+    const roadAddress = [[${memberUpdateDto.roadAddress}]];
 
     function goCancel() {
         window.history.go(-1);
@@ -155,6 +156,25 @@
         document.memberFrm.submit();
     }
 
+    /** Naver Map API 소스(s) */
+    function insertCoordsToFormInput(latlng) {
+        let array = latlng.toString().split(",");
+
+        let latitude = array[0].replace("(lat:", "").replace(")", "");
+        let longitude = array[1].replace("lng:", "").replace(")", "");
+
+        document.getElementById('latitude').value = latitude;
+        document.getElementById('longitude').value = longitude;
+    }
+
+    function insertLatitudeAndLongitudeToFormInput(x,y) {
+        document.getElementById('longitude').value = x;
+        document.getElementById('latitude').value = y;
+    }
+
+    function insertRoadAddressToFormInput(address) {
+        document.getElementById('roadAddress').value = address;
+    }
 
     var map = new naver.maps.Map("map", {
         center: new naver.maps.LatLng(37.3595316, 127.1052133),
@@ -172,7 +192,7 @@
 
         infoWindow.close();
 
-        document.getElementById('latlng').value = latlng;
+        insertCoordsToFormInput(latlng);
 
         naver.maps.Service.reverseGeocode({
             coords: latlng,
@@ -197,7 +217,7 @@
                 htmlAddresses.push((i+1) +'. '+ addrType +' '+ address);
 
                 if (addrType = 'roadaddr') {
-                    document.getElementById('roadAddress').value = address;
+                    insertRoadAddressToFormInput(address);
                 }
             }
 
@@ -207,8 +227,6 @@
                 htmlAddresses.join('<br />'),
                 '</div>'
             ].join('\n'));
-
-            $('userAddress').val(address);
 
             infoWindow.open(map, latlng);
         });
@@ -232,7 +250,6 @@
 
             if (item.roadAddress) {
                 htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
-                $('userAddress').val(item.roadAddress);
             }
 
             if (item.jibunAddress) {
@@ -252,6 +269,9 @@
 
             map.setCenter(point);
             infoWindow.open(map, point);
+
+            insertRoadAddressToFormInput(item.roadAddress);
+            insertLatitudeAndLongitudeToFormInput(item.x, item.y);
         });
     }
 
@@ -274,7 +294,7 @@
             searchAddressToCoordinate($('#address').val());
         });
 
-        searchAddressToCoordinate('정자동 178-1');
+        searchAddressToCoordinate(roadAddress);
     }
 
     function makeAddress(item) {

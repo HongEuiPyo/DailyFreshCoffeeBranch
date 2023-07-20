@@ -1,6 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.service;
 
 import com.example.dailyFreshCoffeeBranch.com.VIPDiscountPolicy;
+import com.example.dailyFreshCoffeeBranch.constant.DeliveryItemStatus;
+import com.example.dailyFreshCoffeeBranch.constant.DeliveryStatus;
 import com.example.dailyFreshCoffeeBranch.dto.MemberPointUpDto;
 import com.example.dailyFreshCoffeeBranch.dto.PaymentDto;
 import com.example.dailyFreshCoffeeBranch.entity.*;
@@ -25,10 +27,12 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final ItemRepository itemRepository;
     private final VIPDiscountPolicy vipDiscountPolicy;
-
+    private final DeliveryRepository deliveryRepository;
+    private final DeliveryItemRepository deliveryItemRepository;
 
     /**
-     * 구매 목록
+     * 구매 상품 목록 조회하기
+     *
      * @param email
      * @return
      */
@@ -42,7 +46,8 @@ public class PaymentService {
     }
 
     /**
-     * 포인트 충전
+     * 포인트 충전하기
+     *
      * @param email
      * @param memberPointUpDto
      * @return
@@ -55,31 +60,77 @@ public class PaymentService {
     }
 
     /**
-     * 장바구니 상품 구매 확정
+     * 구매 확정하기
+     *
      * @param email
      * @param paymentDto
      */
     @Transactional
     public void confirmCartItemPurchase(String email, PaymentDto paymentDto) {
+
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException("회원을 조회할 수 없습니다."));
 
-        double discountPrice = vipDiscountPolicy.getDiscountPrice(paymentDto.getTotalUsePoint(), member.getRole());
+        pay(paymentDto, member);
 
-        if(member.getPoint() < discountPrice){
-            throw new OutOfPointException("포인트가 부족합니다.");
-        }
+        Cart cart = cartRepository.findByMemberId(member.getId())
+                .orElseThrow(() -> new CartNotFoundException("장바구니를 찾을 수 없습니다."));
 
+        deliverCartItem(member, cart);
+
+        clearCart(cart);
+    }
+
+    /**
+     * 결제하기
+     *
+     * @param paymentDto
+     * @param member
+     */
+    private void pay(PaymentDto paymentDto, Member member) {
+        double discountPrice = ifVIPGetDiscountPrice(paymentDto, member);
         member.payPoint(discountPrice);
 
         if(discountPrice != paymentDto.getTotalUsePoint()){
             paymentDto.setDiscount(vipDiscountPolicy.getDiscountRate());
         }
+        Payment payment = paymentDto.toEntity(member);
+        paymentRepository.save(payment);
+    }
 
-        paymentRepository.save(paymentDto.toEntity(member));
+    /**
+     * 모든 장바구니 상품 배송하기
+     *
+     * @param member
+     * @param cart
+     */
+    private void deliverCartItem(Member member, Cart cart) {
 
-        Cart cart = cartRepository.findByMemberId(member.getId())
-                .orElseThrow(() -> new CartNotFoundException("장바구니를 찾을 수 없습니다."));
+        Delivery delivery = Delivery.builder()
+                .deliveryStatus(DeliveryStatus.DELIVERING)
+                .member(member)
+                .build();
+
+        delivery = deliveryRepository.save(delivery);
+
+        for (CartItem cartItem : cart.getCartItemList()) {
+            DeliveryItem deliveryItem = DeliveryItem.builder()
+                    .delivery(delivery)
+                    .item(cartItem.getItem())
+                    .count(cartItem.getCount())
+                    .deliveryItemStatus(DeliveryItemStatus.DELIVERING)
+                    .build();
+
+            deliveryItemRepository.save(deliveryItem);
+        }
+    }
+
+    /**
+     * 장바구니 상품 목록 비우기
+     *
+     * @param cart
+     */
+    private void clearCart(Cart cart) {
 
         for (CartItem cartItem : cart.getCartItemList()) {
             Item item = cartItem.getItem();
@@ -89,6 +140,23 @@ public class PaymentService {
         }
 
         cartItemRepository.deleteAll(cart.getCartItemList());
+    }
+
+    /**
+     * VIP일 시 혜택가 적용하기
+     *
+     * @param paymentDto
+     * @param member
+     * @return
+     */
+    private double ifVIPGetDiscountPrice(PaymentDto paymentDto, Member member) {
+
+        double discountPrice = vipDiscountPolicy.getDiscountPrice(paymentDto.getTotalUsePoint(), member.getRole());
+
+        if(member.getPoint() < discountPrice){
+            throw new OutOfPointException("포인트가 부족합니다.");
+        }
+        return discountPrice;
     }
 
 }

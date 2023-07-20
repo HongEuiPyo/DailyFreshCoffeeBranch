@@ -31,14 +31,10 @@ public class Address extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    public void update(MemberUpdateDto dto) {
-        String[] array = dto.getLatlng()
-                .replace("(", "")
-                .replace(")", "")
-                .split(",");
-        this.latitude = array[0];
-        this.longitude = array[2];
-        this.roadAddress = dto.getRoadAddress();
+    public void update(MemberUpdateDto updateDto) {
+        this.latitude = updateDto.getLatitude();
+        this.longitude = updateDto.getLongitude();
+        this.roadAddress = updateDto.getRoadAddress();
     }
 
 }

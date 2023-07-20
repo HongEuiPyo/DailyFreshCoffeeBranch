@@ -5,27 +5,16 @@ import com.example.dailyFreshCoffeeBranch.dto.GeocodingRequestDto;
 import com.example.dailyFreshCoffeeBranch.dto.ReverseGeocodingRequestDto;
 import com.example.dailyFreshCoffeeBranch.dto.StaticMapRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-
 @RequiredArgsConstructor
-@RequestMapping("/api/naver/map")
-@RestController
-public class NaverMapApiController {
+@Component
+public class NaverMapApi {
 
     private final NaverClient naverClient;
 
 
-    /**
-     * 지도 반환
-     * @param requestDto
-     * @return
-     */
-    @GetMapping(value = "/staticMap", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] staticMap(StaticMapRequestDto requestDto) {
 
         WebClient client = WebClient.builder()
@@ -46,12 +35,6 @@ public class NaverMapApiController {
                 .block();
     }
 
-    /**
-     * 좌표 주소 반환
-     * @param requestDto
-     * @return
-     */
-    @GetMapping("/geocoding")
     public String geocoding(GeocodingRequestDto requestDto) {
 
         WebClient client =  WebClient.builder()
@@ -70,12 +53,6 @@ public class NaverMapApiController {
                 .block();
     }
 
-    /**
-     * 도로명 주소 반환
-     * @param requestDto
-     * @return
-     */
-    @GetMapping("/reverseGeocoding")
     public String reverseGeocoding(ReverseGeocodingRequestDto requestDto) {
 
         WebClient client =  WebClient.builder()
@@ -97,12 +74,6 @@ public class NaverMapApiController {
                 .block();
     }
 
-    /**
-     * 최단거리, 거리 소요시간 반환
-     * @param requestDto
-     * @return
-     */
-    @GetMapping("/directions5")
     public String directions5(Directions5RequestDto requestDto) {
 
         WebClient client =  WebClient.builder()

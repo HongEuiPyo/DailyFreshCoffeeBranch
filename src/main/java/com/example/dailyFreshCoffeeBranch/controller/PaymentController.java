@@ -27,7 +27,7 @@ public class PaymentController {
      */
     @GetMapping("/paymentList")
     public String paymentList(Principal principal, HttpSession session, Model model) {
-        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+        String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
         List<PaymentDto> paymentDtoList = paymentService.getPaymentList(memberEmail);
         model.addAttribute("paymentDtoList", paymentDtoList);
         return "payment/paymentList";

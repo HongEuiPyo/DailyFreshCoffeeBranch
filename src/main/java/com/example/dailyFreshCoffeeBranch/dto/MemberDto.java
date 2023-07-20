@@ -46,7 +46,9 @@ public class MemberDto {
 
     private String roadAddress;
 
-    private String latlng;
+    private String latitude;
+
+    private String longitude;
 
     @AssertTrue(message = "비밀번호가 일치하지 않습니다.")
     public boolean isPasswordDoubleChecked() {
@@ -72,11 +74,13 @@ public class MemberDto {
 
     public static MemberDto of(Member member) {
         String roadAddress = "";
-        String latlng = "";
+        String latitude = "";
+        String longitude = "";
 
         if (member.getAddress() != null) {
             roadAddress = member.getAddress().getRoadAddress();
-            latlng = member.getAddress().getLatitude() + "," + member.getAddress().getLongitude();
+            latitude = member.getAddress().getLatitude();
+            longitude = member.getAddress().getLongitude();
         }
         return MemberDto.builder()
                 .id(member.getId())
@@ -89,7 +93,8 @@ public class MemberDto {
                 .role(member.getRole())
                 .point(member.getPoint())
                 .roadAddress(roadAddress)
-                .latlng(latlng)
+                .latitude(latitude)
+                .longitude(longitude)
                 .build();
     }
 

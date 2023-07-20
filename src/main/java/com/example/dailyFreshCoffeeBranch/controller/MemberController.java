@@ -81,7 +81,7 @@ public class MemberController {
      */
     @GetMapping("/myPage")
     public String memberDetail(Principal principal, Model model, HttpSession session) {
-        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+        String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
         model.addAttribute("memberDto", memberService.getMemberDetailByEmail(memberEmail));
         return "member/memberDetail";
     }

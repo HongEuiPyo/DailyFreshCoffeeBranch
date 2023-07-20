@@ -52,7 +52,7 @@ public class PaymentApiController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
 
-        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+        String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
 
         paymentService.addPoint(memberEmail, memberPointUpDto);
 
@@ -85,7 +85,7 @@ public class PaymentApiController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
 
-        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+        String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
 
         paymentService.confirmCartItemPurchase(memberEmail, paymentDto);
 

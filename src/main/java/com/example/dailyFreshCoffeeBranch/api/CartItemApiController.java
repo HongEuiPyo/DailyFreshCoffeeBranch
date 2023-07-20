@@ -52,7 +52,7 @@ public class CartItemApiController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
 
-        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+        String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
 
         cartService.addToCart(memberEmail, id, cartItemDto);
 
@@ -87,7 +87,7 @@ public class CartItemApiController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
 
-        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+        String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
 
         cartService.updateCartItem(memberEmail, id, cartItemUpdateDto);
 
@@ -104,7 +104,7 @@ public class CartItemApiController {
      */
     @DeleteMapping("/cart/items/{id}/delete")
     public ResponseEntity<Map<String, String>> deleteCartItem(@PathVariable Long id, Principal principal, HttpSession session) {
-        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+        String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
 
         Map<String, String> resultMap = new HashMap<>();
 

@@ -2,6 +2,7 @@ package com.example.dailyFreshCoffeeBranch.entity;
 
 import com.example.dailyFreshCoffeeBranch.constant.DeliveryItemStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Table(name = "delivery_item")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 public class DeliveryItem extends BaseEntity {
 

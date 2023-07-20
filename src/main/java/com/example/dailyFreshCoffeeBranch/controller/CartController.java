@@ -25,7 +25,7 @@ public class CartController {
      */
     @GetMapping(value = "/cart/items")
     public String cartItemList(Principal principal, HttpSession session, Model model) {
-        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+        String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
         CartDto cartDto = cartService.getCartItemList(memberEmail);
         model.addAttribute("cartDto", cartDto);
         return "cart/cartList";

@@ -30,7 +30,7 @@ public class CommentApiController {
      */
     @PostMapping("/boards/{id}/comments/create")
     public ResponseEntity<CommentDto> createComment(@PathVariable Long id, @RequestBody CommentDto commentDto, Principal principal, HttpSession session) {
-        String memberEmail = MySecurityUtils.getTrueMemberEmail(principal, session);
+        String memberEmail = MySecurityUtils.findMemberEmail(principal, session);
         CommentDto comment = commentService.createComment(memberEmail, id, commentDto);
         return ResponseEntity.ok(comment);
     }
