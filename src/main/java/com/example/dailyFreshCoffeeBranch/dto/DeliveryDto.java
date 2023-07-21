@@ -38,4 +38,16 @@ public class DeliveryDto {
                 .build();
     }
 
+    public static DeliveryDto create(Delivery delivery, List<DeliveryItemDto> deliveryItemDtoList) {
+        return DeliveryDto.builder()
+                .id(delivery.getId())
+                .deliveryStatus(delivery.getDeliveryStatus())
+                .deliveryStartTime(delivery.getCreatedTime())
+                .deliveryTakenTime(delivery.getDeliveryTakenTime())
+                .deliveryDepartureRoadLocation(delivery.getDeliveryDepartureRoadLocation())
+                .deliveryDestinationRoadLocation(delivery.getDeliveryDestinationRoadLocation())
+                .deliveryItemList(deliveryItemDtoList)
+                .build();
+    }
+
 }

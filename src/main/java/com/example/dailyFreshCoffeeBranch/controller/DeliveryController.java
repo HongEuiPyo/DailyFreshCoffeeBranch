@@ -33,8 +33,8 @@ public class DeliveryController {
 
     @GetMapping("/deliveries/{id}")
     public String getMemberDeliveryDetail(@PathVariable Long id, @LoginUserInfo UserInfo userInfo, Model model) {
-        DeliveryDto memberDelivery = deliveryService.getMemberDeliveryDetail(userInfo.getEmail(), id);
-        model.addAttribute("memberDelivery", memberDelivery);
-        return "delivery/deliveryList";
+        DeliveryDto delivery = deliveryService.getMemberDeliveryDetail(userInfo.getEmail(), id);
+        model.addAttribute("delivery", delivery);
+        return "delivery/deliveryDetail";
     }
 }

@@ -13,4 +13,6 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
     @Query("SELECT d FROM Delivery d WHERE d.member.email = :email ORDER BY d.modifiedTime desc")
     List<Delivery> findByMemberEmail(@Param("email") String email);
 
+    @Query("SELECT d FROM Delivery d WHERE d.member.email = :email AND d.id = :id ORDER BY d.modifiedTime desc")
+    Optional<Delivery> findByMemberEmailAndId(@Param("email") String email, @Param("id")  Long id);
 }
