@@ -17,7 +17,6 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-
     /**
      * 영수증 목록
      * @param userInfo

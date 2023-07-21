@@ -1,8 +1,10 @@
 package com.example.dailyFreshCoffeeBranch.service;
 
+import com.example.dailyFreshCoffeeBranch.api.NaverDirection5Api;
 import com.example.dailyFreshCoffeeBranch.com.VIPDiscountPolicy;
 import com.example.dailyFreshCoffeeBranch.constant.DeliveryItemStatus;
 import com.example.dailyFreshCoffeeBranch.constant.DeliveryStatus;
+import com.example.dailyFreshCoffeeBranch.dto.Directions5RequestDto;
 import com.example.dailyFreshCoffeeBranch.dto.MemberPointUpDto;
 import com.example.dailyFreshCoffeeBranch.dto.PaymentDto;
 import com.example.dailyFreshCoffeeBranch.entity.*;
@@ -29,6 +31,8 @@ public class PaymentService {
     private final VIPDiscountPolicy vipDiscountPolicy;
     private final DeliveryRepository deliveryRepository;
     private final DeliveryItemRepository deliveryItemRepository;
+    private final AddressQueryDslRepository addressQueryDslRepository;
+    private final NaverDirection5Api naverDirection5Api;
 
     /**
      * 구매 상품 목록 조회하기
@@ -106,9 +110,24 @@ public class PaymentService {
      */
     private void deliverCartItem(Member member, Cart cart) {
 
+        Address storeLoc = addressQueryDslRepository.getStoreLocation();
+        Address userLoc = addressQueryDslRepository.getLoginUserLocation(member.getEmail());
+
+        Directions5RequestDto directions5RequestDto = Directions5RequestDto.builder()
+                .startLatitude(storeLoc.getLatitude())
+                .startLongitude(storeLoc.getLongitude())
+                .goalLatitude(userLoc.getLatitude())
+                .goalLongitude(userLoc.getLongitude())
+                .build();
+
+        long duration = naverDirection5Api.getDuration(directions5RequestDto);
+
         Delivery delivery = Delivery.builder()
                 .deliveryStatus(DeliveryStatus.DELIVERING)
                 .member(member)
+                .deliveryDepartureRoadLocation(storeLoc.getRoadAddress())
+                .deliveryDestinationRoadLocation(userLoc.getRoadAddress())
+                .deliveryTakenTime(duration)
                 .build();
 
         delivery = deliveryRepository.save(delivery);
@@ -123,6 +142,7 @@ public class PaymentService {
 
             deliveryItemRepository.save(deliveryItem);
         }
+
     }
 
     /**
@@ -140,6 +160,7 @@ public class PaymentService {
         }
 
         cartItemRepository.deleteAll(cart.getCartItemList());
+
     }
 
     /**

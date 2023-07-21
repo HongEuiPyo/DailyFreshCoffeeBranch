@@ -23,7 +23,6 @@ public class CartItemApiController {
 
     private final CartItemService cartService;
 
-
     /**
      * 장바구니 상품 등록
      * @param id

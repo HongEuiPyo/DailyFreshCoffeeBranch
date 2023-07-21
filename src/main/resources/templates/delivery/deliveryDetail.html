@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>배송 : 매일 신선한 커피점</title>
+</head>
+<div layout:fragment="content">
+  <div class="container">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">배송</h6>
+      </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <div class="dataTables_wrapper dt-bootstrap4">
+              <div class="row">
+                <div class="card-subtitle py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">· 배송 목록</h6>
+                </div>
+                <div class="col-sm-12">
+                  <table class="table table-bordered dataTable">
+                    <colgroup>
+                      <col style="width: 10%">
+                      <col style="width: auto;">
+                      <col style="width: 15%">
+                      <col style="width: 10%">
+                      <col style="width: 10%">
+                      <col style="width: 10%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                      <th scope="col" style="text-align: center"></th>
+                      <th scope="col" style="text-align: center">상품명</th>
+                      <th scope="col" style="text-align: center">상품사진</th>
+                      <th scope="col" style="text-align: center">가격</th>
+                      <th scope="col" style="text-align: center">수량</th>
+                      <th scope="col" style="text-align: center">배송상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="deliveryItem : ${deliveryList}">
+                        <td th:text="${deliveryItem.}" style="text-align: center"></td>
+                        <td th:text="${deliveryItem.itemDto.title}"></td>
+                        <td>
+                          <img th:src="${deliveryItem.itemDto.imageFileDtoList.get(0).imageUrl}" style="width: 30px; height: 30px;">
+                        </td>
+                        <td th:text="${deliveryItem.itemDto.price}"></td>
+                        <td th:text="${deliveryItem.count}"></td>
+                        <td th:text="${deliveryItem.deliveryItemStatus.title}"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</html>

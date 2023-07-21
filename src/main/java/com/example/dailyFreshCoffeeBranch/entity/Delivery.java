@@ -25,6 +25,12 @@ public class Delivery extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
 
+    private Long deliveryTakenTime;
+
+    private String deliveryDepartureRoadLocation;
+
+    private String deliveryDestinationRoadLocation;
+
     @ManyToOne
     private Member member;
 

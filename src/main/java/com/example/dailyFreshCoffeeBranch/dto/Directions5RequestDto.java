@@ -1,27 +1,28 @@
 package com.example.dailyFreshCoffeeBranch.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter @Setter
+@ToString
 public class Directions5RequestDto {
 
-    private double startLatitude;
-    private double startLongitude;
-    private double goalLatitude;
-    private double goalLongitude;
+    private String startLatitude;
+    private String startLongitude;
+    private String startLocationName;
+    private String goalLatitude;
+    private String goalLongitude;
+    private String goalLocationName;
     private String option;
 
     public String getStart() {
-        return startLatitude + "," + startLongitude;
+        return startLongitude + "," + startLatitude;
     }
 
     public String getGoal() {
-        return goalLatitude + "," + goalLongitude;
+        return goalLongitude + "," + goalLatitude;
     }
 
 }

@@ -1,9 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.service;
 
-import com.example.dailyFreshCoffeeBranch.api.NaverMapApi;
 import com.example.dailyFreshCoffeeBranch.dto.DeliveryDto;
-import com.example.dailyFreshCoffeeBranch.dto.DeliveryItemDto;
-import com.example.dailyFreshCoffeeBranch.dto.Directions5RequestDto;
 import com.example.dailyFreshCoffeeBranch.entity.Delivery;
 import com.example.dailyFreshCoffeeBranch.repository.DeliveryItemRepository;
 import com.example.dailyFreshCoffeeBranch.repository.DeliveryRepository;
@@ -19,20 +16,28 @@ public class DeliveryService {
 
     private final DeliveryRepository deliveryRepository;
     private final DeliveryItemRepository deliveryItemRepository;
-    private final NaverMapApi naverMapApi;
 
-    public DeliveryDto getMemberDeliveryList(String email) {
-        Delivery delivery = deliveryRepository.findByMemberEmail(email);
-        List<DeliveryItemDto> deliveryItemDtoList = deliveryItemRepository.findByDeliveryId(delivery.getId())
-                .stream()
-                .map(deliveryItem -> DeliveryItemDto.of(deliveryItem))
+    /**
+     * 회원 배송 목록 조회하기
+     *
+     * @param email
+     * @return
+     */
+    public List<DeliveryDto> getMemberDeliveryList(String email) {
+        List<Delivery> deliveryList = deliveryRepository.findByMemberEmail(email);
+
+        return deliveryList.stream()
+                .map(d -> DeliveryDto.of(d))
                 .collect(Collectors.toList());
+    }
 
-        Directions5RequestDto requestDto = new Directions5RequestDto();
+    public DeliveryDto getMemberDeliveryDetail(String email, Long id) {
+        List<Delivery> deliveryList = deliveryRepository.findByMemberEmail(email);
 
-        String jsonResponse = naverMapApi.directions5(requestDto);
-
-        DeliveryDto dto = DeliveryDto.of(delivery);
+//        List<DeliveryItemDto> deliveryItemDtoList = deliveryItemRepository.findByDeliveryId(delivery.getId())
+//                .stream()
+//                .map(DeliveryItemDto::of)
+//                .collect(Collectors.toList());
 
         return null;
     }

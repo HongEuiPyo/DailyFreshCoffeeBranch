@@ -5,5 +5,5 @@ import com.example.dailyFreshCoffeeBranch.entity.Address;
 public interface CustomAddressQueryDslRepository {
 
     Address getStoreLocation();
-
+    Address getLoginUserLocation(String email);
 }

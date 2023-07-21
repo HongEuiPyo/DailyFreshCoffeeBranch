@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -22,9 +24,16 @@ public class DeliveryController {
      * @param model
      * @return
      */
-    @GetMapping("/delivery")
+    @GetMapping("/deliveries")
     public String getMemberDeliveryList(@LoginUserInfo UserInfo userInfo, Model model) {
-        DeliveryDto memberDelivery = deliveryService.getMemberDeliveryList(userInfo.getEmail());
+        List<DeliveryDto> deliveryList = deliveryService.getMemberDeliveryList(userInfo.getEmail());
+        model.addAttribute("deliveryList", deliveryList);
+        return "delivery/deliveryList";
+    }
+
+    @GetMapping("/deliveries/{id}")
+    public String getMemberDeliveryDetail(@PathVariable Long id, @LoginUserInfo UserInfo userInfo, Model model) {
+        DeliveryDto memberDelivery = deliveryService.getMemberDeliveryDetail(userInfo.getEmail(), id);
         model.addAttribute("memberDelivery", memberDelivery);
         return "delivery/deliveryList";
     }

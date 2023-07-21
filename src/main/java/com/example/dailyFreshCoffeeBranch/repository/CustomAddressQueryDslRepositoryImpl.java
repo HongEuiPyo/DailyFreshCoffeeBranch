@@ -19,4 +19,13 @@ public class CustomAddressQueryDslRepositoryImpl implements CustomAddressQueryDs
                 .where(address.member.role.eq(Role.ADMIN))
                 .fetchFirst();
     }
+
+    @Override
+    public Address getLoginUserLocation(String email) {
+        return queryFactory
+                .selectFrom(address)
+                .where(address.member.email.eq(email))
+                .fetchFirst();
+    }
+
 }

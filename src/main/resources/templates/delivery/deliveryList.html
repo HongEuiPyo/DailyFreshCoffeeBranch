@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>배송 목록 : 매일 신선한 커피점</title>
+</head>
+<div layout:fragment="content">
+  <div class="container">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">배송 목록</h6>
+      </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <div class="dataTables_wrapper dt-bootstrap4">
+              <div class="row">
+                <div class="col-sm-12">
+                  <table class="table table-bordered dataTable">
+                    <thead>
+                    <tr>
+                      <th scope="col" style="text-align: center">배송번호</th>
+                      <th scope="col" style="text-align: center">배송시작일시</th>
+                      <th scope="col" style="text-align: center">배송소요시간(분)</th>
+                      <th scope="col" style="text-align: center">배송상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="deliveryItem : ${deliveryList}">
+                        <td class="text-center">
+                          <a th:text="${deliveryItem.id}" th:href="@{/deliveries/{id}(id = ${deliveryItem.id})}"></a>
+                        </td>
+                        <td th:text="${#temporals.format(deliveryItem.deliveryStartTime, 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
+                        <td th:text="${deliveryItem.deliveryTakenTime}" class="text-center"></td>
+                        <td th:text="${deliveryItem.deliveryStatus.title}" class="text-center"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</html>

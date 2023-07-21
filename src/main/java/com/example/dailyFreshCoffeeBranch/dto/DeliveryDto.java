@@ -13,18 +13,28 @@ import java.util.List;
 @Getter @Setter
 public class DeliveryDto {
 
+    private Long id;
+
     private DeliveryStatus deliveryStatus;
 
     private List<DeliveryItemDto> deliveryItemList;
 
     private LocalDateTime deliveryStartTime;
 
-    private LocalDateTime deliveryTakenTime;
+    private long deliveryTakenTime;
+
+    private String deliveryDepartureRoadLocation;
+
+    private String deliveryDestinationRoadLocation;
 
     public static DeliveryDto of(Delivery delivery) {
         return DeliveryDto.builder()
+                .id(delivery.getId())
                 .deliveryStatus(delivery.getDeliveryStatus())
                 .deliveryStartTime(delivery.getCreatedTime())
+                .deliveryTakenTime(delivery.getDeliveryTakenTime())
+                .deliveryDepartureRoadLocation(delivery.getDeliveryDepartureRoadLocation())
+                .deliveryDestinationRoadLocation(delivery.getDeliveryDestinationRoadLocation())
                 .build();
     }
 
