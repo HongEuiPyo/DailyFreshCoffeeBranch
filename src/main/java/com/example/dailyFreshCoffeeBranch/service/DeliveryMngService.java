@@ -11,42 +11,38 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RequiredArgsConstructor
 @Service
-public class DeliveryService {
+public class DeliveryMngService {
 
     private final DeliveryRepository deliveryRepository;
     private final DeliveryItemRepository deliveryItemRepository;
 
     /**
-     * 회원 배송 목록
+     * 회원 배송 관리 조회
      *
-     * @param email
+     * @param pageable
      * @return
      */
-    public Page<DeliveryDto> getMemberDeliveryList(String email, Pageable pageable) {
-        Page<Delivery> deliveryList = deliveryRepository.findByMemberEmail(email, pageable);
-
-        return deliveryList
+    public Page<DeliveryDto> getMemberDeliveryMngList(Pageable pageable) {
+        return deliveryRepository.findAllPage(pageable)
                 .map(d -> DeliveryDto.of(d));
     }
 
     /**
-     * 회원 배송 상세
+     * 회원 배송 관리 상세
      *
-     * @param email
      * @param id
+     * @param pageable
      * @return
      */
-    public DeliveryDto getMemberDeliveryDetail(String email, Long id, Pageable pageable) {
-        Delivery delivery = deliveryRepository.findByMemberEmailAndId(email, id)
+    public DeliveryDto getMemberDeliveryMngDetail(Long id, Pageable pageable) {
+
+        Delivery delivery = deliveryRepository.findById(id)
                 .orElseThrow(() -> new DeliveryNotFoundException("배송을 조회할 수 없습니다."));
 
-        Page<DeliveryItemDto> deliveryItemDtoPage = deliveryItemRepository.findByDeliveryId(delivery.getId(), pageable)
-                .map(DeliveryItemDto::of);
+        Page<DeliveryItemDto> deliveryItemDtoPage = deliveryItemRepository.findByDeliveryId(id, pageable)
+                .map(di -> DeliveryItemDto.of(di));
 
         return DeliveryDto.create(delivery, deliveryItemDtoPage);
     }

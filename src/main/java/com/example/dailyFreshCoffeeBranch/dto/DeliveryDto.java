@@ -3,9 +3,9 @@ package com.example.dailyFreshCoffeeBranch.dto;
 import com.example.dailyFreshCoffeeBranch.constant.DeliveryStatus;
 import com.example.dailyFreshCoffeeBranch.entity.Delivery;
 import lombok.*;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +17,7 @@ public class DeliveryDto {
 
     private DeliveryStatus deliveryStatus;
 
-    private List<DeliveryItemDto> deliveryItemList;
+    private Page<DeliveryItemDto> deliveryItemList;
 
     private LocalDateTime deliveryStartTime;
 
@@ -38,7 +38,7 @@ public class DeliveryDto {
                 .build();
     }
 
-    public static DeliveryDto create(Delivery delivery, List<DeliveryItemDto> deliveryItemDtoList) {
+    public static DeliveryDto create(Delivery delivery, Page<DeliveryItemDto> deliveryItemDtoList) {
         return DeliveryDto.builder()
                 .id(delivery.getId())
                 .deliveryStatus(delivery.getDeliveryStatus())

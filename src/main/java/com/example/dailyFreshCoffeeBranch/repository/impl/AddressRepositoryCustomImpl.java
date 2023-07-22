@@ -1,4 +1,4 @@
-package com.example.dailyFreshCoffeeBranch.repository;
+package com.example.dailyFreshCoffeeBranch.repository.impl;
 
 import com.example.dailyFreshCoffeeBranch.constant.Role;
 import com.example.dailyFreshCoffeeBranch.entity.Address;
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import static com.example.dailyFreshCoffeeBranch.entity.QAddress.address;
 
 @RequiredArgsConstructor
-public class CustomAddressQueryDslRepositoryImpl implements CustomAddressQueryDslRepository {
+public class AddressRepositoryCustomImpl implements AddressRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 

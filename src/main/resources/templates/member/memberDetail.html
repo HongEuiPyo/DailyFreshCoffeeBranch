@@ -78,7 +78,6 @@
                             </table>
                             <div class="row">
                                 <div class="input-group col-sm-12 col-md-6">
-                                    <a sec:authorize="isAuthenticated()" href="/members/logout" class="btn btn-danger">로그아웃</a>
                                     <button sec:authorize="isAuthenticated()" id="updateBtn" type="button" class="btn btn-facebook" onclick="goUpdate();">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -87,12 +86,6 @@
                                         회원정보 수정
                                     </button>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div id="cartDiv"></div>
-                            </div>
-                            <div class="row">
-                                <div id="paymentDiv"></div>
                             </div>
                         </div>
                     </div>
@@ -107,72 +100,10 @@
     const memberId = [[${memberDto.id}]];
     let isFunctionAddPointRunning = false;
 
-    window.onload = function (){
-        getCartItemList();
-        getPaymentList();
-    }
-
     function goUpdate() {
         document.memberFrm.method = 'GET';
         document.memberFrm.action = '/members/' + memberId + '/update';
         document.memberFrm.submit();
-    }
-
-    function getCartItemList(){
-        let url = 'http://localhost:8080/cart/items';
-        fetch(url)
-            .then((response) => response.text())
-            .then((result) => document.getElementById('cartDiv').innerHTML = (result))
-    }
-
-    function getPaymentList(){
-        let url = 'http://localhost:8080/paymentList';
-        fetch(url)
-            .then((response) => response.text())
-            .then((result) => document.getElementById('paymentDiv').innerHTML = (result))
-    }
-
-    function updateCartItem(cartItemId){
-        if (confirm('장바구니 상품을 수정하시겠습니까?')){
-            let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/update';
-            fetch(url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    count: document.getElementById('count').value
-                }),
-            })
-                .then((response) => {
-                    if(response.ok){
-                        let promise = response.json();
-                        promise.then(promise => alert(promise.msg));
-                        getCartItemList();
-                    }else if (response.status == 400){
-                        let promise = response.json();
-                        promise.then(promise => alert(promise.count));
-                    }else{
-                        alert('장바구니 상품 수정 중 오류가 발생했습니다.');
-                    }
-                })
-        }
-    }
-
-    function deleteCartItem(cartItemId){
-        if (confirm('장바구니 상품을 취소하시겠습니까?')){
-            let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/delete';
-            fetch(url, {
-                method: 'DELETE',
-            })
-                .then((response) => {
-                    if(response.status == 200){
-                        let promise = response.json();
-                        promise.then(promise => alert(promise.msg));
-                        getCartItemList();
-                    }else{
-                        alert('장바구니 상품 삭제 중 오류가 발생했습니다.');
-                    }
-                })
-        }
     }
 
     function addPoint(){
@@ -207,38 +138,4 @@
                 });
         }
     }
-
-    function confirmCartItemPurchase(){
-        if (confirm('구매확정을 하시겠습니까?')){
-            let url = 'http://localhost:8080/api/payment/confirmCartItemPurchase';
-
-            let itemNameArray = document.getElementsByClassName('itemName');
-            let itemNames = '';
-
-            for (let i=0; i<itemNameArray.length; i++){
-                itemNames += itemNameArray[i].innerText;
-                if (i != (itemNameArray.length-1))
-                    itemNames += ',';
-            }
-
-            fetch(url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    itemNames: itemNames,
-                    totalUsePoint : document.getElementById('totalUsePoint').innerText
-                }),
-            })
-                .then((response) => {
-                    if(response.status == 200){
-                        let promise = response.json();
-                        promise.then(promise => alert(promise.msg));
-                        window.location.reload();
-                    }else{
-                        alert('구매 확정 중 오류가 발생했습니다.');
-                    }
-                })
-        }
-    }
-
 </script>

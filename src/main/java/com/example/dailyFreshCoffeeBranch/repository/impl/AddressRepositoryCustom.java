@@ -1,8 +1,8 @@
-package com.example.dailyFreshCoffeeBranch.repository;
+package com.example.dailyFreshCoffeeBranch.repository.impl;
 
 import com.example.dailyFreshCoffeeBranch.entity.Address;
 
-public interface CustomAddressQueryDslRepository {
+public interface AddressRepositoryCustom {
 
     Address getStoreLocation();
     Address getLoginUserLocation(String email);

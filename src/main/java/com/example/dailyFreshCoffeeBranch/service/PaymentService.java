@@ -13,11 +13,11 @@ import com.example.dailyFreshCoffeeBranch.exception.MemberNotFoundException;
 import com.example.dailyFreshCoffeeBranch.exception.OutOfPointException;
 import com.example.dailyFreshCoffeeBranch.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -31,7 +31,7 @@ public class PaymentService {
     private final VIPDiscountPolicy vipDiscountPolicy;
     private final DeliveryRepository deliveryRepository;
     private final DeliveryItemRepository deliveryItemRepository;
-    private final AddressQueryDslRepository addressQueryDslRepository;
+    private final AddressRepository addressRepository;
     private final NaverDirection5Api naverDirection5Api;
 
     /**
@@ -40,13 +40,11 @@ public class PaymentService {
      * @param email
      * @return
      */
-    public List<PaymentDto> getPaymentList(String email) {
+    public Page<PaymentDto> getPaymentList(String email, Pageable pageable) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException("회원을 조회할 수 없습니다."));
-        List<Payment> paymentList = paymentRepository.findByMemberId(member.getId());
-        return paymentList.stream()
-                .map(Payment::toDto)
-                .collect(Collectors.toList());
+        Page<Payment> paymentPage = paymentRepository.findByMemberId(member.getId(), pageable);
+        return paymentPage.map(Payment::toDto);
     }
 
     /**
@@ -110,8 +108,8 @@ public class PaymentService {
      */
     private void deliverCartItem(Member member, Cart cart) {
 
-        Address storeLoc = addressQueryDslRepository.getStoreLocation();
-        Address userLoc = addressQueryDslRepository.getLoginUserLocation(member.getEmail());
+        Address storeLoc = addressRepository.getStoreLocation();
+        Address userLoc = addressRepository.getLoginUserLocation(member.getEmail());
 
         Directions5RequestDto directions5RequestDto = Directions5RequestDto.builder()
                 .startLatitude(storeLoc.getLatitude())

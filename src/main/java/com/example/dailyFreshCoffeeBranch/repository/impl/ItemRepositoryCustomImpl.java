@@ -1,4 +1,4 @@
-package com.example.dailyFreshCoffeeBranch.repository;
+package com.example.dailyFreshCoffeeBranch.repository.impl;
 
 import com.example.dailyFreshCoffeeBranch.entity.Item;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -10,7 +10,7 @@ import static com.example.dailyFreshCoffeeBranch.entity.QImageFile.imageFile;
 import static com.example.dailyFreshCoffeeBranch.entity.QItem.item;
 
 @RequiredArgsConstructor
-public class CustomItemQueryDslRepositoryImpl implements CustomItemQueryDslRepository{
+public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 

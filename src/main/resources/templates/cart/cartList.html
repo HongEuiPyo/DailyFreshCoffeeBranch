@@ -1,72 +1,119 @@
-<div class="card-subtitle py-3" style="margin-top: 20px;">
-  <h6 class="m-0 font-weight-bold text-primary">· 장바구니</h6>
-</div>
-
-<table class="table table-bordered dataTable" id="cartTable">
-  <colgroup>
-    <col style="width: 10%;">
-    <col style="width: 10%;">
-    <col style="width: auto;">
-    <col style="width: 10%;">
-    <col style="width: 10%;">
-    <col style="width: 17%;">
-  </colgroup>
-  <thead>
-  <tr>
-    <th scope="col" style="text-align: center">상품 번호</th>
-    <th scope="col" style="text-align: center">대표 이미지</th>
-    <th scope="col" style="text-align: center">상품 명</th>
-    <th scope="col" style="text-align: center">가격</th>
-    <th scope="col" style="text-align: center">수량</th>
-    <th scope="col" style="text-align: center">수정</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="cartItem : ${cartDto.getCartItemDtoList()}">
-    <td th:text="${cartItem.itemId}"></td>
-    <td>
-      <img th:src="${cartItem.getImageUrl()}" style="width: 30px; height: 30px;">
-    </td>
-    <td class="itemName" th:text="${cartItem.itemName}" style="text-align: center"></td>
-    <td th:text="${cartItem.price}"></td>
-    <td>
-      <input type="number" name="count" id="count" class="form-control" th:value="${cartItem.count}">
-    </td>
-    <td style="text-align: center;">
-      <div class="input-group mb-3">
-        <button type="button" class="btn btn-danger" th:onclick="deleteCartItem([[${cartItem.id}]])">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-x" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M6.146 8.146a.5.5 0 0 1 .708 0L8 9.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 10l1.147 1.146a.5.5 0 0 1-.708.708L8 10.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 10 6.146 8.854a.5.5 0 0 1 0-.708z"/>
-            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-          </svg>
-          취소
-        </button>
-        <button type="button" class="btn btn-facebook" th:onclick="updateCartItem([[${cartItem.id}]])">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-dash" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M5.5 10a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z"/>
-            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-          </svg>
-          수정
-        </button>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+  <meta charset="UTF-8">
+  <title>장바구니 : 매일 신선한 커피점</title>
+</head>
+<div layout:fragment="content">
+  <div class="container">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">장바구니</h6>
       </div>
-    </td>
-  </tr>
-  <tr th:if="${not #lists.isEmpty(cartDto.getCartItemDtoList())}">
-    <td colspan="3" style="text-align: center;">총 금액</td>
-    <td id="totalUsePoint" colspan="2" th:text="${cartDto.getTotalPrice()}" style="text-align: center;"></td>
-    <td style="text-align: center;">
-      <button type="button" class="btn btn-success" onclick="confirmCartItemPurchase();">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-check" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
-          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-        </svg>
-        구매 확정
-      </button>
-    </td>
-  </tr>
-  <tr th:if="${#lists.isEmpty(cartDto.getCartItemDtoList())}">
-    <td colspan="6" style="text-align: center;">등록된 장바구니 상품이 없습니다.</td>
-  </tr>
-  </tbody>
-</table>
+      <div class="card-body">
+        <div class="table-responsive">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="dataTables_wrapper dt-bootstrap4">
+                <div id="cartDiv"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+</html>
+
+<script th:inline="javascript">
+
+  window.onload = function (){
+    getCartItemList();
+  }
+
+  function getCartItemList(){
+    let url = 'http://localhost:8080/cart/itemsProc';
+    fetch(url)
+            .then((response) => response.text())
+            .then((result) => document.getElementById('cartDiv').innerHTML = (result))
+  }
+
+  function updateCartItem(cartItemId){
+    if (confirm('장바구니 상품을 수정하시겠습니까?')){
+      let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/update';
+      fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          count: document.getElementById('count').value
+        }),
+      })
+              .then((response) => {
+                if(response.ok){
+                  let promise = response.json();
+                  promise.then(promise => alert(promise.msg));
+                  getCartItemList();
+                }else if (response.status == 400){
+                  let promise = response.json();
+                  promise.then(promise => alert(promise.count));
+                }else{
+                  alert('장바구니 상품 수정 중 오류가 발생했습니다.');
+                }
+              })
+    }
+  }
+
+  function deleteCartItem(cartItemId){
+    if (confirm('장바구니 상품을 취소하시겠습니까?')){
+      let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/delete';
+      fetch(url, {
+        method: 'DELETE',
+      })
+              .then((response) => {
+                if(response.status == 200){
+                  let promise = response.json();
+                  promise.then(promise => alert(promise.msg));
+                  getCartItemList();
+                }else{
+                  alert('장바구니 상품 삭제 중 오류가 발생했습니다.');
+                }
+              })
+    }
+  }
+
+  function confirmCartItemPurchase(){
+    if (confirm('구매확정을 하시겠습니까?')){
+      let url = 'http://localhost:8080/api/payment/confirmCartItemPurchase';
+
+      let itemNameArray = document.getElementsByClassName('itemName');
+      let itemNames = '';
+
+      for (let i=0; i<itemNameArray.length; i++){
+        itemNames += itemNameArray[i].innerText;
+        if (i != (itemNameArray.length-1))
+          itemNames += ',';
+      }
+
+      fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          itemNames: itemNames,
+          totalUsePoint : document.getElementById('totalUsePoint').innerText
+        }),
+      })
+              .then((response) => {
+                if(response.status == 200){
+                  let promise = response.json();
+                  promise.then(promise => alert(promise.msg));
+                  window.location.reload();
+                }else{
+                  alert('구매 확정 중 오류가 발생했습니다.');
+                }
+              })
+    }
+  }
+
+</script>

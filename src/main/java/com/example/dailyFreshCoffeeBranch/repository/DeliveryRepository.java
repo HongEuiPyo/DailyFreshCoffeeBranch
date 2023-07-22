@@ -1,18 +1,10 @@
 package com.example.dailyFreshCoffeeBranch.repository;
 
 import com.example.dailyFreshCoffeeBranch.entity.Delivery;
+import com.example.dailyFreshCoffeeBranch.repository.impl.DeliveryRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import java.util.*;
 
 
-public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
+public interface DeliveryRepository extends JpaRepository<Delivery, Long>, DeliveryRepositoryCustom {
 
-    @Query("SELECT d FROM Delivery d WHERE d.member.email = :email ORDER BY d.modifiedTime desc")
-    List<Delivery> findByMemberEmail(@Param("email") String email);
-
-    @Query("SELECT d FROM Delivery d WHERE d.member.email = :email AND d.id = :id ORDER BY d.modifiedTime desc")
-    Optional<Delivery> findByMemberEmailAndId(@Param("email") String email, @Param("id")  Long id);
 }

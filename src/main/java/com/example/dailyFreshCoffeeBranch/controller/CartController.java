@@ -17,17 +17,25 @@ public class CartController {
 
     /**
      * 장바구니 조회
+     *
+     * @return
+     */
+    @GetMapping(value = "/cart/items")
+    public String cartItemList() {
+        return "cart/cartList";
+    }
+
+    /**
+     * 장바구니 조회 처리
      * @param userInfo
      * @param model
      * @return
      */
-    @GetMapping(value = "/cart/items")
-    public String cartItemList(@LoginUserInfo UserInfo userInfo, Model model) {
+    @GetMapping(value = "/cart/itemsProc")
+    public String cartItemListProc(@LoginUserInfo UserInfo userInfo, Model model) {
         CartDto cartDto = cartService.getCartItemList(userInfo.getEmail());
         model.addAttribute("cartDto", cartDto);
-        return "cart/cartList";
+        return "cart/cartListProc";
     }
-
-
 
 }

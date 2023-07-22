@@ -1,35 +1,43 @@
-<div class="card-subtitle py-3" style="margin-top: 20px;">
-    <h6 class="m-0 font-weight-bold text-primary">· 영수증</h6>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>영수증 목록 : 매일 신선한 커피점</title>
+</head>
+<div layout:fragment="content">
+    <div class="container">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">영수증 목록</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="dataTables_wrapper dt-bootstrap4">
+                                <div id="paymentDiv"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+</html>
 
-<table class="table table-bordered dataTable" id="commentTable">
-    <colgroup>
-        <col style="width: auto;">
-        <col style="width: 10%;">
-        <col style="width: 10%;">
-        <col style="width: 10%;">
-        <col style="width: 20%;">
-    </colgroup>
-    <thead>
-    <tr>
-        <th scope="col" style="text-align: center">구매 상품 목록</th>
-        <th scope="col" style="text-align: center">총 금액</th>
-        <th scope="col" style="text-align: center">적용 할인</th>
-        <th scope="col" style="text-align: center">결제 금액</th>
-        <th scope="col" style="text-align: center">구매일시</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="paymentItem : ${paymentDtoList}">
-        <td th:text="${paymentItem.getItemNames()}" style="text-align: center"></td>
-        <td th:text="${paymentItem.getTotalUsePoint()}"></td>
-        <td th:text="${paymentItem.getDiscount()}"></td>
-        <td th:text="${paymentItem.getTotalUsePoint() - paymentItem.getTotalUsePoint() * paymentItem.getDiscount()}"></td>
-        <td th:text="${#temporals.format(paymentItem.getModifiedTime(), 'yyyy-MM-dd HH:mm:ss')}"></td>
-    </tr>
-    <tr th:if="${paymentDtoList.isEmpty()}" style="text-align: center;">
-        <td colspan="5">구매목록이 없습니다.</td>
-    </tr>
-    </tbody>
-</table>
-</div>
+<script th:inline="javascript">
+
+    window.onload = function (){
+        getPaymentList();
+    }
+
+    function getPaymentList(){
+        let url = 'http://localhost:8080/paymentListProc';
+        fetch(url)
+            .then((response) => response.text())
+            .then((result) => document.getElementById('paymentDiv').innerHTML = (result))
+    }
+
+</script>

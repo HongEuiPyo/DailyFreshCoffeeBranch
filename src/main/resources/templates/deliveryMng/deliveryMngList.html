@@ -28,11 +28,16 @@
                     <tbody>
                       <tr th:each="deliveryItem : ${deliveryList}">
                         <td class="text-center">
-                          <a th:text="${deliveryItem.id}" th:href="@{/deliveries/{id}(id = ${deliveryItem.id})}"></a>
+                          <a th:text="${deliveryItem.id}" th:href="@{/admin/deliveriesMng/{id}(id = ${deliveryItem.id})}"></a>
                         </td>
                         <td th:text="${#temporals.format(deliveryItem.deliveryStartTime, 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
                         <td th:text="${((deliveryItem.deliveryTakenTime / (1000 * 60 )) % 60 )}" class="text-center"></td>
-                        <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${deliveryItem.deliveryStatus.title}" class="text-center"></td>
+                        <td>
+                          <select th:id="'deliveryStatus_' + ${deliveryItem.id}" name="deliveryStatus" class="custom-select form-control" th:onfocus="updateDeliveryStatus([[${deliveryItem.id}]])">
+                            <option value="DELIVERING" th:selected="${#strings.equals(deliveryItem.deliveryStatus.key, 'DELIVERING')}">배송중</option>
+                            <option value="DELIVERED" th:selected="${#strings.equals(deliveryItem.deliveryStatus.key, 'DELIVERED')}">배송완료</option>
+                          </select>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -47,7 +52,16 @@
 </html>
 
 <script th:inline="javascript">
-  function updateDeliveryStatus() {
+  function updateDeliveryStatus(id) {
+    let preVal = $('#deliveryStatus_' + id).val();
+
+    $('#deliveryStatus_' + id).on('change', function () {
+      if (confirm('배송상태를 변경하시겠습니까?')) {
+        alert('변경');
+      } else {
+        $('#deliveryStatus_' + id).val(preVal);
+      }
+    });
 
   }
 </script>

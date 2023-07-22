@@ -2,13 +2,14 @@ package com.example.dailyFreshCoffeeBranch.repository;
 
 import com.example.dailyFreshCoffeeBranch.constant.ItemCategory;
 import com.example.dailyFreshCoffeeBranch.entity.Item;
+import com.example.dailyFreshCoffeeBranch.repository.impl.ItemRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ItemRepository extends JpaRepository<Item, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositoryCustom {
 
     @Query("SELECT i FROM Item i WHERE i.title LIKE %:searchKeyword% AND i.itemCategory = :searchType1")
     Page<Item> findByTitleLikeAndItemCategory(@Param("searchKeyword") String searchKeyword, @Param("searchType1") ItemCategory searchType1, Pageable pageable);
