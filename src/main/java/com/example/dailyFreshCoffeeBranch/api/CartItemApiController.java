@@ -39,20 +39,14 @@ public class CartItemApiController {
             @LoginUserInfo UserInfo userInfo
     ) {
         Map<String, String> resultMap = new HashMap<>();
-
         if (bindingResult.hasErrors()) {
-
             for (FieldError error : bindingResult.getFieldErrors()) {
                 resultMap.put(error.getField(), error.getDefaultMessage());
             }
-
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
-
         cartService.addToCart(userInfo.getEmail(), id, cartItemDto);
-
         resultMap.put("msg", "장바구니에 추가 완료하였습니다.");
-
         return ResponseEntity.ok().body(resultMap);
     }
 
@@ -71,20 +65,14 @@ public class CartItemApiController {
             @LoginUserInfo UserInfo userInfo
     ) {
         Map<String, String> resultMap = new HashMap<>();
-
         if (result.hasErrors()) {
-
             for (FieldError error : result.getFieldErrors()) {
                 resultMap.put(error.getField(), error.getDefaultMessage());
             }
-
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
-
         cartService.updateCartItem(userInfo.getEmail(), id, cartItemUpdateDto);
-
         resultMap.put("msg", "장바구니 상품 수정을 완료하였습니다.");
-
         return ResponseEntity.ok().body(resultMap);
     }
 
@@ -97,11 +85,8 @@ public class CartItemApiController {
     @DeleteMapping("/cart/items/{id}/delete")
     public ResponseEntity<Map<String, String>> deleteCartItem(@PathVariable Long id, @LoginUserInfo UserInfo userInfo) {
         Map<String, String> resultMap = new HashMap<>();
-
         cartService.deleteCartItem(id, userInfo.getEmail());
-
         resultMap.put("msg", "장바구니 상품을 삭제 하였습니다.");
-
         return ResponseEntity.ok(resultMap);
     }
 

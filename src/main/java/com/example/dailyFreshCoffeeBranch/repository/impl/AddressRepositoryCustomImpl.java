@@ -13,7 +13,7 @@ public class AddressRepositoryCustomImpl implements AddressRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Address getStoreLocation() {
+    public Address findStoreLocation() {
         return queryFactory
                 .selectFrom(address)
                 .where(address.member.role.eq(Role.ADMIN))
@@ -21,7 +21,7 @@ public class AddressRepositoryCustomImpl implements AddressRepositoryCustom {
     }
 
     @Override
-    public Address getLoginUserLocation(String email) {
+    public Address findLoginUserLocationByEmail(String email) {
         return queryFactory
                 .selectFrom(address)
                 .where(address.member.email.eq(email))

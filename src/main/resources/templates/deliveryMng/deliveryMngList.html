@@ -6,62 +6,115 @@
     <title>배송 목록 : 매일 신선한 커피점</title>
 </head>
 <div layout:fragment="content">
-  <div class="container">
-    <div class="card shadow mb-4">
-      <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">배송 목록</h6>
-      </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <div class="dataTables_wrapper dt-bootstrap4">
-              <div class="row">
-                <div class="col-sm-12">
-                  <table class="table table-bordered dataTable">
-                    <thead>
-                    <tr>
-                      <th scope="col" style="text-align: center">배송번호</th>
-                      <th scope="col" style="text-align: center">배송요청일시</th>
-                      <th scope="col" style="text-align: center">예상배송소요시간(분)</th>
-                      <th scope="col" style="text-align: center">배송상태</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                      <tr th:each="deliveryItem : ${deliveryList}">
-                        <td class="text-center">
-                          <a th:text="${deliveryItem.id}" th:href="@{/admin/deliveriesMng/{id}(id = ${deliveryItem.id})}"></a>
-                        </td>
-                        <td th:text="${#temporals.format(deliveryItem.deliveryStartTime, 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
-                        <td th:text="${((deliveryItem.deliveryTakenTime / (1000 * 60 )) % 60 )}" class="text-center"></td>
-                        <td>
-                          <select th:id="'deliveryStatus_' + ${deliveryItem.id}" name="deliveryStatus" class="custom-select form-control" th:onfocus="updateDeliveryStatus([[${deliveryItem.id}]])">
-                            <option value="DELIVERING" th:selected="${#strings.equals(deliveryItem.deliveryStatus.key, 'DELIVERING')}">배송중</option>
-                            <option value="DELIVERED" th:selected="${#strings.equals(deliveryItem.deliveryStatus.key, 'DELIVERED')}">배송완료</option>
-                          </select>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+    <div class="container">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">배송 목록</h6>
             </div>
-          </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="dataTables_wrapper dt-bootstrap4">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-bordered dataTable">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" style="text-align: center">배송번호</th>
+                                        <th scope="col" style="text-align: center">배송요청일시</th>
+                                        <th scope="col" style="text-align: center">예상배송소요시간(분)</th>
+                                        <th scope="col" style="text-align: center">배송상태</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="deliveryItem : ${deliveryDtoPage}">
+                                        <td class="text-center">
+                                            <a th:text="${deliveryItem.id}"
+                                               th:href="@{/admin/deliveriesMng/{id}(id = ${deliveryItem.id})}"></a>
+                                        </td>
+                                        <td th:text="${#temporals.format(deliveryItem.deliveryStartTime, 'yyyy-MM-dd HH:mm:ss')}"
+                                            class="text-center"></td>
+                                        <td th:text="${((deliveryItem.deliveryTakenTime / (1000 * 60 )) % 60 )}"
+                                            class="text-center"></td>
+                                        <td>
+                                            <select th:id="'deliveryStatus_' + ${deliveryItem.id}" name="deliveryStatus"
+                                                    class="custom-select form-control"
+                                                    th:onfocus="updateDeliveryStatus([[${deliveryItem.id}]])">
+                                                <option value="DELIVERING"
+                                                        th:selected="${#strings.equals(deliveryItem.deliveryStatus.key, 'DELIVERING')}">
+                                                    배송중
+                                                </option>
+                                                <option value="DELIVERED"
+                                                        th:selected="${#strings.equals(deliveryItem.deliveryStatus.key, 'DELIVERED')}">
+                                                    배송완료
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row" th:if="not ${deliveryDtoPage?.isEmpty()}">
+                            <div class="dataTables_paginate paging_simple_numbers">
+                                <ul class="pagination"
+                                    th:with="start=${T(java.lang.Math).floor(deliveryDtoPage.number/10)*10 + 1},last=(${start + 9 < deliveryDtoPage.totalPages ? start + 9 : deliveryDtoPage.totalPages})">
+                                    <li th:class="${deliveryDtoPage.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                                        <a class="page-link"
+                                           th:href="@{/admin/deliveriesMng(page=${deliveryDtoPage.number})}"
+                                           aria-label="이전">
+                                          <span aria-hidden="true">
+                                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                   fill="currentColor" class="bi bi-caret-left-fill"
+                                                   viewBox="0 0 16 16">
+                                                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                                              </svg>
+                                              이전
+                                          </span>
+                                        </a>
+                                    </li>
+                                    <li th:each="page: ${#numbers.sequence(start, last)}"
+                                        th:class="${page == deliveryDtoPage.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
+                                        <a class="page-link" th:text="${page}" th:href="@{/admin/deliveriesMng(page=${page})}"></a>
+                                    </li>
+                                    <li th:class="${deliveryDtoPage.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                                        <a class="page-link"
+                                           th:href="@{/admin/deliveriesMng(page=${deliveryDtoPage.number + 2})}"
+                                           aria-label="다음">
+                                        <span aria-hidden="true">
+                                            다음
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor" class="bi bi-caret-right-fill"
+                                                 viewBox="0 0 16 16">
+                                              <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                            </svg>
+                                        </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 </div>
 </html>
 
 <script th:inline="javascript">
-  function updateDeliveryStatus(id) {
-    let preVal = $('#deliveryStatus_' + id).val();
+    function updateDeliveryStatus(id) {
+        let preVal = $('#deliveryStatus_' + id).val();
 
-    $('#deliveryStatus_' + id).on('change', function () {
-      if (confirm('배송상태를 변경하시겠습니까?')) {
-        alert('변경');
-      } else {
-        $('#deliveryStatus_' + id).val(preVal);
-      }
-    });
+        $('#deliveryStatus_' + id).on('change', function () {
+            if (confirm('배송상태를 변경하시겠습니까?')) {
+                alert('변경');
+            } else {
+                $('#deliveryStatus_' + id).val(preVal);
+            }
+        });
 
-  }
+    }
 </script>

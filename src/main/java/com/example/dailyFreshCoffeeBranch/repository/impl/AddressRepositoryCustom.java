@@ -4,6 +4,6 @@ import com.example.dailyFreshCoffeeBranch.entity.Address;
 
 public interface AddressRepositoryCustom {
 
-    Address getStoreLocation();
-    Address getLoginUserLocation(String email);
+    Address findStoreLocation();
+    Address findLoginUserLocationByEmail(String email);
 }

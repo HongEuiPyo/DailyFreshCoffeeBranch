@@ -24,9 +24,11 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        int total = content.size();
+        Long count = queryFactory.select(board.count())
+                .from(board)
+                .fetchOne();
 
-        return new PageImpl<>(content, pageable, total);
+        return new PageImpl<>(content, pageable, count);
     }
 
 }

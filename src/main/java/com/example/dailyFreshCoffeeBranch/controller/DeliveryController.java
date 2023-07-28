@@ -46,4 +46,34 @@ public class DeliveryController {
         model.addAttribute("delivery", delivery);
         return "delivery/deliveryDetail";
     }
+
+    /**
+     * 회원 배송 조회 Ajax
+     *
+     * @param userInfo
+     * @param model
+     * @return
+     */
+    @GetMapping("/deliveriesAjax")
+    public String getMemberDeliveryListAjax(@LoginUserInfo UserInfo userInfo, Model model, Pageable pageable) {
+        Page<DeliveryDto> deliveryPage = deliveryService.getMemberDeliveryList(userInfo.getEmail(), pageable);
+        model.addAttribute("deliveryPage", deliveryPage);
+        return "delivery/deliveryListAjax";
+    }
+
+    /**
+     * 회원 배송 상세 Ajax
+     *
+     * @param id
+     * @param userInfo
+     * @param model
+     * @return
+     */
+    @GetMapping("/deliveriesAjax/{id}")
+    public String getMemberDeliveryDetailAjax(@PathVariable Long id, @LoginUserInfo UserInfo userInfo, Model model, Pageable pageable) {
+        DeliveryDto delivery = deliveryService.getMemberDeliveryDetail(userInfo.getEmail(), id, pageable);
+        model.addAttribute("delivery", delivery);
+        return "delivery/deliveryDetailAjax";
+    }
+
 }

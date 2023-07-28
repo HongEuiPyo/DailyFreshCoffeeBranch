@@ -21,12 +21,16 @@ public class DeliveryItemRepositoryCustomImpl implements DeliveryItemRepositoryC
 
         List<DeliveryItem> content = queryFactory.selectFrom(deliveryItem)
                 .where(deliveryItem.id.eq(deliveryId))
+                .orderBy(deliveryItem.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        int total = content.size();
+        Long count = queryFactory.select(deliveryItem.count())
+                .from(deliveryItem)
+                .where(deliveryItem.id.eq(deliveryId))
+                .fetchOne();
 
-        return new PageImpl<>(content, pageable, total);
+        return new PageImpl<>(content, pageable, count);
     }
 }

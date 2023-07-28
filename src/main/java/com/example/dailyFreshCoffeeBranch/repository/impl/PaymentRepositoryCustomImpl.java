@@ -25,9 +25,12 @@ public class PaymentRepositoryCustomImpl implements PaymentRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        int total = content.size();
+        Long count = queryFactory.select(payment.count()).
+                from(payment)
+                .where(payment.member.id.eq(memberId))
+                .fetchOne();
 
-        return new PageImpl<>(content, pageable, total);
+        return new PageImpl<>(content, pageable, count);
     }
 
 }

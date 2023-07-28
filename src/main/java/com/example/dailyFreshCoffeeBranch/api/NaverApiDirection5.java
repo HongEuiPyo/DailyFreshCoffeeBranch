@@ -10,7 +10,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
-public class NaverDirection5Api {
+public class NaverApiDirection5 {
 
     private final NaverClient naverClient;
 
@@ -20,13 +20,15 @@ public class NaverDirection5Api {
      * @param requestDto
      * @return
      */
-    public long getDuration(Directions5RequestDto requestDto) {
+    public long calculateDurationValAsTesting(Directions5RequestDto requestDto) {
 
-        WebClient webClient =  WebClient.builder()
+        WebClient webClient =
+                WebClient.builder()
                 .baseUrl("https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving")
                 .build();
 
-        Map<String, Map<String, List<Map<String, Map<String, Object>>>>> response = webClient.get()
+        Map<String, Map<String, List<Map<String, Map<String, Object>>>>> response =
+                webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .queryParam("start", requestDto.getStart())
                         .queryParam("goal", requestDto.getGoal())
@@ -37,10 +39,10 @@ public class NaverDirection5Api {
                 .bodyToMono(Map.class)
                 .block();
 
-        Object duration = response.get("route").get("traoptimal").stream()
+        Object duration =
+                response.get("route").get("traoptimal").stream()
                 .filter(m -> m.containsKey("summary"))
-                .findFirst()
-                .get()
+                .findFirst().get()
                 .get("summary")
                 .get("duration");
 

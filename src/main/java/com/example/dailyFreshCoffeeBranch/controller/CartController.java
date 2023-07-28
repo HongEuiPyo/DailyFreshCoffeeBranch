@@ -31,11 +31,11 @@ public class CartController {
      * @param model
      * @return
      */
-    @GetMapping(value = "/cart/itemsProc")
+    @GetMapping(value = "/cart/itemsAjax")
     public String cartItemListProc(@LoginUserInfo UserInfo userInfo, Model model) {
         CartDto cartDto = cartService.getCartItemList(userInfo.getEmail());
         model.addAttribute("cartDto", cartDto);
-        return "cart/cartListProc";
+        return "cart/cartListAjax";
     }
 
 }

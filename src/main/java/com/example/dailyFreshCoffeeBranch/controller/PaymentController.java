@@ -34,11 +34,11 @@ public class PaymentController {
      * @param model
      * @return
      */
-    @GetMapping("/paymentListProc")
+    @GetMapping("/paymentListAjax")
     public String paymentListProc(@LoginUserInfo UserInfo userInfo, Model model, Pageable pageable) {
-        Page<PaymentDto> paymentDtoList = paymentService.getPaymentList(userInfo.getEmail(), pageable);
-        model.addAttribute("paymentDtoList", paymentDtoList);
-        return "payment/paymentListProc";
+        Page<PaymentDto> paymentDtoPage = paymentService.getPaymentList(userInfo.getEmail(), pageable);
+        model.addAttribute("paymentDtoPage", paymentDtoPage);
+        return "payment/paymentListAjax";
     }
 
 }

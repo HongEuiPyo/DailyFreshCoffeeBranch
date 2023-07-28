@@ -1,0 +1,76 @@
+<div class="card-subtitle py-3">
+    <h6 class="m-0 font-weight-bold text-primary">· 장바구니</h6>
+</div>
+
+<table class="table table-bordered dataTable" id="cartTable">
+    <colgroup>
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: auto;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 17%;">
+    </colgroup>
+    <thead>
+    <tr>
+        <th scope="col" style="text-align: center">상품 번호</th>
+        <th scope="col" style="text-align: center">대표 이미지</th>
+        <th scope="col" style="text-align: center">상품 명</th>
+        <th scope="col" style="text-align: center">가격</th>
+        <th scope="col" style="text-align: center">수량</th>
+        <th scope="col" style="text-align: center">수정</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="cartItem : ${cartDto.getCartItemDtoList()}">
+        <td th:text="${cartItem.itemId}" class="text-center"></td>
+        <td>
+            <img th:src="${cartItem.getImageUrl()}" style="width: 30px; height: 30px;">
+        </td>
+        <td class="itemName text-center" th:text="${cartItem.itemName}"></td>
+        <td th:text="${cartItem.price}" class="text-center"></td>
+        <td>
+            <input type="number" name="count" id="count" class="form-control text-center" th:value="${cartItem.count}">
+        </td>
+        <td style="text-align: center;">
+            <div class="input-group mb-3">
+                <button type="button" class="btn btn-danger" th:onclick="deleteCartItem([[${cartItem.id}]])">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-bag-x" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M6.146 8.146a.5.5 0 0 1 .708 0L8 9.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 10l1.147 1.146a.5.5 0 0 1-.708.708L8 10.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 10 6.146 8.854a.5.5 0 0 1 0-.708z"/>
+                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                    </svg>
+                    취소
+                </button>
+                <button type="button" class="btn btn-facebook" th:onclick="updateCartItem([[${cartItem.id}]])">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-bag-dash" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M5.5 10a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z"/>
+                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                    </svg>
+                    수정
+                </button>
+            </div>
+        </td>
+    </tr>
+    <tr th:if="${not #lists.isEmpty(cartDto.getCartItemDtoList())}">
+        <td colspan="3" style="text-align: center;">총 금액</td>
+        <td id="totalUsePoint" colspan="2" th:text="${cartDto.getTotalPrice()}" style="text-align: center;"></td>
+        <td style="text-align: center;">
+            <button type="button" class="btn btn-warning" onclick="goDelivery();">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-bag-check" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                    <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                </svg>
+                배송하기
+            </button>
+        </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(cartDto.getCartItemDtoList())}">
+        <td colspan="6" style="text-align: center;">등록된 장바구니 상품이 없습니다.</td>
+    </tr>
+    </tbody>
+</table>

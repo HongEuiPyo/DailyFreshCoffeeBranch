@@ -5,9 +5,9 @@
   <meta charset="UTF-8">
   <title>마이페이지 : 매일 신선한 커피점</title>
 </head>
+
 <div layout:fragment="content">
 <div class="container">
-
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">마이페이지</h6>
@@ -70,7 +70,7 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                                     <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
                                                 </svg>
-                                                입금
+                                                포인트 충전
                                             </button>
                                         </div>
                                     </td>
@@ -87,6 +87,27 @@
                                     </button>
                                 </div>
                             </div>
+                            <div class="row mt-5">
+                                <div class="col-sm-12">
+                                    <div class="dataTables_wrapper dt-bootstrap4">
+                                        <div id="cartDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-sm-12">
+                                    <div class="dataTables_wrapper dt-bootstrap4">
+                                        <div id="deliveryDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-sm-12">
+                                    <div class="dataTables_wrapper dt-bootstrap4">
+                                        <div id="paymentDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -94,11 +115,18 @@
         </div>
     </div>
 </div>
+</div>
 </html>
 
 <script th:inline="javascript">
     const memberId = [[${memberDto.id}]];
     let isFunctionAddPointRunning = false;
+
+    window.onload = function (){
+        goCartItemList();
+        goDeliveryList(1);
+        goPaymentList(1);
+    }
 
     function goUpdate() {
         document.memberFrm.method = 'GET';
@@ -107,7 +135,7 @@
     }
 
     function addPoint(){
-        if (confirm('입금하시겠습니까?')){
+        if (confirm('\'포인트 충전\'을 하시겠습니까?')){
             if (isFunctionAddPointRunning == true){
                 return;
             }
@@ -132,10 +160,146 @@
                         promise.then(promise => alert(promise.point));
                         isFunctionAddPointRunning = false;
                     }else{
-                        alert('입금 중 오류가 발생했습니다.');
+                        alert('\'포인트\' 충전 중 오류가 발생했습니다.');
                         isFunctionAddPointRunning = false;
                     }
                 });
         }
     }
+
+    function goCartItemList(){
+        $.ajax({
+            url: "http://localhost:8080/cart/itemsAjax", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+            method: "GET",   // HTTP 요청 메소드(GET, POST 등)
+            dataType: "text", // 서버에서 보내줄 데이터의 타입
+            error: function() {
+                console.log('통신실패!!');
+            },
+            success: function(data) {
+                document.getElementById('cartDiv').innerHTML = data;
+            }
+        });
+    }
+
+    function updateCartItem(cartItemId){
+        if (confirm('장바구니 상품을 수정하시겠습니까?')){
+            let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/update';
+            fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    count: document.getElementById('count').value
+                }),
+            })
+                .then((response) => {
+                    if(response.ok){
+                        let promise = response.json();
+                        promise.then(promise => alert(promise.msg));
+                        getCartItemList();
+                    }else if (response.status == 400){
+                        let promise = response.json();
+                        promise.then(promise => alert(promise.count));
+                    }else{
+                        alert('장바구니 상품 수정 중 오류가 발생했습니다.');
+                    }
+                });
+        }
+    }
+
+    function deleteCartItem(cartItemId){
+        if (confirm('장바구니 상품을 취소하시겠습니까?')){
+            let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/delete';
+            fetch(url, {
+                method: 'DELETE',
+            })
+                .then((response) => {
+                    if(response.status == 200){
+                        let promise = response.json();
+                        promise.then(promise => alert(promise.msg));
+                        getCartItemList();
+                    }else{
+                        alert('장바구니 상품 삭제 중 오류가 발생했습니다.');
+                    }
+                });
+        }
+    }
+
+    function goDelivery(){
+        if (confirm('장바구니 상품을 \'배송\' 하시겠습니까?')){
+            let url = 'http://localhost:8080/api/delivery/deliverCartItems';
+
+            let itemNameArray = document.getElementsByClassName('itemName');
+            let itemNames = '';
+
+            for (let i=0; i<itemNameArray.length; i++){
+                itemNames += itemNameArray[i].innerText;
+                if (i !== (itemNameArray.length-1))
+                    itemNames += ',';
+            }
+
+            fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    itemNames: itemNames,
+                    totalUsePoint : document.getElementById('totalUsePoint').innerText
+                }),
+            })
+                .then((response) => {
+                    if(response.status == 200){
+                        let promise = response.json();
+                        promise.then(promise => alert(promise.msg));
+                        window.location.reload();
+                    }else{
+                        alert('\'배송\' 중 오류가 발생했습니다.');
+                    }
+                });
+        }
+    }
+
+    function goPaymentList(page){
+        $.ajax({
+            url: "http://localhost:8080/paymentListAjax", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+            method: "GET",   // HTTP 요청 메소드(GET, POST 등)
+            data: {"page": page},
+            dataType: "text", // 서버에서 보내줄 데이터의 타입
+            error: function() {
+                console.log('통신실패!!');
+            },
+            success: function(data) {
+                document.getElementById('paymentDiv').innerHTML = data;
+            }
+        });
+    }
+
+    function goDeliveryList(page){
+        $.ajax({
+            url: "http://localhost:8080/deliveriesAjax", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+            method: "GET",   // HTTP 요청 메소드(GET, POST 등)
+            data: {"page": page},
+            dataType: "text", // 서버에서 보내줄 데이터의 타입
+            error: function() {
+                console.log('통신실패!!');
+            },
+            success: function(data) {
+                document.getElementById('deliveryDiv').innerHTML = data;
+            }
+        });
+    }
+
+    function goDeliveryDetail(id) {
+        $.ajax({
+            url: "http://localhost:8080/deliveriesAjax/" + id, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+            method: "GET",   // HTTP 요청 메소드(GET, POST 등)
+            dataType: "text", // 서버에서 보내줄 데이터의 타입
+            error: function() {
+                console.log('통신실패!!');
+            },
+            success: function(data) {
+                document.getElementById('deliveryDiv').innerHTML = '';
+                document.getElementById('deliveryDiv').innerHTML = data;
+            }
+        });
+    }
+
 </script>

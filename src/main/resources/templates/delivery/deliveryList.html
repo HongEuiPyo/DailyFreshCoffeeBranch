@@ -20,9 +20,9 @@
                     <thead>
                     <tr>
                       <th scope="col" style="text-align: center">배송번호</th>
-                      <th scope="col" style="text-align: center">배송요청일시</th>
                       <th scope="col" style="text-align: center">예상배송소요시간(분)</th>
                       <th scope="col" style="text-align: center">배송상태</th>
+                      <th scope="col" style="text-align: center">배송요청일시</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -30,9 +30,9 @@
                         <td class="text-center">
                           <a th:text="${deliveryItem.id}" th:href="@{/deliveries/{id}(id = ${deliveryItem.id})}"></a>
                         </td>
-                        <td th:text="${#temporals.format(deliveryItem.deliveryStartTime, 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
                         <td th:text="${((deliveryItem.deliveryTakenTime / (1000 * 60 )) % 60 )}" class="text-center"></td>
-                        <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${deliveryItem.deliveryStatus.title}" class="text-center"></td>
+                        <td th:text="${deliveryItem.deliveryStatus.title}" class="text-center"></td>
+                        <td th:text="${#temporals.format(deliveryItem.deliveryStartTime, 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
                       </tr>
                     </tbody>
                   </table>

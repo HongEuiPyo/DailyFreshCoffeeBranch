@@ -1,0 +1,61 @@
+<div class="card-subtitle py-3">
+    <h6 class="m-0 font-weight-bold text-primary">· 배송 목록</h6>
+</div>
+
+<table class="table table-bordered dataTable">
+    <thead>
+    <tr>
+        <th scope="col" style="text-align: center">배송번호</th>
+        <th scope="col" style="text-align: center">예상배송소요시간(분)</th>
+        <th scope="col" style="text-align: center">배송상태</th>
+        <th scope="col" style="text-align: center">배송요청일시</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="deliveryItem : ${deliveryPage}">
+        <td class="text-center">
+            <a href="#" th:text="${deliveryItem.id}" th:onclick="goDeliveryDetail([[${deliveryItem.id}]])"></a>
+        </td>
+        <td th:text="${((deliveryItem.deliveryTakenTime / (1000 * 60 )) % 60 )}" class="text-center"></td>
+        <td th:text="${deliveryItem.deliveryStatus.title}" class="text-center"></td>
+        <td th:text="${#temporals.format(deliveryItem.deliveryStartTime, 'yyyy-MM-dd HH:mm:ss')}"
+            class="text-center"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="row mt-5" th:if="not ${deliveryPage?.isEmpty()}">
+    <div class="dataTables_paginate paging_simple_numbers">
+        <ul class="pagination"
+            th:with="start=${T(java.lang.Math).floor(deliveryPage.number/10)*10 + 1},last=(${start + 9 < deliveryPage.totalPages ? start + 9 : deliveryPage.totalPages})">
+            <li th:class="${deliveryPage.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                <a class="page-link" th:onclick="goDeliveryList([[${deliveryPage.number}]])" aria-label="이전">
+          <span aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                   fill="currentColor" class="bi bi-caret-left-fill"
+                   viewBox="0 0 16 16">
+                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+              </svg>
+              이전
+          </span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(start, last)}"
+                th:class="${page == deliveryPage.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
+                <a class="page-link" th:text="${page}" th:onclick="goDeliveryList([[${page}]])"></a>
+            </li>
+            <li th:class="${deliveryPage.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                <a class="page-link" th:onclick="goDeliveryList([[${deliveryPage.number + 2}]])" aria-label="다음">
+                    <span aria-hidden="true">
+                        다음
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                             fill="currentColor" class="bi bi-caret-right-fill"
+                             viewBox="0 0 16 16">
+                          <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                        </svg>
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

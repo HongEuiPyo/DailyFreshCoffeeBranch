@@ -26,9 +26,11 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        int total = content.size();
+        Long count = queryFactory.select(comment.count())
+                .from(comment)
+                .fetchOne();
 
-        return new PageImpl<>(content, pageable, total);
+        return new PageImpl<>(content, pageable, count);
     }
 
     @Override

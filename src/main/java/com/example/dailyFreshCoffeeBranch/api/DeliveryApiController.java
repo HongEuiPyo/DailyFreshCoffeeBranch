@@ -1,9 +1,9 @@
 package com.example.dailyFreshCoffeeBranch.api;
 
 import com.example.dailyFreshCoffeeBranch.annotation.LoginUserInfo;
-import com.example.dailyFreshCoffeeBranch.dto.MemberPointUpDto;
+import com.example.dailyFreshCoffeeBranch.dto.PaymentDto;
 import com.example.dailyFreshCoffeeBranch.security.oauth2.UserInfo;
-import com.example.dailyFreshCoffeeBranch.service.PaymentService;
+import com.example.dailyFreshCoffeeBranch.service.DeliveryApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +21,20 @@ import java.util.Map;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
-public class PaymentApiController {
+public class DeliveryApiController {
 
-    private final PaymentService paymentService;
+    private final DeliveryApiService deliveryApiService;
 
     /**
-     * 포인트 충전
-     * @param memberPointUpDto
+     * 장바구니 상품 배송 확정
+     *
+     * @param paymentDto
      * @param userInfo
      * @return
      */
-    @PostMapping("/payment/addPoint")
-    public ResponseEntity<Map<String, String>> addPoint(
-            @Valid @RequestBody MemberPointUpDto memberPointUpDto,
+    @PostMapping("/delivery/deliverCartItems")
+    public ResponseEntity<Map<String, String>> deliverCartItems(
+            @Valid @RequestBody PaymentDto paymentDto,
             BindingResult result,
             @LoginUserInfo UserInfo userInfo
     ) {
@@ -48,9 +49,9 @@ public class PaymentApiController {
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
 
-        paymentService.addPoint(userInfo.getEmail(), memberPointUpDto);
+        deliveryApiService.deliverCartItems(userInfo.getEmail(), paymentDto);
 
-        resultMap.put("msg", "'포인트 충전'을 완료하였습니다.");
+        resultMap.put("msg", "'배송'을 완료하였습니다.");
 
         return ResponseEntity.ok().body(resultMap);
     }

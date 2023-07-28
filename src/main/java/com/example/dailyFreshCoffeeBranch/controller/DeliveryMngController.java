@@ -25,8 +25,8 @@ public class DeliveryMngController {
      */
     @GetMapping("/admin/deliveriesMng")
     public String getMemberDeliveryMngList(Model model, Pageable pageable) {
-        Page<DeliveryDto> deliveryList = deliveryMngService.getMemberDeliveryMngList(pageable);
-        model.addAttribute("deliveryList", deliveryList);
+        Page<DeliveryDto> deliveryDtoPage = deliveryMngService.getMemberDeliveryMngList(pageable);
+        model.addAttribute("deliveryDtoPage", deliveryDtoPage);
         return "deliveryMng/deliveryMngList";
     }
 

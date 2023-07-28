@@ -49,10 +49,10 @@
           <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/boards">공지사항</a></li>
           <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/items">상품</a></li>
           <li sec:authorize="!isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/login">로그인</a></li>
-          <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/cart/items">장바구니</a></li>
-          <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/deliveries">배송</a></li>
+          <!-- li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/cart/items">장바구니</a></li -->
+          <!-- li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/deliveries">배송</a></li -->
           <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/admin/deliveriesMng">배송관리</a></li>
-          <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/paymentList">영수증</a></li>
+          <!-- li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/paymentList">영수증</a></li -->
           <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/myPage">마이페이지</a></li>
           <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/logout">로그아웃</a></li>
         </ul>

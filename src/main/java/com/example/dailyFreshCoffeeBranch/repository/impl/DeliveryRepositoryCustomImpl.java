@@ -23,13 +23,17 @@ public class DeliveryRepositoryCustomImpl implements DeliveryRepositoryCustom {
 
         List<Delivery> content = queryFactory.selectFrom(delivery)
                 .where(delivery.member.email.eq(email))
+                .orderBy(delivery.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        int total = content.size();
+        Long count = queryFactory.select(delivery.count())
+                .from(delivery)
+                .where(delivery.member.email.eq(email))
+                .fetchOne();
 
-        return new PageImpl<>(content, pageable, total);
+        return new PageImpl<>(content, pageable, count);
     }
 
     @Override
@@ -46,13 +50,15 @@ public class DeliveryRepositoryCustomImpl implements DeliveryRepositoryCustom {
     public Page<Delivery> findAllPage(Pageable pageable) {
 
         List<Delivery> content = queryFactory.selectFrom(delivery)
+                .orderBy(delivery.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(delivery.id.desc())
                 .fetch();
 
-        int total = content.size();
+        Long count = queryFactory.select(delivery.count())
+                .from(delivery)
+                .fetchOne();
 
-        return new PageImpl<>(content, pageable, total);
+        return new PageImpl<>(content, pageable, count);
     }
 }

@@ -1,0 +1,69 @@
+<div class="card-subtitle py-3">
+    <h6 class="m-0 font-weight-bold text-primary">· 영수증</h6>
+</div>
+<table class="table table-bordered dataTable" id="commentTable">
+    <colgroup>
+        <col style="width: auto;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 20%;">
+    </colgroup>
+    <thead>
+    <tr>
+        <th scope="col" style="text-align: center">구매 상품 목록</th>
+        <th scope="col" style="text-align: center">총 금액</th>
+        <th scope="col" style="text-align: center">적용 할인</th>
+        <th scope="col" style="text-align: center">결제 금액</th>
+        <th scope="col" style="text-align: center">구매일시</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="paymentItem : ${paymentDtoPage}">
+        <td th:text="${paymentItem.getItemNames()}" style="text-align: center"></td>
+        <td th:text="${paymentItem.getTotalUsePoint()}" class="text-center"></td>
+        <td th:text="${paymentItem.getDiscount() * 100 + '%'}" class="text-center"></td>
+        <td th:text="${paymentItem.getTotalUsePoint() - paymentItem.getTotalUsePoint() * paymentItem.getDiscount()}" class="text-center"></td>
+        <td th:text="${#temporals.format(paymentItem.getModifiedTime(), 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
+    </tr>
+    <tr th:if="${paymentDtoPage.isEmpty()}" style="text-align: center;">
+        <td colspan="5">구매목록이 없습니다.</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="row mt-5" th:if="not ${paymentDtoPage?.isEmpty()}">
+    <div class="dataTables_paginate paging_simple_numbers">
+        <ul class="pagination"
+            th:with="start=${T(java.lang.Math).floor(paymentDtoPage.number/10)*10 + 1},last=(${start + 9 < paymentDtoPage.totalPages ? start + 9 : paymentDtoPage.totalPages})">
+            <li th:class="${paymentDtoPage.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                <a class="page-link" th:href="@{/items(page=${paymentDtoPage.number})}" aria-label="이전">
+          <span aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                   fill="currentColor" class="bi bi-caret-left-fill"
+                   viewBox="0 0 16 16">
+                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+              </svg>
+              이전
+          </span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(start, last)}"
+                th:class="${page == paymentDtoPage.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
+                <a class="page-link" th:text="${page}" th:href="@{/items(page=${page})}"></a>
+            </li>
+            <li th:class="${paymentDtoPage.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                <a class="page-link" th:href="@{/items(page=${paymentDtoPage.number + 2})}" aria-label="다음">
+                    <span aria-hidden="true">
+                        다음
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                             fill="currentColor" class="bi bi-caret-right-fill"
+                             viewBox="0 0 16 16">
+                          <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                        </svg>
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -18,16 +18,13 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     @Override
     public List<Item> getTop3ItemList() {
 
-        List<Item> result = queryFactory
-                .selectFrom(item)
+        return queryFactory.selectFrom(item)
                 .leftJoin(imageFile)
                 .on(item.id.eq(imageFile.item.id))
                 .where(imageFile.imageUrl.isNotNull())
                 .orderBy(item.purchaseCnt.desc())
                 .limit(3)
                 .fetch();
-
-        return result;
     }
 
 }

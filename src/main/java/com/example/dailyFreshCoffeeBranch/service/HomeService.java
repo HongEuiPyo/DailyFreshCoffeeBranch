@@ -28,7 +28,7 @@ public class HomeService {
     }
 
     public AddressDto getStoreLocation() {
-        Address storeLocation = addressRepository.getStoreLocation();
+        Address storeLocation = addressRepository.findStoreLocation();
         return AddressDto.of(storeLocation);
     }
 
