@@ -1,5 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.repository.impl;
 
+import com.example.dailyFreshCoffeeBranch.constant.DeliveryItemStatus;
 import com.example.dailyFreshCoffeeBranch.entity.DeliveryItem;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,21 @@ public class DeliveryItemRepositoryCustomImpl implements DeliveryItemRepositoryC
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, count);
+    }
+
+    @Override
+    public List<DeliveryItem> updateDeliveryItemStatus(Long deliveryItemId, DeliveryItemStatus deliveryItemStatus) {
+
+        queryFactory.update(deliveryItem)
+                .set(deliveryItem.deliveryItemStatus, deliveryItemStatus)
+                .where(deliveryItem.id.eq(deliveryItemId))
+                .execute();
+
+        return queryFactory.selectFrom(deliveryItem)
+                .where(deliveryItem.id.eq(deliveryItemId))
+                .fetch();
+
+        
+
     }
 }

@@ -14,4 +14,8 @@ public interface DeliveryRepositoryCustom {
     Optional<Delivery> findByMemberEmailAndId(String email, Long id);
 
     Page<Delivery> findAllPage(Pageable pageable);
+
+    long getDelivered(Long deliveryId);
+
+    long getDelivering(Long deliveryId);
 }

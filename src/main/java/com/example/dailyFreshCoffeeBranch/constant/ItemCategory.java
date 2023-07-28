@@ -1,10 +1,12 @@
 package com.example.dailyFreshCoffeeBranch.constant;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ItemCategory {
     ALL("ALL", "모든 음료"),
     COLD_BREW("COLD_BREW", "콜드브루"),

@@ -1,10 +1,13 @@
 package com.example.dailyFreshCoffeeBranch.constant;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter
+
 @RequiredArgsConstructor
+@Getter
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Role {
     USER("ROLE_USER", "사용자")
     , SMALL_BUSINESS("ROLE_SMALL_BUSINESS", "소상공인")

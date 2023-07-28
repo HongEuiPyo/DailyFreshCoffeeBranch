@@ -37,7 +37,7 @@
         <ul class="pagination"
             th:with="start=${T(java.lang.Math).floor(paymentDtoPage.number/10)*10 + 1},last=(${start + 9 < paymentDtoPage.totalPages ? start + 9 : paymentDtoPage.totalPages})">
             <li th:class="${paymentDtoPage.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                <a class="page-link" th:href="@{/items(page=${paymentDtoPage.number})}" aria-label="이전">
+                <a href="#none" class="page-link" th:onclick="goPaymentList([[${paymentDtoPage.number}]])" aria-label="이전">
           <span aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                    fill="currentColor" class="bi bi-caret-left-fill"
@@ -50,10 +50,10 @@
             </li>
             <li th:each="page: ${#numbers.sequence(start, last)}"
                 th:class="${page == paymentDtoPage.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
-                <a class="page-link" th:text="${page}" th:href="@{/items(page=${page})}"></a>
+                <a href="#none" class="page-link" th:text="${page}" th:onclick="goPaymentList([[${page}]])"></a>
             </li>
             <li th:class="${paymentDtoPage.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                <a class="page-link" th:href="@{/items(page=${paymentDtoPage.number + 2})}" aria-label="다음">
+                <a href="#none" class="page-link" th:onclick="goPaymentList([[${paymentDtoPage.number + 2}]])" aria-label="다음">
                     <span aria-hidden="true">
                         다음
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"

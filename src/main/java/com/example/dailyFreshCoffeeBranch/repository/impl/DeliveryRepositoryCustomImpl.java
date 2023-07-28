@@ -1,5 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.repository.impl;
 
+import com.example.dailyFreshCoffeeBranch.constant.DeliveryStatus;
 import com.example.dailyFreshCoffeeBranch.entity.Delivery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import static com.example.dailyFreshCoffeeBranch.entity.QDelivery.delivery;
 public class DeliveryRepositoryCustomImpl implements DeliveryRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+
 
     @Override
     public Page<Delivery> findByMemberEmail(String email, Pageable pageable) {
@@ -61,4 +63,23 @@ public class DeliveryRepositoryCustomImpl implements DeliveryRepositoryCustom {
 
         return new PageImpl<>(content, pageable, count);
     }
+
+    @Override
+    public long getDelivered(Long deliveryId) {
+
+        return queryFactory.update(delivery)
+                .set(delivery.deliveryStatus, DeliveryStatus.DELIVERED)
+                .where(delivery.id.eq(deliveryId))
+                .execute();
+    }
+
+    @Override
+    public long getDelivering(Long deliveryId) {
+
+        return queryFactory.update(delivery)
+                .set(delivery.deliveryStatus, DeliveryStatus.DELIVERING)
+                .where(delivery.id.eq(deliveryId))
+                .execute();
+    }
+
 }

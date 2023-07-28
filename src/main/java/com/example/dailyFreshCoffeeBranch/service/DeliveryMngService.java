@@ -42,7 +42,7 @@ public class DeliveryMngService {
                 .orElseThrow(() -> new DeliveryNotFoundException("배송을 조회할 수 없습니다."));
 
         Page<DeliveryItemDto> deliveryItemDtoPage = deliveryItemRepository.findByDeliveryId(id, pageable)
-                .map(di -> DeliveryItemDto.of(di));
+                .map(DeliveryItemDto::of);
 
         return DeliveryDto.create(delivery, deliveryItemDtoPage);
     }

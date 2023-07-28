@@ -55,17 +55,17 @@
                   <table class="table table-bordered dataTable">
                     <colgroup>
                       <col style="width: 10%">
-                      <col style="width: auto;">
                       <col style="width: 15%">
+                      <col style="width: auto;">
                       <col style="width: 10%">
                       <col style="width: 10%">
-                      <col style="width: 10%">
+                      <col style="width: 15%">
                     </colgroup>
                     <thead>
                     <tr>
                       <th scope="col" style="text-align: center">상품번호</th>
-                      <th scope="col" style="text-align: center">상품명</th>
                       <th scope="col" style="text-align: center">상품사진</th>
+                      <th scope="col" style="text-align: center">상품명</th>
                       <th scope="col" style="text-align: center">가격</th>
                       <th scope="col" style="text-align: center">수량</th>
                       <th scope="col" style="text-align: center">배송상태</th>
@@ -74,13 +74,26 @@
                     <tbody>
                       <tr th:each="deliveryItem : ${delivery.getDeliveryItemList()}">
                         <td th:text="${deliveryItem.itemDto.id}" style="text-align: center"></td>
-                        <td th:text="${deliveryItem.itemDto.title}" class="text-center"></td>
                         <td>
                           <img th:src="${deliveryItem.itemDto.imageFileDtoList.get(0).imageUrl}" style="width: 30px; height: 30px;">
                         </td>
+                        <td th:text="${deliveryItem.itemDto.title}" class="text-center"></td>
                         <td th:text="${deliveryItem.itemDto.price}" class="text-center"></td>
                         <td th:text="${deliveryItem.count}" class="text-center"></td>
-                        <td th:text="${deliveryItem.deliveryItemStatus.title}" class="text-center"></td>
+                        <td class="text-center">
+                          <select th:id="'deliveryItemStatus_' + ${deliveryItem.id}" name="deliveryItemStatus"
+                                  class="custom-select form-control"
+                                  th:onfocus="updateDeliveryItemStatus([[${delivery.id}]], [[${deliveryItem.id}]])">
+                            <option value="DELIVERING"
+                                    th:selected="${#strings.equals(deliveryItem.deliveryItemStatus.key, 'DELIVERING')}">
+                              배송중
+                            </option>
+                            <option value="DELIVERED"
+                                    th:selected="${#strings.equals(deliveryItem.deliveryItemStatus.key, 'DELIVERED')}">
+                              배송완료
+                            </option>
+                          </select>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -107,6 +120,40 @@
 <script th:inline="javascript">
   function goList(){
     window.location.href = '/admin/deliveriesMng';
+  }
+
+  function updateDeliveryItemStatus(deliveryId, deliveryItemId) {
+    let selectForDeliveryItemStatus = $('#deliveryItemStatus_' + deliveryItemId);
+    let preVal = selectForDeliveryItemStatus.val();
+
+    selectForDeliveryItemStatus.on('change', function () {
+
+      if (confirm("'배송상품 상태'를 변경하시겠습니까?")) {
+
+        $.ajax({
+          url: "http://localhost:8080/api/deliveries/" + deliveryId + "/deliveryItems/" + deliveryItemId + "/updateStatus?deliveryItemStatus=" + this.value, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+          method: "GET",   // HTTP 요청 메소드(GET, POST 등)
+          dataType: "json", // 서버에서 보내줄 데이터의 타입
+          error: function() {
+            console.log('통신실패!!');
+            selectForDeliveryItemStatus.val(preVal);
+          },
+          success: function(data) {
+            if (data.status == 'ok') {
+              alert(data.msg);
+              goList();
+            } else if (data.status == 'fail') {
+              alert(data.msg);
+              selectForDeliveryItemStatus.val(preVal);
+            }
+          }
+        });
+
+      } else {
+        selectForDeliveryItemStatus.val(preVal);
+      }
+    });
+
   }
 
 </script>

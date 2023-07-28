@@ -14,7 +14,7 @@
     <tbody>
     <tr th:each="deliveryItem : ${deliveryPage}">
         <td class="text-center">
-            <a href="#" th:text="${deliveryItem.id}" th:onclick="goDeliveryDetail([[${deliveryItem.id}]])"></a>
+            <a href="#none" th:text="${deliveryItem.id}" th:onclick="goDeliveryDetail([[${deliveryItem.id}]])"></a>
         </td>
         <td th:text="${((deliveryItem.deliveryTakenTime / (1000 * 60 )) % 60 )}" class="text-center"></td>
         <td th:text="${deliveryItem.deliveryStatus.title}" class="text-center"></td>
@@ -29,7 +29,7 @@
         <ul class="pagination"
             th:with="start=${T(java.lang.Math).floor(deliveryPage.number/10)*10 + 1},last=(${start + 9 < deliveryPage.totalPages ? start + 9 : deliveryPage.totalPages})">
             <li th:class="${deliveryPage.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                <a class="page-link" th:onclick="goDeliveryList([[${deliveryPage.number}]])" aria-label="이전">
+                <a href="#none" class="page-link" th:onclick="goDeliveryList([[${deliveryPage.number}]])" aria-label="이전">
           <span aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                    fill="currentColor" class="bi bi-caret-left-fill"
@@ -42,10 +42,10 @@
             </li>
             <li th:each="page: ${#numbers.sequence(start, last)}"
                 th:class="${page == deliveryPage.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
-                <a class="page-link" th:text="${page}" th:onclick="goDeliveryList([[${page}]])"></a>
+                <a href="#none" class="page-link" th:text="${page}" th:onclick="goDeliveryList([[${page}]])"></a>
             </li>
             <li th:class="${deliveryPage.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                <a class="page-link" th:onclick="goDeliveryList([[${deliveryPage.number + 2}]])" aria-label="다음">
+                <a href="#none" class="page-link" th:onclick="goDeliveryList([[${deliveryPage.number + 2}]])" aria-label="다음">
                     <span aria-hidden="true">
                         다음
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
