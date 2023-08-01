@@ -1,4 +1,4 @@
-package com.example.dailyFreshCoffeeBranch.config;
+package com.example.dailyFreshCoffeeBranch.security;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;

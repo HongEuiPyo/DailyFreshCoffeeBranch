@@ -1,11 +1,13 @@
 package com.example.dailyFreshCoffeeBranch.dto;
 
+import com.example.dailyFreshCoffeeBranch.constant.ItemCategory;
 import com.example.dailyFreshCoffeeBranch.constant.ItemStatus;
 import com.example.dailyFreshCoffeeBranch.entity.Item;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,18 +33,24 @@ public class ItemDto {
 
     private ItemStatus itemStatus;
 
+    private ItemCategory itemCategory;
+
     private List<ImageFileDto> imageFileDtoList = new ArrayList<>();
 
     private int purchaseCnt;
 
+    private LocalDateTime createdTime;
+
+    private LocalDateTime modifiedTime;
+
 
     public Item toEntity() {
         return Item.builder()
-                .title(this.title)
-                .price(this.price)
-                .summary(this.summary)
-                .stock(this.stock)
-                .itemStatus(this.itemStatus)
+                .title(title)
+                .price(price)
+                .summary(summary)
+                .stock(stock)
+                .itemStatus(itemStatus)
                 .purchaseCnt(purchaseCnt)
                 .build();
     }

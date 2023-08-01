@@ -1,9 +1,9 @@
 package com.example.dailyFreshCoffeeBranch.api;
 
-import com.example.dailyFreshCoffeeBranch.annotation.LoginUserInfo;
+import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
 import com.example.dailyFreshCoffeeBranch.dto.CartItemDto;
 import com.example.dailyFreshCoffeeBranch.dto.CartItemUpdateDto;
-import com.example.dailyFreshCoffeeBranch.security.oauth2.UserInfo;
+import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
 import com.example.dailyFreshCoffeeBranch.service.CartItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class CartItemApiController {
      * @param id
      * @param cartItemDto
      * @param bindingResult
-     * @param userInfo
+     * @param userInfoDto
      * @return
      */
     @PostMapping(value = "/cart/items/{id}/add")
@@ -36,7 +36,7 @@ public class CartItemApiController {
             @PathVariable Long id,
             @Valid @RequestBody CartItemDto cartItemDto,
             BindingResult bindingResult,
-            @LoginUserInfo UserInfo userInfo
+            @LoginUser UserInfoDto userInfoDto
     ) {
         Map<String, String> resultMap = new HashMap<>();
         if (bindingResult.hasErrors()) {
@@ -45,7 +45,7 @@ public class CartItemApiController {
             }
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
-        cartService.addToCart(userInfo.getEmail(), id, cartItemDto);
+        cartService.addToCart(userInfoDto.getEmail(), id, cartItemDto);
         resultMap.put("msg", "장바구니에 추가 완료하였습니다.");
         return ResponseEntity.ok().body(resultMap);
     }
@@ -54,7 +54,7 @@ public class CartItemApiController {
      * 장바구니 상품 수정
      * @param id
      * @param cartItemUpdateDto
-     * @param userInfo
+     * @param userInfoDto
      * @return
      */
     @PostMapping(value = "/cart/items/{id}/update")
@@ -62,7 +62,7 @@ public class CartItemApiController {
             @PathVariable Long id,
             @Valid @RequestBody CartItemUpdateDto cartItemUpdateDto,
             BindingResult result,
-            @LoginUserInfo UserInfo userInfo
+            @LoginUser UserInfoDto userInfoDto
     ) {
         Map<String, String> resultMap = new HashMap<>();
         if (result.hasErrors()) {
@@ -71,7 +71,7 @@ public class CartItemApiController {
             }
             return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
         }
-        cartService.updateCartItem(userInfo.getEmail(), id, cartItemUpdateDto);
+        cartService.updateCartItem(userInfoDto.getEmail(), id, cartItemUpdateDto);
         resultMap.put("msg", "장바구니 상품 수정을 완료하였습니다.");
         return ResponseEntity.ok().body(resultMap);
     }
@@ -79,13 +79,13 @@ public class CartItemApiController {
     /**
      * 장바구니 상품 삭제
      * @param id
-     * @param userInfo
+     * @param userInfoDto
      * @return
      */
     @DeleteMapping("/cart/items/{id}/delete")
-    public ResponseEntity<Map<String, String>> deleteCartItem(@PathVariable Long id, @LoginUserInfo UserInfo userInfo) {
+    public ResponseEntity<Map<String, String>> deleteCartItem(@PathVariable Long id, @LoginUser UserInfoDto userInfoDto) {
         Map<String, String> resultMap = new HashMap<>();
-        cartService.deleteCartItem(id, userInfo.getEmail());
+        cartService.deleteCartItem(id, userInfoDto.getEmail());
         resultMap.put("msg", "장바구니 상품을 삭제 하였습니다.");
         return ResponseEntity.ok(resultMap);
     }

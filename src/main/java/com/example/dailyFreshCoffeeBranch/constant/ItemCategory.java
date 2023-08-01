@@ -1,21 +1,19 @@
 package com.example.dailyFreshCoffeeBranch.constant;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ItemCategory {
     ALL("ALL", "모든 음료"),
     COLD_BREW("COLD_BREW", "콜드브루"),
-    BROOD("BROOD", "콜드브루"),
-    ESPRESSO("ESPRESSO", "콜드브루"),
-    FRAPPUCCINO("FRAPPUCCINO", "콜드브루"),
-    REFRESHER("REFRESHER", "콜드브루"),
-    TEA("TEA", "콜드브루"),
-    BOTTLED("BOTTLED", "콜드브루");
+    BROOD("BROOD", "브루드"),
+    ESPRESSO("ESPRESSO", "에스프레소"),
+    FRAPPUCCINO("FRAPPUCCINO", "프라푸치노"),
+    REFRESHER("REFRESHER", "리프레셔"),
+    TEA("TEA", "티"),
+    BOTTLED("BOTTLED", "병음료");
 
     private final String key;
     private final String title;

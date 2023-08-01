@@ -29,20 +29,24 @@
                       <td th:text="${delivery.id}"></td>
                     </tr>
                     <tr>
+                      <th scope="col">배송자</th>
+                      <td th:text="${delivery.memberName}"></td>
+                    </tr>
+                    <tr>
+                      <th scope="col">배송출발지</th>
+                      <td th:text="${delivery.deliveryDepartureRoadLocation}"></td>
+                    </tr>
+                    <tr>
+                      <th scope="col">배송도착지</th>
+                      <td th:text="${delivery.deliveryDestinationRoadLocation}"></td>
+                    </tr>
+                    <tr>
                       <th scope="col">예상배송소요시간(분)</th>
                       <td id="content" th:utext="${((delivery.deliveryTakenTime / (1000 * 60 )) % 60 )}"></td>
                     </tr>
                     <tr>
                       <th scope="col">배송요청일시</th>
                       <td th:text="${#temporals.format(delivery.deliveryStartTime, 'yyyy년 MM월 dd일 HH시 mm분 ss초')}"></td>
-                    </tr>
-                    <tr>
-                    <th scope="col">배송출발지</th>
-                    <td th:text="${delivery.deliveryDepartureRoadLocation}"></td>
-                    </tr>
-                    <tr>
-                    <th scope="col">배송도착지</th>
-                    <td th:text="${delivery.deliveryDestinationRoadLocation}"></td>
                     </tr>
                   </table>
                 </div>

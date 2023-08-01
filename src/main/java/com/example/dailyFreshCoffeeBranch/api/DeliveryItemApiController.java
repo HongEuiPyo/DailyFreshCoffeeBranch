@@ -20,7 +20,7 @@ public class DeliveryItemApiController {
     private final DeliveryItemApiService deliveryItemApiService;
 
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/deliveries/{deliveryId}/deliveryItems/{deliveryItemId}/updateStatus")
     public ResponseEntity<?> updateStatus(@PathVariable Long deliveryId, @PathVariable Long deliveryItemId, DeliveryItemDto requestDto) {
         try {

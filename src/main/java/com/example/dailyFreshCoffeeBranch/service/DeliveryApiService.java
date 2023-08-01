@@ -1,6 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.service;
 
-import com.example.dailyFreshCoffeeBranch.api.NaverApiDirection5;
+import com.example.dailyFreshCoffeeBranch.api.naver.NaverApiDirection5;
 import com.example.dailyFreshCoffeeBranch.com.VIPDiscountPolicy;
 import com.example.dailyFreshCoffeeBranch.constant.DeliveryItemStatus;
 import com.example.dailyFreshCoffeeBranch.constant.DeliveryStatus;

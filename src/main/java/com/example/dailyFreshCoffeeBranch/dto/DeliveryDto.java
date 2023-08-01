@@ -15,6 +15,12 @@ public class DeliveryDto {
 
     private Long id;
 
+    private Long memberId;
+
+    private String memberEmail;
+
+    private String memberName;
+
     private DeliveryStatus deliveryStatus;
 
     private Page<DeliveryItemDto> deliveryItemList;
@@ -30,6 +36,9 @@ public class DeliveryDto {
     public static DeliveryDto of(Delivery delivery) {
         return DeliveryDto.builder()
                 .id(delivery.getId())
+                .memberId(delivery.getMember().getId())
+                .memberEmail(delivery.getMember().getEmail())
+                .memberName(delivery.getMember().getName())
                 .deliveryStatus(delivery.getDeliveryStatus())
                 .deliveryStartTime(delivery.getCreatedTime())
                 .deliveryTakenTime(delivery.getDeliveryTakenTime())
@@ -41,6 +50,9 @@ public class DeliveryDto {
     public static DeliveryDto create(Delivery delivery, Page<DeliveryItemDto> deliveryItemDtoList) {
         return DeliveryDto.builder()
                 .id(delivery.getId())
+                .memberId(delivery.getMember().getId())
+                .memberEmail(delivery.getMember().getEmail())
+                .memberName(delivery.getMember().getName())
                 .deliveryStatus(delivery.getDeliveryStatus())
                 .deliveryStartTime(delivery.getCreatedTime())
                 .deliveryTakenTime(delivery.getDeliveryTakenTime())

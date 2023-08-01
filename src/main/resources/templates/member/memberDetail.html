@@ -250,7 +250,11 @@
                         let promise = response.json();
                         promise.then(promise => alert(promise.msg));
                         window.location.reload();
-                    }else{
+                    } else if (response.status == 400) {
+                        let promise = response.json();
+                        promise.then(promise => alert(promise.msg));
+                        window.location.reload();
+                    } else {
                         alert('\'배송\' 중 오류가 발생했습니다.');
                     }
                 });

@@ -1,4 +1,4 @@
-package com.example.dailyFreshCoffeeBranch.api;
+package com.example.dailyFreshCoffeeBranch.api.naver;
 
 import com.example.dailyFreshCoffeeBranch.dto.Directions5RequestDto;
 import lombok.RequiredArgsConstructor;

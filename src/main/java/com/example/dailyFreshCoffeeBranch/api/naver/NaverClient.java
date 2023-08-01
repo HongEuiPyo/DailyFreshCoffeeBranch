@@ -1,4 +1,4 @@
-package com.example.dailyFreshCoffeeBranch.api;
+package com.example.dailyFreshCoffeeBranch.api.naver;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

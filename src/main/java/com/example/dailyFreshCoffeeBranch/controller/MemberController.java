@@ -1,9 +1,9 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
-import com.example.dailyFreshCoffeeBranch.annotation.LoginUserInfo;
+import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
 import com.example.dailyFreshCoffeeBranch.dto.MemberDto;
 import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateDto;
-import com.example.dailyFreshCoffeeBranch.security.oauth2.UserInfo;
+import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
 import com.example.dailyFreshCoffeeBranch.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -79,8 +79,8 @@ public class MemberController {
      * @return
      */
     @GetMapping("/myPage")
-    public String memberDetail(@LoginUserInfo UserInfo userInfo, Model model) {
-        model.addAttribute("memberDto", memberService.getMemberDetailByEmail(userInfo.getEmail()));
+    public String memberDetail(@LoginUser UserInfoDto userInfoDto, Model model) {
+        model.addAttribute("memberDto", memberService.getMemberDetailByEmail(userInfoDto.getEmail()));
         return "member/memberDetail";
     }
 

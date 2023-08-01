@@ -20,14 +20,14 @@
     </thead>
     <tbody>
     <tr th:each="paymentItem : ${paymentDtoPage}">
-        <td th:text="${paymentItem.getItemNames()}" style="text-align: center"></td>
-        <td th:text="${paymentItem.getTotalUsePoint()}" class="text-center"></td>
-        <td th:text="${paymentItem.getDiscount() * 100 + '%'}" class="text-center"></td>
-        <td th:text="${paymentItem.getTotalUsePoint() - paymentItem.getTotalUsePoint() * paymentItem.getDiscount()}" class="text-center"></td>
+        <td th:text="${paymentItem.getItemNames()}"></td>
+        <td th:text="${paymentItem.getTotalUsePoint()}" class="text-right"></td>
+        <td th:text="${paymentItem.getDiscount() * 100 + '%'}" class="text-right"></td>
+        <td th:text="${paymentItem.getTotalUsePoint() - paymentItem.getTotalUsePoint() * paymentItem.getDiscount()}" class="text-right"></td>
         <td th:text="${#temporals.format(paymentItem.getModifiedTime(), 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
     </tr>
-    <tr th:if="${paymentDtoPage.isEmpty()}" style="text-align: center;">
-        <td colspan="5">구매목록이 없습니다.</td>
+    <tr th:if="${paymentDtoPage.isEmpty()}" class="text-center">
+        <td colspan="5">회원님의 구매내역이 존재하지 않습니다.</td>
     </tr>
     </tbody>
 </table>

@@ -1,8 +1,11 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
+import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
 import com.example.dailyFreshCoffeeBranch.dto.AddressDto;
 import com.example.dailyFreshCoffeeBranch.dto.ItemDto;
+import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
 import com.example.dailyFreshCoffeeBranch.service.HomeService;
+import com.example.dailyFreshCoffeeBranch.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,21 +19,24 @@ import java.util.List;
 public class HomeController {
 
     private final HomeService homeService;
+    private final MemberService memberService;
+
 
     /**
      * 홈 화면
      * @return
      */
     @GetMapping("/")
-    public String home(Model model) {
-        // 1. 현재 날짜 계산
+    public String home(@LoginUser UserInfoDto userInfoDto, Model model) {
+
+        // 현재 날짜 계산
         LocalDate localDate = LocalDate.now();
         int yyyy = localDate.getYear();
         int MM = localDate.getMonthValue();
         model.addAttribute("yyyy", yyyy);
         model.addAttribute("MM", MM);
 
-        // 2. 판매량 TOP3 상품 목록 조회
+        // 판매량 TOP3 상품 목록 조회
         List<ItemDto> top3ItemList = homeService.getTop3ItemList();
         model.addAttribute("top3ItemList", top3ItemList);
         return "index";

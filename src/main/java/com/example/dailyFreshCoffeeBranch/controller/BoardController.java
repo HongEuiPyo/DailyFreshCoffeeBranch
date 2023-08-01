@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
-import com.example.dailyFreshCoffeeBranch.annotation.LoginUserInfo;
+import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
 import com.example.dailyFreshCoffeeBranch.dto.BoardDto;
-import com.example.dailyFreshCoffeeBranch.security.oauth2.UserInfo;
+import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
 import com.example.dailyFreshCoffeeBranch.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -75,13 +75,13 @@ public class BoardController {
      * @return
      */
     @PostMapping("/admin/boards/create")
-    public String createBoard(@Valid BoardDto boardDto, BindingResult bindingResult, @LoginUserInfo UserInfo userInfo, Model model) {
+    public String createBoard(@Valid BoardDto boardDto, BindingResult bindingResult, @LoginUser UserInfoDto userInfoDto, Model model) {
         if (bindingResult.hasErrors()) {
             return "board/boardUpdateForm";
         }
 
         try {
-            boardService.createBoard(boardDto, userInfo.getEmail());
+            boardService.createBoard(boardDto, userInfoDto.getEmail());
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "board/boardUpdateForm";
@@ -96,13 +96,13 @@ public class BoardController {
      * @return
      */
     @PostMapping("/admin/boards/{id}/update")
-    public String updateBoard(@PathVariable Long id, @Valid BoardDto boardDto, BindingResult bindingResult, @LoginUserInfo UserInfo userInfo, Model model) {
+    public String updateBoard(@PathVariable Long id, @Valid BoardDto boardDto, BindingResult bindingResult, @LoginUser UserInfoDto userInfoDto, Model model) {
         if (bindingResult.hasErrors()) {
             return "board/boardUpdateForm";
         }
 
         try {
-            boardService.updateBoard(id, boardDto, userInfo.getEmail());
+            boardService.updateBoard(id, boardDto, userInfoDto.getEmail());
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "board/boardUpdateForm";

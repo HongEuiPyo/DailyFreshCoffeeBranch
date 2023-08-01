@@ -26,8 +26,10 @@ public class ItemController {
 
     private final ItemService itemService;
 
+
     /**
      * 상품 목록
+     *
      * @param pageable
      * @param model
      * @return
@@ -44,6 +46,7 @@ public class ItemController {
 
     /**
      * 상품 상세
+     *
      * @param id
      * @return
      */
@@ -56,6 +59,7 @@ public class ItemController {
 
     /**
      * 상품 폼
+     *
      * @param id
      * @param request
      * @param itemDto
@@ -79,6 +83,7 @@ public class ItemController {
 
     /**
      * 상품 등록 처리
+     *
      * @param dto
      * @param result
      * @return
@@ -106,6 +111,7 @@ public class ItemController {
 
     /**
      * 상품 수정 처리
+     *
      * @param id
      * @param itemDto
      * @param result
@@ -143,6 +149,7 @@ public class ItemController {
 
     /**
      * 상품 삭제 처리
+     *
      * @param id
      * @return
      */
@@ -160,6 +167,7 @@ public class ItemController {
 
     /**
      * 상품 삭제 처리
+     *
      * @param imageFileId
      * @return
      */

@@ -1,8 +1,17 @@
 package com.example.dailyFreshCoffeeBranch.constant;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+
+@RequiredArgsConstructor
+@Getter
 public enum ItemStatus {
-    SELL, SOLD_OUT
+
+    SELL("SELL", "판매"),
+    SOLD_OUT("SOLD_OUT", "매진");
+
+    private final String key;
+    private final String title;
+
 }

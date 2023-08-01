@@ -1,13 +1,14 @@
 package com.example.dailyFreshCoffeeBranch.config;
 
-import com.example.dailyFreshCoffeeBranch.security.oauth2.CustomAuthorizationRequestResolver;
 import com.example.dailyFreshCoffeeBranch.security.MyLoginFailureHandler;
 import com.example.dailyFreshCoffeeBranch.security.MyLoginSuccessHandler;
+import com.example.dailyFreshCoffeeBranch.security.oauth2.CustomAuthorizationRequestResolver;
 import com.example.dailyFreshCoffeeBranch.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,6 +23,7 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @Slf4j
 public class SecurityConfig {
 
@@ -49,9 +51,9 @@ public class SecurityConfig {
                     .formLogin()
                     .loginPage("/members/login")
                     .loginProcessingUrl("/members/generalLogin")
-                    .successHandler(loginSuccessHandler())
+//                    .defaultSuccessUrl("/")
+                    .successHandler(myLoginSuccessHandler())
                     .failureHandler(myLoginFailureHandler())
-                    .defaultSuccessUrl("/")
                     .usernameParameter("email")
 
                 .and()
@@ -99,7 +101,7 @@ public class SecurityConfig {
 //    }
 
     @Bean
-    public AuthenticationSuccessHandler loginSuccessHandler() {
+    public AuthenticationSuccessHandler myLoginSuccessHandler() {
         return new MyLoginSuccessHandler();
     }
 

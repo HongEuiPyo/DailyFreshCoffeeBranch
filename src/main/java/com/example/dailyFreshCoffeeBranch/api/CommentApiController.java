@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.api;
 
-import com.example.dailyFreshCoffeeBranch.annotation.LoginUserInfo;
+import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
 import com.example.dailyFreshCoffeeBranch.dto.CommentDto;
-import com.example.dailyFreshCoffeeBranch.security.oauth2.UserInfo;
+import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
 import com.example.dailyFreshCoffeeBranch.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +24,12 @@ public class CommentApiController {
      * 댓글 등록
      * @param id
      * @param commentDto
-     * @param userInfo
+     * @param userInfoDto
      * @return
      */
     @PostMapping("/boards/{id}/comments/create")
-    public ResponseEntity<CommentDto> createComment(@PathVariable Long id, @RequestBody CommentDto commentDto, @LoginUserInfo UserInfo userInfo) {
-        CommentDto comment = commentService.createComment(userInfo.getEmail(), id, commentDto);
+    public ResponseEntity<CommentDto> createComment(@PathVariable Long id, @RequestBody CommentDto commentDto, @LoginUser UserInfoDto userInfoDto) {
+        CommentDto comment = commentService.createComment(userInfoDto.getEmail(), id, commentDto);
         return ResponseEntity.ok(comment);
     }
 

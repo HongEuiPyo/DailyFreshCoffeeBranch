@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
-import com.example.dailyFreshCoffeeBranch.annotation.LoginUserInfo;
+import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
 import com.example.dailyFreshCoffeeBranch.dto.CartDto;
-import com.example.dailyFreshCoffeeBranch.security.oauth2.UserInfo;
+import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
 import com.example.dailyFreshCoffeeBranch.service.CartItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -27,13 +27,13 @@ public class CartController {
 
     /**
      * 장바구니 조회 처리
-     * @param userInfo
+     * @param userInfoDto
      * @param model
      * @return
      */
     @GetMapping(value = "/cart/itemsAjax")
-    public String cartItemListProc(@LoginUserInfo UserInfo userInfo, Model model) {
-        CartDto cartDto = cartService.getCartItemList(userInfo.getEmail());
+    public String cartItemListProc(@LoginUser UserInfoDto userInfoDto, Model model) {
+        CartDto cartDto = cartService.getCartItemList(userInfoDto.getEmail());
         model.addAttribute("cartDto", cartDto);
         return "cart/cartListAjax";
     }

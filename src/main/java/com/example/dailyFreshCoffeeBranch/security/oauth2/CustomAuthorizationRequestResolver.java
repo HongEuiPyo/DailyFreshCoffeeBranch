@@ -48,7 +48,7 @@ public class CustomAuthorizationRequestResolver implements OAuth2AuthorizationRe
 
         OAuth2AuthorizationRequest oAuth2AuthorizationRequest;
 
-        if (authorizationRequest.getAuthorizationRequestUri().indexOf("google") != -1) {
+        if (authorizationRequest.getAuthorizationRequestUri().contains("google")) {
             Map<String, Object> additionalParameters =
                     new LinkedHashMap<>(authorizationRequest.getAdditionalParameters());
 

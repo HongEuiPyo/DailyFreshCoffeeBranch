@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Table(name = "item")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 public class Item extends BaseEntity {
 
@@ -54,16 +55,6 @@ public class Item extends BaseEntity {
     List<ImageFile> imageFileList;
 
 
-    @Builder
-    public Item(String title, String summary, ItemStatus itemStatus, int price, int stock, int purchaseCnt) {
-        this.title = title;
-        this.summary = summary;
-        this.itemStatus = itemStatus;
-        this.price = price;
-        this.stock = stock;
-        this.purchaseCnt = purchaseCnt;
-    }
-
     public ItemDto toDto() {
         List<ImageFileDto> imageFileDtoList = new ArrayList<>();
         if (imageFileList!=null) {
@@ -78,8 +69,11 @@ public class Item extends BaseEntity {
                 .summary(summary)
                 .stock(stock)
                 .itemStatus(itemStatus)
+                .itemCategory(itemCategory)
                 .imageFileDtoList(imageFileDtoList)
                 .purchaseCnt(purchaseCnt)
+                .createdTime(getCreatedTime())
+                .modifiedTime(getModifiedTime())
                 .build();
     }
 

@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
-import com.example.dailyFreshCoffeeBranch.annotation.LoginUserInfo;
+import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
 import com.example.dailyFreshCoffeeBranch.dto.PaymentDto;
-import com.example.dailyFreshCoffeeBranch.security.oauth2.UserInfo;
+import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
 import com.example.dailyFreshCoffeeBranch.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,13 +30,13 @@ public class PaymentController {
     /**
      * 영수증 목록 처리
      *
-     * @param userInfo
+     * @param userInfoDto
      * @param model
      * @return
      */
     @GetMapping("/paymentListAjax")
-    public String paymentListProc(@LoginUserInfo UserInfo userInfo, Model model, Pageable pageable) {
-        Page<PaymentDto> paymentDtoPage = paymentService.getPaymentList(userInfo.getEmail(), pageable);
+    public String paymentListProc(@LoginUser UserInfoDto userInfoDto, Model model, Pageable pageable) {
+        Page<PaymentDto> paymentDtoPage = paymentService.getPaymentList(userInfoDto.getEmail(), pageable);
         model.addAttribute("paymentDtoPage", paymentDtoPage);
         return "payment/paymentListAjax";
     }

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+  <meta charset="UTF-8">
+  <title>상품 관리 목록 : 매일 신선한 커피점</title>
+</head>
+<div layout:fragment="content">
+
+    <div class="container">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">상품 관리 목록</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="dataTables_wrapper dt-bootstrap4">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-bordered dataTable">
+                                    <colgroup>
+                                        <col style="width: 7%;">
+                                        <col style="width: 5%;">
+                                        <col style="width: auto;">
+                                        <col style="width: 7%;">
+                                        <col style="width: 10%;">
+                                        <col style="width: 5%;">
+                                        <col style="width: 7%;">
+                                        <col style="width: 7%;">
+                                        <col style="width: 10%;">
+                                        <col style="width: 10%;">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" style="text-align: center">번호</th>
+                                        <th scope="col" style="text-align: center">사진</th>
+                                        <th scope="col" style="text-align: center">상품명</th>
+                                        <th scope="col" style="text-align: center">상태</th>
+                                        <th scope="col" style="text-align: center">종류</th>
+                                        <th scope="col" style="text-align: center">가격</th>
+                                        <th scope="col" style="text-align: center">재고</th>
+                                        <th scope="col" style="text-align: center">구매수</th>
+                                        <th scope="col" style="text-align: center">등록월</th>
+                                        <th scope="col" style="text-align: center">수정월</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:if="not ${itemDtoList?.isEmpty()}" th:each="item : ${itemDtoList}">
+                                        <td th:text="${item.id}" class="text-center"></td>
+                                        <td>
+                                            <img th:src="${item.imageFileDtoList.get(0).getImageUrl()}" style="width:30px; height:30px">
+                                        </td>
+                                        <td class="text-center">
+                                            <a th:text="${item.title}"
+                                               th:href="@{/admin/items/{id}/update(id = ${item.id})}"></a>
+                                        </td>
+                                        <td th:text="${item.itemStatus.title}" class="text-center"></td>
+                                        <td th:text="${item.itemCategory.title}" class="text-center"></td>
+                                        <td th:text="${item.price}"></td>
+                                        <td th:text="${item.stock}" class="text-center"></td>
+                                        <td th:text="${item.purchaseCnt}" class="text-center"></td>
+                                        <td th:text="${#temporals.format(item.createdTime, 'yyyy-MM')}"
+                                            class="text-center"></td>
+                                        <td th:text="${#temporals.format(item.modifiedTime, 'yyyy-MM')}"
+                                            class="text-center"></td>
+                                    </tr>
+                                    <tr th:if="${itemDtoList?.isEmpty()}" class="text-center">
+                                        <td colspan="4">조회된 배송 목록이 없습니다.</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <th:block th:if="${itemDtoList?.isEmpty()}">
+                        <div class="row mt-5 mb-5" style="text-align: center;">
+                            <h5>검색결과가 없습니다.</h5>
+                        </div>
+                        </th:block>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-2">
+                                <button type="button" id="createBtn" class="btn btn-facebook" sec:authorize="hasRole('ROLE_ADMIN')" th:onclick="goCreate()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                                    </svg>
+                                    상품 등록
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
+
+<script>
+  function goCreate(){
+    window.location.href = '/admin/items/create';
+  }
+
+  function goSearch(){
+      document.listFrm.action = '/items';
+      document.listFrm.method = 'GET';
+      document.listFrm.submit();
+  }
+
+  document.getElementById('searchCategory1').onchange = function(){
+      document.listFrm.action = '/items';
+      document.listFrm.method = 'GET';
+      document.listFrm.submit();
+  }
+
+</script>

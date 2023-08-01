@@ -33,14 +33,14 @@
 
   <header>
     <h1 class="site-heading text-center text-faded d-none d-lg-block">
-      <span class="site-heading-upper text-primary mb-3">shop</span>
+      <span class="site-heading-upper text-primary mb-3">매일신선한커피</span>
     </h1>
   </header>
 
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
     <div class="container">
-      <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="/">shop</a>
+      <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="/">매일신선한커피</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto">
@@ -49,10 +49,8 @@
           <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/boards">공지사항</a></li>
           <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/items">상품</a></li>
           <li sec:authorize="!isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/login">로그인</a></li>
-          <!-- li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/cart/items">장바구니</a></li -->
-          <!-- li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/deliveries">배송</a></li -->
+          <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/itemsMng">상품관리</a></li>
           <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/admin/deliveriesMng">배송관리</a></li>
-          <!-- li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/paymentList">영수증</a></li -->
           <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/myPage">마이페이지</a></li>
           <li sec:authorize="isAuthenticated()" class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="/members/logout">로그아웃</a></li>
         </ul>

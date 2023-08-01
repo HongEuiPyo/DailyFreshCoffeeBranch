@@ -12,7 +12,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="deliveryItem : ${deliveryPage}">
+    <tr th:if="not ${deliveryPage?.isEmpty()}" th:each="deliveryItem : ${deliveryPage}">
         <td class="text-center">
             <a href="#none" th:text="${deliveryItem.id}" th:onclick="goDeliveryDetail([[${deliveryItem.id}]])"></a>
         </td>
@@ -20,6 +20,9 @@
         <td th:text="${deliveryItem.deliveryStatus.title}" class="text-center"></td>
         <td th:text="${#temporals.format(deliveryItem.deliveryStartTime, 'yyyy-MM-dd HH:mm:ss')}"
             class="text-center"></td>
+    </tr>
+    <tr th:if="${deliveryPage?.isEmpty()}" class="text-center">
+        <td colspan="4">조회된 배송 목록이 없습니다.</td>
     </tr>
     </tbody>
 </table>

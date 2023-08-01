@@ -26,7 +26,7 @@ public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         log.warn("ROLE NAMES: " + roleNames);
 
-        if (roleNames.contains("ROLE_ADMIN")) {
+        /* if (roleNames.contains("ROLE_ADMIN")) {
             response.sendRedirect("/sample/admin");
             return;
         }
@@ -34,8 +34,9 @@ public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
         if (roleNames.contains("ROLE_MEMBER")) {
             response.sendRedirect("/sample/member");
             return;
-        }
+        } */
 
         response.sendRedirect("/");
     }
+
 }
