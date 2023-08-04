@@ -19,7 +19,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="paymentItem : ${paymentDtoPage}">
+    <tr th:each="paymentItem : ${result}">
         <td th:text="${paymentItem.getItemNames()}"></td>
         <td th:text="${paymentItem.getTotalUsePoint()}" class="text-right"></td>
         <td th:text="${paymentItem.getDiscount() * 100 + '%'}" class="text-right"></td>

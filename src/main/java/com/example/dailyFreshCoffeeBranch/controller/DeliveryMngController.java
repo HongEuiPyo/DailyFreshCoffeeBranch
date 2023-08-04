@@ -1,6 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
-import com.example.dailyFreshCoffeeBranch.dto.DeliveryDto;
+import com.example.dailyFreshCoffeeBranch.dto.DeliveryFormDto;
 import com.example.dailyFreshCoffeeBranch.service.DeliveryMngService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +16,7 @@ public class DeliveryMngController {
 
     private final DeliveryMngService deliveryMngService;
 
+
     /**
      * 회원 배송 관리 조회
      *
@@ -25,8 +26,9 @@ public class DeliveryMngController {
      */
     @GetMapping("/admin/deliveriesMng")
     public String getMemberDeliveryMngList(Model model, Pageable pageable) {
-        Page<DeliveryDto> deliveryDtoPage = deliveryMngService.getMemberDeliveryMngList(pageable);
-        model.addAttribute("deliveryDtoPage", deliveryDtoPage);
+        Page<DeliveryFormDto> result = deliveryMngService.getMemberDeliveryMngList(pageable);
+        model.addAttribute("result", result);
+
         return "deliveryMng/deliveryMngList";
     }
 
@@ -39,9 +41,14 @@ public class DeliveryMngController {
      * @return
      */
     @GetMapping("/admin/deliveriesMng/{id}")
-    public String getMemberDeliveryMngDetail(@PathVariable Long id, Model model, Pageable pageable) {
-        DeliveryDto delivery = deliveryMngService.getMemberDeliveryMngDetail(id, pageable);
-        model.addAttribute("delivery", delivery);
+    public String getMemberDeliveryMngDetail
+    (
+            @PathVariable Long id,
+            Model model, Pageable pageable
+    ) {
+        DeliveryFormDto result = deliveryMngService.getMemberDeliveryMngDetail(id, pageable);
+        model.addAttribute("result", result);
+
         return "deliveryMng/deliveryMngDetail";
     }
 }

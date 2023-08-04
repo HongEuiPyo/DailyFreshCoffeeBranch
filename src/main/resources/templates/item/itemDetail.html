@@ -18,9 +18,9 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <form id="cartFrm" name="cartFrm">
-                                    <input type="hidden" name="itemId" th:value="${itemDto.id}">
+                                    <input type="hidden" name="itemId" th:value="${result.id}">
                                 </form>
-                                <form id="itemFrm" name="itemFrm" th:object="${itemDto}">
+                                <form id="itemFrm" name="itemFrm" th:object="${result}">
                                 </form>
                                 <table class="table table-bordered dataTable">
                                     <colgroup>
@@ -29,35 +29,35 @@
                                     </colgroup>
                                     <tr>
                                         <th scope="col">번호</th>
-                                        <td th:text="${itemDto.id}"></td>
+                                        <td th:text="${result.id}"></td>
                                     </tr>
                                     <tr>
                                         <th scope="col">상품명</th>
-                                        <td th:text="${itemDto.title}"></td>
+                                        <td th:text="${result.title}"></td>
                                     </tr>
                                     <tr>
                                         <th scope="col">사진</th>
                                         <td>
-                                            <th:block th:each="itemImg, status: ${itemDto.getImageFileDtoList()}">
+                                            <th:block th:each="itemImg, status: ${result.getImageFileFormDtoList()}">
                                                 <img th:if="${not #strings.isEmpty(itemImg.getImageUrl())}" th:src="${itemImg.getImageUrl()}" style="width: 400px; height: 400px;">
                                             </th:block>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th scope="col">설명</th>
-                                        <td th:text="${itemDto.summary}"></td>
+                                        <td th:text="${result.summary}"></td>
                                     </tr>
                                     <tr>
                                         <th scope="col">가격</th>
-                                        <td th:text="${itemDto.price}"></td>
+                                        <td th:text="${result.price}"></td>
                                     </tr>
                                     <tr>
                                         <th scope="col">재고</th>
-                                        <td th:text="${itemDto.stock}"></td>
+                                        <td th:text="${result.stock}"></td>
                                     </tr>
                                     <tr>
                                         <th scope="col">구매수량</th>
-                                        <td th:text="${itemDto.purchaseCnt}"></td>
+                                        <td th:text="${result.purchaseCnt}"></td>
                                     </tr>
                                 </table>
                                 <div class="row">
@@ -100,7 +100,7 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    const itemId = [[${itemDto.id}]];
+    const itemId = [[${result.id}]];
 
     function goList(){
         window.location.href = '/items';

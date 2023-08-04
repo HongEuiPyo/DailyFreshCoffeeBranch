@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
 import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
-import com.example.dailyFreshCoffeeBranch.dto.PaymentDto;
-import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
+import com.example.dailyFreshCoffeeBranch.dto.PaymentFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.LoginUserDto;
 import com.example.dailyFreshCoffeeBranch.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,27 +17,19 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    /**
-     * 영수증 목록
-     *
-     * @return
-     */
-    @GetMapping("/paymentList")
-    public String paymentList() {
-        return "payment/paymentList";
-    }
 
     /**
      * 영수증 목록 처리
      *
-     * @param userInfoDto
+     * @param loginUserDto
      * @param model
      * @return
      */
     @GetMapping("/paymentListAjax")
-    public String paymentListProc(@LoginUser UserInfoDto userInfoDto, Model model, Pageable pageable) {
-        Page<PaymentDto> paymentDtoPage = paymentService.getPaymentList(userInfoDto.getEmail(), pageable);
-        model.addAttribute("paymentDtoPage", paymentDtoPage);
+    public String paymentListProc(@LoginUser LoginUserDto loginUserDto, Model model, Pageable pageable) {
+        Page<PaymentFormDto> result = paymentService.getPaymentList(loginUserDto.getEmail(), pageable);
+        model.addAttribute("result", result);
+
         return "payment/paymentListAjax";
     }
 

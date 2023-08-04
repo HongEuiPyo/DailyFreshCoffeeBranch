@@ -57,8 +57,8 @@
                                 <div class="col-md-4 margin">
                                     <div class="card" style="margin-bottom: 15px;">
                                         <a th:href="'/items/' +${item.id}" class="text-dark" style="text-decoration: none;">
-                                            <img th:if="${not #lists.isEmpty(item.imageFileDtoList)}" th:src="${item.imageFileDtoList.get(0).getImageUrl()}" class="card-img-top" th:alt="${item.title}" height="300">
-                                            <img th:if="${#lists.isEmpty(item.imageFileDtoList)}" src="/images/no_img.jpg" class="card-img-top" th:alt="${item.title}" height="300">
+                                            <img th:if="${not #lists.isEmpty(item.imageFileFormDtoList)}" th:src="${item.imageFileFormDtoList.get(0).getImageUrl()}" class="card-img-top" th:alt="${item.title}" height="300">
+                                            <img th:if="${#lists.isEmpty(item.imageFileFormDtoList)}" src="/images/no_img.jpg" class="card-img-top" th:alt="${item.title}" height="300">
                                             <div class="card-body">
                                                 <h4 class="card-title">[[${item.title}]]</h4>
                                                 <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">

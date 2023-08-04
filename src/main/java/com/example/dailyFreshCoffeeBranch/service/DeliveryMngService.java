@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.service;
 
-import com.example.dailyFreshCoffeeBranch.dto.DeliveryDto;
-import com.example.dailyFreshCoffeeBranch.dto.DeliveryItemDto;
-import com.example.dailyFreshCoffeeBranch.entity.Delivery;
+import com.example.dailyFreshCoffeeBranch.dto.DeliveryFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.DeliveryItemFormDto;
+import com.example.dailyFreshCoffeeBranch.domain.Delivery;
 import com.example.dailyFreshCoffeeBranch.exception.DeliveryNotFoundException;
 import com.example.dailyFreshCoffeeBranch.repository.DeliveryItemRepository;
 import com.example.dailyFreshCoffeeBranch.repository.DeliveryRepository;
@@ -24,9 +24,9 @@ public class DeliveryMngService {
      * @param pageable
      * @return
      */
-    public Page<DeliveryDto> getMemberDeliveryMngList(Pageable pageable) {
+    public Page<DeliveryFormDto> getMemberDeliveryMngList(Pageable pageable) {
         return deliveryRepository.findAllPage(pageable)
-                .map(d -> DeliveryDto.of(d));
+                .map(d -> DeliveryFormDto.of(d));
     }
 
     /**
@@ -36,15 +36,15 @@ public class DeliveryMngService {
      * @param pageable
      * @return
      */
-    public DeliveryDto getMemberDeliveryMngDetail(Long id, Pageable pageable) {
+    public DeliveryFormDto getMemberDeliveryMngDetail(Long id, Pageable pageable) {
 
         Delivery delivery = deliveryRepository.findById(id)
                 .orElseThrow(() -> new DeliveryNotFoundException("배송을 조회할 수 없습니다."));
 
-        Page<DeliveryItemDto> deliveryItemDtoPage = deliveryItemRepository.findByDeliveryId(id, pageable)
-                .map(DeliveryItemDto::of);
+        Page<DeliveryItemFormDto> deliveryItemDtoPage = deliveryItemRepository.findByDeliveryId(id, pageable)
+                .map(DeliveryItemFormDto::of);
 
-        return DeliveryDto.create(delivery, deliveryItemDtoPage);
+        return DeliveryFormDto.create(delivery, deliveryItemDtoPage);
     }
 
 }

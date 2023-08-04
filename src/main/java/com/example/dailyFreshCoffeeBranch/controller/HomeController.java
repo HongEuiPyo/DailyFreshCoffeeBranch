@@ -1,11 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
-import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
-import com.example.dailyFreshCoffeeBranch.dto.AddressDto;
-import com.example.dailyFreshCoffeeBranch.dto.ItemDto;
-import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
+import com.example.dailyFreshCoffeeBranch.dto.AddressResponseDto;
+import com.example.dailyFreshCoffeeBranch.dto.ItemFormDto;
 import com.example.dailyFreshCoffeeBranch.service.HomeService;
-import com.example.dailyFreshCoffeeBranch.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,15 +16,15 @@ import java.util.List;
 public class HomeController {
 
     private final HomeService homeService;
-    private final MemberService memberService;
 
 
     /**
      * 홈 화면
+     *
      * @return
      */
     @GetMapping("/")
-    public String home(@LoginUser UserInfoDto userInfoDto, Model model) {
+    public String home(Model model) {
 
         // 현재 날짜 계산
         LocalDate localDate = LocalDate.now();
@@ -37,19 +34,22 @@ public class HomeController {
         model.addAttribute("MM", MM);
 
         // 판매량 TOP3 상품 목록 조회
-        List<ItemDto> top3ItemList = homeService.getTop3ItemList();
+        List<ItemFormDto> top3ItemList = homeService.getTop3ItemList();
         model.addAttribute("top3ItemList", top3ItemList);
+
         return "index";
     }
 
     /**
      * 오시는 길
+     *
      * @return
      */
     @GetMapping("/store")
     public String store(Model model) {
-        AddressDto storeLocation = homeService.getStoreLocation();
-        model.addAttribute("storeLocation", storeLocation);
+        AddressResponseDto result = homeService.getStoreLocation();
+        model.addAttribute("result", result);
+
         return "store";
     }
 

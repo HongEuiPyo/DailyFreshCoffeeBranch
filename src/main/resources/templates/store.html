@@ -15,9 +15,9 @@
 <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=k18d8834sg&submodules=geocoder"></script>
 
 <script th:script="javascript">
-    var latitude = '[[${storeLocation.latitude}]]';
-    var longitude = '[[${storeLocation.longitude}]]';
-    var roadAddress = '[[${storeLocation.roadAddress}]]';
+    var latitude = '[[${result.latitude}]]';
+    var longitude = '[[${result.longitude}]]';
+    var roadAddress = '[[${result.roadAddress}]]';
 
     var shopLocation = new naver.maps.LatLng(latitude, longitude);
 

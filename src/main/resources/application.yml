@@ -5,7 +5,7 @@ server:
 
 spring:
   profiles:
-    include: oauth2,policy
+    include: security,policy
 
   # DB
   datasource:

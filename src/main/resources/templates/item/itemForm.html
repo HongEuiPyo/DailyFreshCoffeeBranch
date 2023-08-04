@@ -10,8 +10,8 @@
 
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 th:if="!${itemFormDto?.id}" class="m-0 font-weight-bold text-primary">상품 등록</h6>
-                <h6 th:if="${itemFormDto?.id}" class="m-0 font-weight-bold text-primary">상품 수정</h6>
+                <h6 th:if="!${result?.id}" class="m-0 font-weight-bold text-primary">상품 등록</h6>
+                <h6 th:if="${result?.id}" class="m-0 font-weight-bold text-primary">상품 수정</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -21,15 +21,15 @@
                                 <form id="listFrm" name="listFrm">
                                     <input type="hidden" name="size" value="9">
                                 </form>
-                                <form id="itemFrm" name="itemFrm" action="/admin/items/create" method="POST" enctype="multipart/form-data" th:object="${itemFormDto}">
+                                <form id="itemFrm" name="itemFrm" action="/admin/items/create" method="POST" enctype="multipart/form-data" th:object="${result}">
                                     <table class="table table-bordered dataTable">
                                         <colgroup>
                                             <col style="width: 30%;">
                                             <col style="width: auto;">
                                         </colgroup>
-                                        <tr th:if="${itemFormDto?.id}">
+                                        <tr th:if="${result?.id}">
                                             <th scope="col">번호</th>
-                                            <td th:text="${itemFormDto.id}"></td>
+                                            <td th:text="${result.id}"></td>
                                         </tr>
                                         <tr>
                                             <th scope="col">상품명</th>
@@ -59,7 +59,7 @@
                                                 <p th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}" class="filedError">Incorrect data</p>
                                             </td>
                                         </tr>
-                                        <tr th:each="imageFile, index : ${itemFormDto.imageFileDtoList}">
+                                        <tr th:each="imageFile, index : ${result.imageFileFormDtoList}">
                                             <th scope="col" th:text="'사진(' + ${index.count} + ')'"></th>
                                             <td th:id="'imageFile_' + ${imageFile.getId()}">
                                                 <img th:src="${imageFile.getImageUrl()}" style="width: 400px; height: 400px;">
@@ -82,13 +82,13 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr th:if="${not #lists.isEmpty(itemFormDto.imageFileDtoList) && itemFormDto.imageFileDtoList.size() < 3}" th:each="num, index : ${#numbers.sequence(itemFormDto.imageFileDtoList.size() + 1, 3)}">
-                                            <th scope="col" th:text="'사진(' + ${itemFormDto.getImageFileDtoList().size() + index.count} + ')'"></th>
+                                        <tr th:if="${not #lists.isEmpty(result.imageFileFormDtoList) && result.imageFileFormDtoList.size() < 3}" th:each="num, index : ${#numbers.sequence(result.imageFileFormDtoList.size() + 1, 3)}">
+                                            <th scope="col" th:text="'사진(' + ${result.getImageFileFormDtoList().size() + index.count} + ')'"></th>
                                             <td>
                                                 <input type="file" name="itemImageFile" class="form-control">
                                             </td>
                                         </tr>
-                                        <th:block th:if="${#lists.isEmpty(itemFormDto.imageFileDtoList)}">
+                                        <th:block th:if="${#lists.isEmpty(result.imageFileFormDtoList)}">
                                         <tr>
                                             <th scope="col">사진(1)</th>
                                             <td>
@@ -109,9 +109,9 @@
                                             </td>
                                         </tr>
                                         </th:block>
-                                        <tr th:if="${itemFormDto?.id}">
+                                        <tr th:if="${result?.id}">
                                             <th scope="col">구매수량</th>
-                                            <td th:text="${itemFormDto.purchaseCnt}"></td>
+                                            <td th:text="${result.purchaseCnt}"></td>
                                         </tr>
                                     </table>
                                     <div class="row">
@@ -122,20 +122,20 @@
                                                 </svg>
                                                 취소
                                             </button>
-                                            <button th:if="!${itemFormDto?.id}" type="submit" class="btn btn-facebook">
+                                            <button th:if="!${result?.id}" type="submit" class="btn btn-facebook">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                                     <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
                                                 </svg>
                                                 등록
                                             </button>
-                                            <button id="deleteBtn" th:if="${itemFormDto?.title}" type="button" class="btn btn-danger" onclick="goDelete()">
+                                            <button id="deleteBtn" th:if="${result?.title}" type="button" class="btn btn-danger" onclick="goDelete()">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                     <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                                                 </svg>
                                                 삭제
                                             </button>
-                                            <button id="updateBtn" th:if="${itemFormDto?.title}" type="button" class="btn btn-facebook" onclick="goUpdate()">
+                                            <button id="updateBtn" th:if="${result?.title}" type="button" class="btn btn-facebook" onclick="goUpdate()">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
@@ -157,7 +157,7 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    const itemId = [[${itemFormDto.id}]];
+    const itemId = [[${result.id}]];
 
     function goList(){
         window.location.href = '/items';

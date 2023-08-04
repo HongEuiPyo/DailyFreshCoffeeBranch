@@ -17,7 +17,7 @@
                     <div class="dataTables_wrapper dt-bootstrap4">
                         <div class="row">
                             <div class="col-sm-12">
-                                <form id="boardFrm" name="boardFrm" th:object="${boardDto}">
+                                <form id="boardFrm" name="boardFrm" th:object="${result}">
                                 <table class="table table-bordered dataTable">
                                     <colgroup>
                                         <col style="width: 30%;">
@@ -25,7 +25,7 @@
                                     </colgroup>
                                     <tr>
                                         <th scope="col" style="text-align: center">번호</th>
-                                        <td th:text="${boardDto.id}"></td>
+                                        <td th:text="${result.id}"></td>
                                     </tr>
                                     <tr>
                                         <th scope="col" style="text-align: center">제목</th>
@@ -43,11 +43,11 @@
                                     </tr>
                                     <tr>
                                         <th scope="col" style="text-align: center">작성자</th>
-                                        <td th:text="${boardDto.writer}"></td>
+                                        <td th:text="${result.writer}"></td>
                                     </tr>
                                     <tr>
                                         <th scope="col" style="text-align: center">작성일시</th>
-                                        <td th:text="${boardDto.createdTime}"></td>
+                                        <td th:text="${result.createdTime}"></td>
                                     </tr>
                                 </table>
                                 <div class="row">
@@ -103,7 +103,7 @@
         smartEditor();
     }
 
-    const boardId = [[${boardDto.id}]];
+    const boardId = [[${result.id}]];
 
     function goList(){
         document.boardFrm.method = "GET";

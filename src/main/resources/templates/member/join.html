@@ -17,7 +17,7 @@
                     <div class="dataTables_wrapper dt-bootstrap4">
                         <div class="row">
                             <div class="col-sm-12">
-                                <form id="memberFrm" name="memberFrm" method="POST" action="/members/generalJoin" th:object="${memberDto}">
+                                <form id="memberFrm" name="memberFrm" method="POST" action="/members/generalJoin" th:object="${memberFormDto}">
                                     <table class="table table-bordered dataTable">
                                         <colgroup>
                                             <col style="width: 30%;">
@@ -87,9 +87,9 @@
                                             <th scope="col" style="text-align: center">회원구분</th>
                                             <td>
                                                 <select th:field="*{role}" class="form-select">
-                                                    <option th:if="${memberDto.getRole() == '[ROLE_USER]' ? 'selected' : ''}" value="USER">소비자</option>
-                                                    <option th:if="${memberDto.getRole() == '[ROLE_SMALL_BUSINESS]' ? 'selected' : ''}" value="SMALL_BUSINESS">소상공인</option>
-                                                    <option th:if="${memberDto.getRole() == '[ROLE_ADMIN]' ? 'selected' : ''}" value="ADMIN">관리자</option>
+                                                    <option th:if="${memberFormDto.getRole() == '[ROLE_USER]' ? 'selected' : ''}" value="USER">소비자</option>
+                                                    <option th:if="${memberFormDto.getRole() == '[ROLE_SMALL_BUSINESS]' ? 'selected' : ''}" value="SMALL_BUSINESS">소상공인</option>
+                                                    <option th:if="${memberFormDto.getRole() == '[ROLE_ADMIN]' ? 'selected' : ''}" value="ADMIN">관리자</option>
                                                 </select>
                                             </td>
                                         </tr>

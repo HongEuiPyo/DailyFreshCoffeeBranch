@@ -1,6 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.api;
 
-import com.example.dailyFreshCoffeeBranch.dto.DeliveryItemDto;
+import com.example.dailyFreshCoffeeBranch.dto.DeliveryItemFormDto;
 import com.example.dailyFreshCoffeeBranch.service.DeliveryItemApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,11 @@ public class DeliveryItemApiController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/deliveries/{deliveryId}/deliveryItems/{deliveryItemId}/updateStatus")
-    public ResponseEntity<?> updateStatus(@PathVariable Long deliveryId, @PathVariable Long deliveryItemId, DeliveryItemDto requestDto) {
+    public ResponseEntity<?> updateStatus(
+            @PathVariable Long deliveryId,
+            @PathVariable Long deliveryItemId,
+            DeliveryItemFormDto requestDto
+    ) {
         try {
 
             deliveryItemApiService.updateStatus(deliveryId, deliveryItemId, requestDto);
@@ -32,6 +36,7 @@ public class DeliveryItemApiController {
         }
 
         HashMap<String, String> resultMap = new HashMap<>();
+
         resultMap.put("status", "ok");
         resultMap.put("msg", "배송 상품 상태 변경을 완료하였습니다.");
 

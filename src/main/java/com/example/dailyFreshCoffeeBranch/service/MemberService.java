@@ -1,10 +1,10 @@
 package com.example.dailyFreshCoffeeBranch.service;
 
-import com.example.dailyFreshCoffeeBranch.dto.MemberDto;
-import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateDto;
-import com.example.dailyFreshCoffeeBranch.entity.Address;
-import com.example.dailyFreshCoffeeBranch.entity.Cart;
-import com.example.dailyFreshCoffeeBranch.entity.Member;
+import com.example.dailyFreshCoffeeBranch.dto.MemberFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateFormDto;
+import com.example.dailyFreshCoffeeBranch.domain.Address;
+import com.example.dailyFreshCoffeeBranch.domain.Cart;
+import com.example.dailyFreshCoffeeBranch.domain.Member;
 import com.example.dailyFreshCoffeeBranch.exception.MemberNotFoundException;
 import com.example.dailyFreshCoffeeBranch.repository.AddressRepository;
 import com.example.dailyFreshCoffeeBranch.repository.CartRepository;
@@ -33,22 +33,22 @@ public class MemberService implements UserDetailsService {
 
     /**
      * 회원가입
-     * @param memberDto
+     * @param memberFormDto
      * @return
      */
     @Transactional
-    public void join(MemberDto memberDto) {
-        memberDto.setPassword(bCryptPasswordEncoder.encode(memberDto.getPassword()));
-        Member entity = memberDto.toEntity();
+    public void join(MemberFormDto memberFormDto) {
+        memberFormDto.setPassword(bCryptPasswordEncoder.encode(memberFormDto.getPassword()));
+        Member entity = memberFormDto.toEntity();
 
         validateDuplicatedMember(entity);
 
         Member member = memberRepository.save(entity);
 
         Address address = Address.builder()
-                .roadAddress(memberDto.getRoadAddress())
-                .latitude(memberDto.getLatitude())
-                .longitude(memberDto.getLongitude())
+                .roadAddress(memberFormDto.getRoadAddress())
+                .latitude(memberFormDto.getLatitude())
+                .longitude(memberFormDto.getLongitude())
                 .member(member)
                 .build();
 
@@ -67,10 +67,10 @@ public class MemberService implements UserDetailsService {
      * @param email
      * @return
      */
-    public MemberDto getMemberDetailByEmail(String email) {
+    public MemberFormDto getMemberDetailByEmail(String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException("회원 상세정보가 없습니다. 괸리자에게 문의하세요."));
-        return MemberDto.of(member);
+        return MemberFormDto.of(member);
     }
 
     /**
@@ -78,10 +78,10 @@ public class MemberService implements UserDetailsService {
      * @param memberId
      * @return
      */
-    public MemberUpdateDto getMemberDetailByMemberId(Long memberId) {
+    public MemberUpdateFormDto getMemberDetailByMemberId(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException("회원 상세정보가 없습니다. 괸리자에게 문의하세요."));
-        return MemberUpdateDto.of(member);
+        return MemberUpdateFormDto.of(member);
     }
 
     /**
@@ -90,7 +90,7 @@ public class MemberService implements UserDetailsService {
      * @param updateDto
      */
     @Transactional
-    public void updateMember(Long id, MemberUpdateDto updateDto) {
+    public void updateMember(Long id, MemberUpdateFormDto updateDto) {
         updateDto.setPassword(bCryptPasswordEncoder.encode(updateDto.getPassword()));
 
         Member member = memberRepository.findById(id)

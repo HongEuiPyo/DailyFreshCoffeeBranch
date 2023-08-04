@@ -9,23 +9,23 @@
   </colgroup>
   <tr>
     <th scope="col">배송번호</th>
-    <td th:text="${delivery.id}"></td>
+    <td th:text="${result.id}"></td>
   </tr>
   <tr>
     <th scope="col">배송출발지</th>
-    <td th:text="${delivery.deliveryDepartureRoadLocation}"></td>
+    <td th:text="${result.deliveryDepartureRoadLocation}"></td>
   </tr>
   <tr>
     <th scope="col">배송도착지</th>
-    <td th:text="${delivery.deliveryDestinationRoadLocation}"></td>
+    <td th:text="${result.deliveryDestinationRoadLocation}"></td>
   </tr>
   <tr>
     <th scope="col">예상배송소요시간(분)</th>
-    <td id="content" th:utext="${((delivery.deliveryTakenTime / (1000 * 60 )) % 60 )}"></td>
+    <td id="content" th:utext="${((result.deliveryTakenTime / (1000 * 60 )) % 60 )}"></td>
   </tr>
   <tr>
     <th scope="col">배송요청일시</th>
-    <td th:text="${#temporals.format(delivery.deliveryStartTime, 'yyyy년 MM월 dd일 HH시 mm분 ss초')}"></td>
+    <td th:text="${#temporals.format(result.deliveryStartTime, 'yyyy년 MM월 dd일 HH시 mm분 ss초')}"></td>
   </tr>
 </table>
 
@@ -50,14 +50,14 @@
   </tr>
   </thead>
   <tbody>
-  <tr th:each="deliveryItem : ${delivery.getDeliveryItemList()}">
-    <td th:text="${delivery.id}" class="text-center"></td>
-    <td th:text="${deliveryItem.itemDto.id}" class="text-center"></td>
+  <tr th:each="deliveryItem : ${result.getDeliveryItemList()}">
+    <td th:text="${result.id}" class="text-center"></td>
+    <td th:text="${deliveryItem.itemFormDto.id}" class="text-center"></td>
     <td>
-      <img th:src="${deliveryItem.itemDto.imageFileDtoList.get(0).imageUrl}" style="width: 30px; height: 30px;">
+      <img th:src="${deliveryItem.itemFormDto.imageFileFormDtoList.get(0).imageUrl}" style="width: 30px; height: 30px;">
     </td>
-    <td th:text="${deliveryItem.itemDto.title}" class="text-center"></td>
-    <td th:text="${deliveryItem.itemDto.price}" class="text-center"></td>
+    <td th:text="${deliveryItem.itemFormDto.title}" class="text-center"></td>
+    <td th:text="${deliveryItem.itemFormDto.price}" class="text-center"></td>
     <td th:text="${deliveryItem.count}" class="text-center"></td>
     <td th:text="${deliveryItem.deliveryItemStatus.title}" class="text-center"></td>
   </tr>

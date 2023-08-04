@@ -26,6 +26,7 @@ public class FileController {
     @Value("${itemImgLocation}")
     private String uploadPath;
 
+
     /**
      * 파일 다운로드
      * @param savedFileName
@@ -50,6 +51,7 @@ public class FileController {
                     )
                     .body(resource);
         } else {
+
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

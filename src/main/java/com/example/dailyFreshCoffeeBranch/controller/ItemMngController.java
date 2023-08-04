@@ -1,7 +1,7 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
-import com.example.dailyFreshCoffeeBranch.dto.ItemDto;
-import com.example.dailyFreshCoffeeBranch.dto.ItemSearchDto;
+import com.example.dailyFreshCoffeeBranch.dto.ItemFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.ItemSearchFormDto;
 import com.example.dailyFreshCoffeeBranch.service.ItemMngService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,11 +28,14 @@ public class ItemMngController {
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/itemsMng")
-    public String getItemMngList(@ModelAttribute("searchDto") ItemSearchDto searchDto, Model model) {
+    public String getItemMngList
+    (
+            @ModelAttribute("searchDto") ItemSearchFormDto searchDto,
+            Model model
+    ) {
+        List<ItemFormDto> itemFormDtoList = itemMngService.getItemMngList(searchDto);
 
-        List<ItemDto> itemDtoList = itemMngService.getItemMngList(searchDto);
-
-        model.addAttribute("itemDtoList", itemDtoList);
+        model.addAttribute("resultList", itemFormDtoList);
 
         return "itemMng/itemMngList";
     }

@@ -2,7 +2,7 @@ package com.example.dailyFreshCoffeeBranch.config;
 
 import com.example.dailyFreshCoffeeBranch.security.MyLoginFailureHandler;
 import com.example.dailyFreshCoffeeBranch.security.MyLoginSuccessHandler;
-import com.example.dailyFreshCoffeeBranch.security.oauth2.CustomAuthorizationRequestResolver;
+import com.example.dailyFreshCoffeeBranch.security.CustomAuthorizationRequestResolver;
 import com.example.dailyFreshCoffeeBranch.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

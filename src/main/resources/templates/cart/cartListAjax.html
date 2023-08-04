@@ -22,7 +22,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="cartItem : ${cartDto.getCartItemDtoList()}">
+    <tr th:each="cartItem : ${result.getCartItemFormDtoList()}">
         <td th:text="${cartItem.itemId}" class="text-center"></td>
         <td>
             <img th:src="${cartItem.getImageUrl()}" style="width: 30px; height: 30px;">
@@ -54,9 +54,9 @@
             </div>
         </td>
     </tr>
-    <tr th:if="${not #lists.isEmpty(cartDto.getCartItemDtoList())}">
+    <tr th:if="${not #lists.isEmpty(result.getCartItemFormDtoList())}">
         <td colspan="3" style="text-align: center;">총 금액</td>
-        <td id="totalUsePoint" colspan="2" th:text="${cartDto.getTotalPrice()}" style="text-align: center;"></td>
+        <td id="totalUsePoint" colspan="2" th:text="${result.getTotalPrice()}" style="text-align: center;"></td>
         <td style="text-align: center;">
             <button type="button" class="btn btn-warning" onclick="goDelivery();">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -69,7 +69,7 @@
             </button>
         </td>
     </tr>
-    <tr th:if="${#lists.isEmpty(cartDto.getCartItemDtoList())}">
+    <tr th:if="${#lists.isEmpty(result.getCartItemFormDtoList())}">
         <td colspan="6" style="text-align: center;">등록된 장바구니 상품이 없습니다.</td>
     </tr>
     </tbody>

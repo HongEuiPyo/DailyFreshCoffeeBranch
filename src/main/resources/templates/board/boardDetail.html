@@ -20,7 +20,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">· 공지사항 상세</h6>
                             </div>
                             <div class="col-sm-12">
-                                <form id="boardFrm" name="boardFrm" th:object="${boardDto}">
+                                <form id="boardFrm" name="boardFrm" th:object="${result}">
                                 <table class="table table-bordered dataTable">
                                     <colgroup>
                                         <col style="width: 30%;">
@@ -28,23 +28,23 @@
                                     </colgroup>
                                     <tr>
                                         <th scope="col">번호</th>
-                                        <td th:text="${boardDto.id}"></td>
+                                        <td th:text="${result.id}"></td>
                                     </tr>
                                     <tr>
                                         <th scope="col">제목</th>
-                                        <td th:text="${boardDto.title}"></td>
+                                        <td th:text="${result.title}"></td>
                                     </tr>
                                     <tr>
                                         <th scope="col">내용</th>
-                                        <td id="content" th:utext="${boardDto.content}"></td>
+                                        <td id="content" th:utext="${result.content}"></td>
                                     </tr>
                                     <tr>
                                         <th scope="col">글쓴이</th>
-                                        <td th:text="${boardDto.writer}"></td>
+                                        <td th:text="${result.writer}"></td>
                                     </tr>
                                     <tr>
                                         <th scope="col">작성일시</th>
-                                        <td th:text="${boardDto.createdTime}"></td>
+                                        <td th:text="${result.createdTime}"></td>
                                     </tr>
                                 </table>
                                 <div class="row">
@@ -79,7 +79,7 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    const boardId = [[${boardDto.id}]];
+    const boardId = [[${result.id}]];
 
     window.onload = function (){
         getCommentList(boardId, 1);

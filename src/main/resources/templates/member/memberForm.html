@@ -17,7 +17,7 @@
                 <div class="dataTables_wrapper dt-bootstrap4">
                     <div class="row">
                         <div class="col-sm-12">
-                            <form id="memberFrm" name="memberFrm" th:object="${memberUpdateDto}">
+                            <form id="memberFrm" name="memberFrm" th:object="${result}">
                             <table class="table table-bordered dataTable">
                                 <colgroup>
                                     <col style="width: 30%;">
@@ -25,13 +25,13 @@
                                 </colgroup>
                                 <tr>
                                     <th scope="col">번호</th>
-                                    <td th:text="${memberUpdateDto.id}"></td>
+                                    <td th:text="${result.id}"></td>
                                 </tr>
                                 <tr>
                                     <th scope="col">이메일</th>
                                     <td>
-                                        <input type="hidden" name="email" th:value="${memberUpdateDto.email}">
-                                        <span th:text="${memberUpdateDto.email}"></span>
+                                        <input type="hidden" name="email" th:value="${result.email}">
+                                        <span th:text="${result.email}"></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -91,9 +91,9 @@
                                     <th scope="col">회원구분</th>
                                     <td>
                                         <select th:field="*{role}" class="form-select">
-                                            <option th:if="${memberUpdateDto.getRole() == '[ROLE_USER]' ? 'selected' : ''}" value="USER">소비자</option>
-                                            <option th:if="${memberUpdateDto.getRole() == '[ROLE_SMALL_BUSINESS]' ? 'selected' : ''}" value="SMALL_BUSINESS">소상공인</option>
-                                            <option th:if="${memberUpdateDto.getRole() == '[ROLE_ADMIN]' ? 'selected' : ''}" value="ADMIN">관리자</option>
+                                            <option th:if="${result.getRole() == '[ROLE_USER]' ? 'selected' : ''}" value="USER">소비자</option>
+                                            <option th:if="${result.getRole() == '[ROLE_SMALL_BUSINESS]' ? 'selected' : ''}" value="SMALL_BUSINESS">소상공인</option>
+                                            <option th:if="${result.getRole() == '[ROLE_ADMIN]' ? 'selected' : ''}" value="ADMIN">관리자</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -137,8 +137,8 @@
 
 <script th:inline="javascript">
 
-    const memberId = '[[${memberUpdateDto.id}]]';
-    const roadAddress = [[${memberUpdateDto.roadAddress}]];
+    const memberId = '[[${result.id}]]';
+    const roadAddress = [[${result.roadAddress}]];
 
     function goCancel() {
         window.history.go(-1);

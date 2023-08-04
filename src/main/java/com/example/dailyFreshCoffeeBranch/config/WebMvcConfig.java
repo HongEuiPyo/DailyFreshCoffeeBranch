@@ -1,6 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.config;
 
-import com.example.dailyFreshCoffeeBranch.com.UserInfoArgumentResolver;
+import com.example.dailyFreshCoffeeBranch.security.UserInfoArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

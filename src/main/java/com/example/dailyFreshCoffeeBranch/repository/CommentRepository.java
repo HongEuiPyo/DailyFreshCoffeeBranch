@@ -1,7 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.repository;
 
-import com.example.dailyFreshCoffeeBranch.entity.Comment;
-import com.example.dailyFreshCoffeeBranch.repository.impl.CommentRepositoryCustom;
+import com.example.dailyFreshCoffeeBranch.domain.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

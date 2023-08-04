@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
 import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
-import com.example.dailyFreshCoffeeBranch.dto.CartDto;
-import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
+import com.example.dailyFreshCoffeeBranch.dto.CartResponseDto;
+import com.example.dailyFreshCoffeeBranch.dto.LoginUserDto;
 import com.example.dailyFreshCoffeeBranch.service.CartItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,26 +15,23 @@ public class CartController {
 
     private final CartItemService cartService;
 
-    /**
-     * 장바구니 조회
-     *
-     * @return
-     */
-    @GetMapping(value = "/cart/items")
-    public String cartItemList() {
-        return "cart/cartList";
-    }
 
     /**
      * 장바구니 조회 처리
-     * @param userInfoDto
+     *
+     * @param loginUserDto
      * @param model
      * @return
      */
     @GetMapping(value = "/cart/itemsAjax")
-    public String cartItemListProc(@LoginUser UserInfoDto userInfoDto, Model model) {
-        CartDto cartDto = cartService.getCartItemList(userInfoDto.getEmail());
-        model.addAttribute("cartDto", cartDto);
+    public String cartItemListProc
+    (
+            @LoginUser LoginUserDto loginUserDto,
+            Model model
+    ) {
+        CartResponseDto result = cartService.getCartItemList(loginUserDto.getEmail());
+        model.addAttribute("result", result);
+
         return "cart/cartListAjax";
     }
 

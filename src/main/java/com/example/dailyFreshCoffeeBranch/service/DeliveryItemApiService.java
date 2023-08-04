@@ -2,9 +2,9 @@ package com.example.dailyFreshCoffeeBranch.service;
 
 import com.example.dailyFreshCoffeeBranch.constant.DeliveryItemStatus;
 import com.example.dailyFreshCoffeeBranch.constant.DeliveryStatus;
-import com.example.dailyFreshCoffeeBranch.dto.DeliveryItemDto;
-import com.example.dailyFreshCoffeeBranch.entity.Delivery;
-import com.example.dailyFreshCoffeeBranch.entity.DeliveryItem;
+import com.example.dailyFreshCoffeeBranch.dto.DeliveryItemFormDto;
+import com.example.dailyFreshCoffeeBranch.domain.Delivery;
+import com.example.dailyFreshCoffeeBranch.domain.DeliveryItem;
 import com.example.dailyFreshCoffeeBranch.exception.DeliveryNotFoundException;
 import com.example.dailyFreshCoffeeBranch.repository.DeliveryItemRepository;
 import com.example.dailyFreshCoffeeBranch.repository.DeliveryRepository;
@@ -30,7 +30,7 @@ public class DeliveryItemApiService {
      * @param requestDto
      */
     @Transactional
-    public void updateStatus(Long deliveryId, Long deliveryItemId, DeliveryItemDto requestDto) {
+    public void updateStatus(Long deliveryId, Long deliveryItemId, DeliveryItemFormDto requestDto) {
         List<DeliveryItem> deliveryItemList = deliveryItemRepository.updateDeliveryItemStatus(deliveryItemId, requestDto.getDeliveryItemStatus());
         Delivery deliveryEntity = deliveryRepository.findById(deliveryId).orElseThrow(() -> new DeliveryNotFoundException("배송을 조회할 수 없습니다."));
         checkIfDeliveryIsDelivered(deliveryId, deliveryItemList, deliveryEntity.getDeliveryStatus()); // 모든 배송 상품 배송 여부 체크

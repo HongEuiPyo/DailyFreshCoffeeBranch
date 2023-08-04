@@ -34,7 +34,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                      <tr th:each="boardItem : ${boardList}">
+                      <tr th:each="boardItem : ${resultList}">
                         <td th:text="${boardItem.id}" style="text-align: center"></td>
                         <td style="text-align: center">
                           <a th:text="${boardItem.title}" th:href="@{/boards/{id}(id = ${boardItem.id})}"></a>
@@ -57,9 +57,9 @@
                   </div>
                   <div class="row">
                     <div class="dataTables_paginate paging_simple_numbers">
-                      <ul class="pagination" th:with="start=${T(java.lang.Math).floor(boardList.number/10)*10 + 1},last=(${start + 9 < boardList.totalPages ? start + 9 : boardList.totalPages})">
-                        <li th:class="${boardList.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                          <a class="page-link" th:href="@{/boards(page=${boardList.number})}" aria-label="이전">
+                      <ul class="pagination" th:with="start=${T(java.lang.Math).floor(resultList.number/10)*10 + 1},last=(${start + 9 < resultList.totalPages ? start + 9 : resultList.totalPages})">
+                        <li th:class="${resultList.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                          <a class="page-link" th:href="@{/boards(page=${resultList.number})}" aria-label="이전">
                             <span aria-hidden="true">
                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
                                 <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
@@ -68,11 +68,11 @@
                             </span>
                           </a>
                         </li>
-                        <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boardList.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
+                        <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == resultList.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
                           <a class="page-link" th:text="${page}" th:href="@{/boards(page=${page})}"></a>
                         </li>
-                        <li th:class="${boardList.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                          <a class="page-link" th:href="@{/boards(page=${boardList.number + 2})}" aria-label="다음">
+                        <li th:class="${resultList.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                          <a class="page-link" th:href="@{/boards(page=${resultList.number + 2})}" aria-label="다음">
                             <span aria-hidden="true">
                               다음
                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">

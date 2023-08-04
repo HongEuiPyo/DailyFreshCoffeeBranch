@@ -1,7 +1,7 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
 import com.example.dailyFreshCoffeeBranch.service.CommentService;
-import com.example.dailyFreshCoffeeBranch.dto.CommentDto;
+import com.example.dailyFreshCoffeeBranch.dto.CommentFormDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +16,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+
     /**
      * 공지사항 댓글 목록
      * @param id
@@ -23,9 +24,14 @@ public class CommentController {
      * @return
      */
     @GetMapping("/boards/{id}/comments")
-    public String getBoardComments(@PathVariable Long id, Pageable pageable, Model model) {
-        Page<CommentDto> commentDtoPage = commentService.getBoardCommentsByBoardId(id, pageable);
-        model.addAttribute("commentDtoPage", commentDtoPage);
+    public String getBoardComments(
+            @PathVariable Long id,
+            Pageable pageable,
+            Model model
+    ) {
+        Page<CommentFormDto> result = commentService.getBoardCommentsByBoardId(id, pageable);
+        model.addAttribute("result", result);
+
         return "comment/commentList";
     }
 

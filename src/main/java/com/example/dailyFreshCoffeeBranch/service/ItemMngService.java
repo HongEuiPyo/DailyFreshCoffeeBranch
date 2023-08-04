@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.service;
 
 
-import com.example.dailyFreshCoffeeBranch.dto.ItemDto;
-import com.example.dailyFreshCoffeeBranch.dto.ItemSearchDto;
+import com.example.dailyFreshCoffeeBranch.dto.ItemFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.ItemSearchFormDto;
 import com.example.dailyFreshCoffeeBranch.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class ItemMngService {
 
     private final ItemRepository itemRepository;
 
-    public List<ItemDto> getItemMngList(ItemSearchDto searchDto) {
+    public List<ItemFormDto> getItemMngList(ItemSearchFormDto searchDto) {
 
         return itemRepository.findAllSearching(searchDto).stream()
                 .map(i -> i.toDto())

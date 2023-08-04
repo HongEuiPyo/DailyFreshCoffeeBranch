@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.api;
 
 import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
-import com.example.dailyFreshCoffeeBranch.dto.CommentDto;
-import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
+import com.example.dailyFreshCoffeeBranch.dto.CommentFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.LoginUserDto;
 import com.example.dailyFreshCoffeeBranch.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,28 +22,41 @@ public class CommentApiController {
 
     /**
      * 댓글 등록
+     *
      * @param id
-     * @param commentDto
-     * @param userInfoDto
+     * @param commentFormDto
+     * @param loginUserDto
      * @return
      */
     @PostMapping("/boards/{id}/comments/create")
-    public ResponseEntity<CommentDto> createComment(@PathVariable Long id, @RequestBody CommentDto commentDto, @LoginUser UserInfoDto userInfoDto) {
-        CommentDto comment = commentService.createComment(userInfoDto.getEmail(), id, commentDto);
+    public ResponseEntity<CommentFormDto> createComment(
+            @PathVariable Long id,
+            @RequestBody CommentFormDto commentFormDto,
+            @LoginUser LoginUserDto loginUserDto
+    ) {
+        CommentFormDto comment = commentService.createComment(loginUserDto.getEmail(), id, commentFormDto);
+
         return ResponseEntity.ok(comment);
     }
 
     /**
      * 공지사항 댓글 수정
+     *
      * @param boardId
      * @param commentId
-     * @param commentDto
+     * @param commentFormDto
      * @return
      */
     @PutMapping("/boards/{boardId}/comments/{commentId}/update")
-    public ResponseEntity<CommentDto> updateComment(@PathVariable Long boardId, @PathVariable Long commentId, @RequestBody CommentDto commentDto) {
-        CommentDto updatedCommentDto = commentService.updateComment(boardId, commentId, commentDto);
-        return ResponseEntity.ok(updatedCommentDto);
+    public ResponseEntity<CommentFormDto> updateComment
+    (
+            @PathVariable Long boardId,
+            @PathVariable Long commentId,
+            @RequestBody CommentFormDto commentFormDto
+    ) {
+        CommentFormDto updatedCommentFormDto = commentService.updateComment(boardId, commentId, commentFormDto);
+
+        return ResponseEntity.ok(updatedCommentFormDto);
     }
 
     /**
@@ -53,7 +66,10 @@ public class CommentApiController {
      * @return
      */
     @DeleteMapping("/boards/{boardId}/comments/{commentId}/delete")
-    public ResponseEntity<Map<String, String>> deleteComment(@PathVariable Long boardId, @PathVariable Long commentId) {
+    public ResponseEntity<Map<String, String>> deleteComment(
+            @PathVariable Long boardId,
+            @PathVariable Long commentId
+    ) {
         Map<String, String> resultMap = new HashMap<>();
 
         commentService.deleteComment(boardId, commentId);

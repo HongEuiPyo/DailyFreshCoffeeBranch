@@ -29,7 +29,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:if="!${commentDtoPage?.isEmpty()}" th:each="commentItem : ${commentDtoPage}">
+    <tr th:if="!${result?.isEmpty()}" th:each="commentItem : ${result}">
         <td th:text="${commentItem.writer}" style="text-align: center"></td>
         <td>
             <div class="input-group mb-3">
@@ -51,17 +51,17 @@
         </td>
         <td th:text="${#temporals.format(commentItem.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
     </tr>
-    <tr th:if="${commentDtoPage?.isEmpty()}">
+    <tr th:if="${result?.isEmpty()}">
         <td colspan="3" style="text-align: center;">등록된 댓글이 없습니다.</td>
     </tr>
     </tbody>
 </table>
 
-<th:block th:if="!${commentDtoPage?.isEmpty()}">
-<ul class="pagination" th:with="start=${T(java.lang.Math).floor(commentDtoPage.number/10)*10 + 1},last=(${start + 9 < commentDtoPage.totalPages ? start + 9 : commentDtoPage.totalPages})">
+<th:block th:if="!${result?.isEmpty()}">
+<ul class="pagination" th:with="start=${T(java.lang.Math).floor(result.number/10)*10 + 1},last=(${start + 9 < result.totalPages ? start + 9 : result.totalPages})">
 
-    <li th:class="${commentDtoPage.first} ? 'page-item disabled' : 'page-item'">
-        <a class="page-link" th:onclick="goPage([[${commentDtoPage.number}]])" aria-label="이전">
+    <li th:class="${result.first} ? 'page-item disabled' : 'page-item'">
+        <a class="page-link" th:onclick="goPage([[${result.number}]])" aria-label="이전">
             <span aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
                     <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
@@ -71,12 +71,12 @@
         </a>
     </li>
 
-    <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == commentDtoPage.number + 1} ? 'page-item active' : 'page-item'">
+    <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == result.number + 1} ? 'page-item active' : 'page-item'">
         <a class="page-link" th:text="${page}" th:onclick="goPage([[${page}]])"></a>
     </li>
 
-    <li th:class="${commentDtoPage.last} ? 'page-item disabled' : 'page-item'">
-        <a class="page-link" th:onclick="goPage([[${commentDtoPage.number + 2}]])" aria-label="다음">
+    <li th:class="${result.last} ? 'page-item disabled' : 'page-item'">
+        <a class="page-link" th:onclick="goPage([[${result.number + 2}]])" aria-label="다음">
             <span aria-hidden="true">
                 다음
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">

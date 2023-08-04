@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.service;
 
-import com.example.dailyFreshCoffeeBranch.dto.DeliveryDto;
-import com.example.dailyFreshCoffeeBranch.dto.DeliveryItemDto;
-import com.example.dailyFreshCoffeeBranch.entity.Delivery;
+import com.example.dailyFreshCoffeeBranch.dto.DeliveryFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.DeliveryItemFormDto;
+import com.example.dailyFreshCoffeeBranch.domain.Delivery;
 import com.example.dailyFreshCoffeeBranch.exception.DeliveryNotFoundException;
 import com.example.dailyFreshCoffeeBranch.repository.DeliveryItemRepository;
 import com.example.dailyFreshCoffeeBranch.repository.DeliveryRepository;
@@ -10,9 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -27,11 +24,11 @@ public class DeliveryService {
      * @param email
      * @return
      */
-    public Page<DeliveryDto> getMemberDeliveryList(String email, Pageable pageable) {
+    public Page<DeliveryFormDto> getMemberDeliveryList(String email, Pageable pageable) {
         Page<Delivery> deliveryList = deliveryRepository.findByMemberEmail(email, pageable);
 
         return deliveryList
-                .map(d -> DeliveryDto.of(d));
+                .map(d -> DeliveryFormDto.of(d));
     }
 
     /**
@@ -41,14 +38,14 @@ public class DeliveryService {
      * @param id
      * @return
      */
-    public DeliveryDto getMemberDeliveryDetail(String email, Long id, Pageable pageable) {
+    public DeliveryFormDto getMemberDeliveryDetail(String email, Long id, Pageable pageable) {
         Delivery delivery = deliveryRepository.findByMemberEmailAndId(email, id)
                 .orElseThrow(() -> new DeliveryNotFoundException("배송을 조회할 수 없습니다."));
 
-        Page<DeliveryItemDto> deliveryItemDtoPage = deliveryItemRepository.findByDeliveryId(delivery.getId(), pageable)
-                .map(DeliveryItemDto::of);
+        Page<DeliveryItemFormDto> deliveryItemDtoPage = deliveryItemRepository.findByDeliveryId(delivery.getId(), pageable)
+                .map(DeliveryItemFormDto::of);
 
-        return DeliveryDto.create(delivery, deliveryItemDtoPage);
+        return DeliveryFormDto.create(delivery, deliveryItemDtoPage);
     }
 
 }

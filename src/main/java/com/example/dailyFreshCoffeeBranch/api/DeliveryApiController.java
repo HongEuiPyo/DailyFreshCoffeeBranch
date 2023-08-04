@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.api;
 
 import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
-import com.example.dailyFreshCoffeeBranch.dto.PaymentDto;
-import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
+import com.example.dailyFreshCoffeeBranch.dto.PaymentFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.LoginUserDto;
 import com.example.dailyFreshCoffeeBranch.service.DeliveryApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,15 +28,16 @@ public class DeliveryApiController {
     /**
      * 장바구니 상품 배송 확정
      *
-     * @param paymentDto
-     * @param userInfoDto
+     * @param paymentFormDto
+     * @param loginUserDto
      * @return
      */
     @PostMapping("/delivery/deliverCartItems")
-    public ResponseEntity<?> deliverCartItems(
-            @Valid @RequestBody PaymentDto paymentDto,
+    public ResponseEntity<?> deliverCartItems
+    (
+            @Valid @RequestBody PaymentFormDto paymentFormDto,
             BindingResult result,
-            @LoginUser UserInfoDto userInfoDto
+            @LoginUser LoginUserDto loginUserDto
     ) {
         HashMap<String, String> resultMap = new HashMap<>();
 
@@ -48,7 +49,9 @@ public class DeliveryApiController {
         }
 
         try {
-            deliveryApiService.deliverCartItems(userInfoDto.getEmail(), paymentDto);
+
+            deliveryApiService.deliverCartItems(loginUserDto.getEmail(), paymentFormDto);
+
         } catch (Exception e) {
             resultMap.put("msg", e.getMessage());
             return ResponseEntity.badRequest().body(resultMap);

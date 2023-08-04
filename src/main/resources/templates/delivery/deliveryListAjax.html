@@ -12,7 +12,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:if="not ${deliveryPage?.isEmpty()}" th:each="deliveryItem : ${deliveryPage}">
+    <tr th:if="not ${result?.isEmpty()}" th:each="deliveryItem : ${result}">
         <td class="text-center">
             <a href="#none" th:text="${deliveryItem.id}" th:onclick="goDeliveryDetail([[${deliveryItem.id}]])"></a>
         </td>
@@ -21,18 +21,18 @@
         <td th:text="${#temporals.format(deliveryItem.deliveryStartTime, 'yyyy-MM-dd HH:mm:ss')}"
             class="text-center"></td>
     </tr>
-    <tr th:if="${deliveryPage?.isEmpty()}" class="text-center">
+    <tr th:if="${result?.isEmpty()}" class="text-center">
         <td colspan="4">조회된 배송 목록이 없습니다.</td>
     </tr>
     </tbody>
 </table>
 
-<div class="row mt-5" th:if="not ${deliveryPage?.isEmpty()}">
+<div class="row mt-5" th:if="not ${result?.isEmpty()}">
     <div class="dataTables_paginate paging_simple_numbers">
         <ul class="pagination"
-            th:with="start=${T(java.lang.Math).floor(deliveryPage.number/10)*10 + 1},last=(${start + 9 < deliveryPage.totalPages ? start + 9 : deliveryPage.totalPages})">
-            <li th:class="${deliveryPage.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                <a href="#none" class="page-link" th:onclick="goDeliveryList([[${deliveryPage.number}]])" aria-label="이전">
+            th:with="start=${T(java.lang.Math).floor(result.number/10)*10 + 1},last=(${start + 9 < result.totalPages ? start + 9 : result.totalPages})">
+            <li th:class="${result.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                <a href="#none" class="page-link" th:onclick="goDeliveryList([[${result.number}]])" aria-label="이전">
           <span aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                    fill="currentColor" class="bi bi-caret-left-fill"
@@ -44,11 +44,11 @@
                 </a>
             </li>
             <li th:each="page: ${#numbers.sequence(start, last)}"
-                th:class="${page == deliveryPage.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
+                th:class="${page == result.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
                 <a href="#none" class="page-link" th:text="${page}" th:onclick="goDeliveryList([[${page}]])"></a>
             </li>
-            <li th:class="${deliveryPage.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
-                <a href="#none" class="page-link" th:onclick="goDeliveryList([[${deliveryPage.number + 2}]])" aria-label="다음">
+            <li th:class="${result.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                <a href="#none" class="page-link" th:onclick="goDeliveryList([[${result.number + 2}]])" aria-label="다음">
                     <span aria-hidden="true">
                         다음
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"

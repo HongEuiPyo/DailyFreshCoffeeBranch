@@ -1,10 +1,11 @@
 package com.example.dailyFreshCoffeeBranch.service;
 
 import com.example.dailyFreshCoffeeBranch.constant.ItemCategory;
-import com.example.dailyFreshCoffeeBranch.dto.ItemDto;
-import com.example.dailyFreshCoffeeBranch.dto.ItemSearchDto;
-import com.example.dailyFreshCoffeeBranch.entity.ImageFile;
-import com.example.dailyFreshCoffeeBranch.entity.Item;
+import com.example.dailyFreshCoffeeBranch.constant.ItemStatus;
+import com.example.dailyFreshCoffeeBranch.dto.ItemFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.ItemSearchFormDto;
+import com.example.dailyFreshCoffeeBranch.domain.ImageFile;
+import com.example.dailyFreshCoffeeBranch.domain.Item;
 import com.example.dailyFreshCoffeeBranch.exception.ImageFileNotFoundException;
 import com.example.dailyFreshCoffeeBranch.exception.ItemNotFoundException;
 import com.example.dailyFreshCoffeeBranch.repository.ImageFileRepository;
@@ -32,12 +33,12 @@ public class ItemService {
      * @param pageable
      * @return
      */
-    public Page<ItemDto> getItemList(Pageable pageable, ItemSearchDto searchDto) {
+    public Page<ItemFormDto> getItemList(Pageable pageable, ItemSearchFormDto searchDto) {
         ItemCategory searchCategory1 = searchDto.getSearchCategory1();
         String searchType = searchDto.getSearchType();
         String searchKeyword = searchDto.getSearchKeyword();
 
-        Page<ItemDto> itemPage = null;
+        Page<ItemFormDto> itemPage = null;
 
         if (!searchCategory1.equals(ItemCategory.ALL) && !"".equals(searchKeyword)) {
             if ("title".equals(searchType)) {
@@ -77,7 +78,7 @@ public class ItemService {
      * @param id
      * @return
      */
-    public ItemDto getItemDetail(Long id) {
+    public ItemFormDto getItemDetail(Long id) {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException("상품을 확인할 수 없습니다."));
         return item.toDto();
@@ -89,8 +90,9 @@ public class ItemService {
      * @throws Exception
      */
     @Transactional
-    public void createItem(ItemDto dto, List<MultipartFile> multipartFileList) throws Exception {
+    public void createItem(ItemFormDto dto, List<MultipartFile> multipartFileList) throws Exception {
         // 1. 상품 등록
+        dto.setItemStatus(ItemStatus.SELL);
         Item item = dto.toEntity();
         itemRepository.save(item);
 
@@ -144,12 +146,12 @@ public class ItemService {
     /**
      * 상품 수정 처리
      * @param itemId
-     * @param itemDto
+     * @param itemFormDto
      * @param multipartFileList
      * @throws Exception
      */
     @Transactional
-    public void updateItem(Long itemId, ItemDto itemDto, List<MultipartFile> multipartFileList) throws Exception {
+    public void updateItem(Long itemId, ItemFormDto itemFormDto, List<MultipartFile> multipartFileList) throws Exception {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException("상품을 찾을 수 없습니다."));
 
@@ -176,7 +178,7 @@ public class ItemService {
             }
         }
 
-        item.update(itemDto);
+        item.update(itemFormDto);
     }
 
     @Transactional

@@ -1,12 +1,12 @@
 package com.example.dailyFreshCoffeeBranch.service;
 
-import com.example.dailyFreshCoffeeBranch.api.naver.NaverApiDirection5;
-import com.example.dailyFreshCoffeeBranch.com.VIPDiscountPolicy;
 import com.example.dailyFreshCoffeeBranch.constant.DeliveryItemStatus;
 import com.example.dailyFreshCoffeeBranch.constant.DeliveryStatus;
-import com.example.dailyFreshCoffeeBranch.dto.Directions5RequestDto;
-import com.example.dailyFreshCoffeeBranch.dto.PaymentDto;
-import com.example.dailyFreshCoffeeBranch.entity.*;
+import com.example.dailyFreshCoffeeBranch.domain.*;
+import com.example.dailyFreshCoffeeBranch.dto.AddressResponseDto;
+import com.example.dailyFreshCoffeeBranch.dto.NaverApiRequestDto;
+import com.example.dailyFreshCoffeeBranch.dto.PaymentFormDto;
+import com.example.dailyFreshCoffeeBranch.exception.AddressNotFoundException;
 import com.example.dailyFreshCoffeeBranch.exception.CartNotFoundException;
 import com.example.dailyFreshCoffeeBranch.exception.MemberNotFoundException;
 import com.example.dailyFreshCoffeeBranch.exception.OutOfPointException;
@@ -22,29 +22,28 @@ public class DeliveryApiService {
 
     private final MemberRepository memberRepository;
     private final CartRepository cartRepository;
-    private final VIPDiscountPolicy vipDiscountPolicy;
+    private final SmallBusinessPeopleDiscountPolicyService smallBusinessPeopleDiscountPolicyService;
     private final PaymentRepository paymentRepository;
     private final DeliveryRepository deliveryRepository;
     private final DeliveryItemRepository deliveryItemRepository;
     private final AddressRepository addressRepository;
     private final CartItemRepository cartItemRepository;
     private final ItemRepository itemRepository;
-
-    private final NaverApiDirection5 naverApiDirection5;
+    private final NaverApiService naverApiService;
 
 
     /**
      * 장바구니 상품 배송 확정
      *
      * @param email
-     * @param paymentDto
+     * @param paymentFormDto
      */
     @Transactional
-    public void deliverCartItems(String email, PaymentDto paymentDto) {
+    public void deliverCartItems(String email, PaymentFormDto paymentFormDto) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException("회원을 조회할 수 없습니다."));
 
-        pay(paymentDto, member); // 결제정보 회원 entity에 반영
+        pay(paymentFormDto, member); // 결제정보 회원 entity에 반영
 
         Cart cart = cartRepository.findByMemberId(member.getId())
                 .orElseThrow(() -> new CartNotFoundException("장바구니를 찾을 수 없습니다."));
@@ -57,17 +56,17 @@ public class DeliveryApiService {
     /**
      * 결제하기
      *
-     * @param paymentDto
+     * @param paymentFormDto
      * @param member
      */
-    private void pay(PaymentDto paymentDto, Member member) {
-        double discountPrice = ifVIPGetDiscountPrice(paymentDto, member);
+    private void pay(PaymentFormDto paymentFormDto, Member member) {
+        double discountPrice = ifVIPGetDiscountPrice(paymentFormDto, member);
         member.payPoint(discountPrice);
 
-        if(discountPrice != paymentDto.getTotalUsePoint()){
-            paymentDto.setDiscount(vipDiscountPolicy.getDiscountRate());
+        if(discountPrice != paymentFormDto.getTotalUsePoint()){
+            paymentFormDto.setDiscount(smallBusinessPeopleDiscountPolicyService.getDiscountRate());
         }
-        Payment payment = paymentDto.toEntity(member);
+        Payment payment = paymentFormDto.toEntity(member);
         paymentRepository.save(payment);
     }
 
@@ -79,17 +78,19 @@ public class DeliveryApiService {
      */
     private void deliverCartItem(Member member, Cart cart) {
 
-        Address storeLoc = addressRepository.findStoreLocation();
-        Address userLoc = addressRepository.findLoginUserLocationByEmail(member.getEmail());
+        AddressResponseDto storeLoc = addressRepository.findStoreLocation()
+                .orElseThrow(() -> new AddressNotFoundException("매장 주소를 찾을 수 없습니다. 관리자에게 문의하세요."));
+        AddressResponseDto userLoc = addressRepository.findLoginUserLocationByEmail(member.getEmail())
+                .orElseThrow(() -> new AddressNotFoundException("주소가 등록되어 있지 않습니다. 주소를 등록하시고 다시 배송 신청을 진행해주세요."));
 
-        Directions5RequestDto directions5RequestDto = Directions5RequestDto.builder()
+        NaverApiRequestDto naverApiRequestDto = NaverApiRequestDto.builder()
                 .startLatitude(storeLoc.getLatitude())
                 .startLongitude(storeLoc.getLongitude())
                 .goalLatitude(userLoc.getLatitude())
                 .goalLongitude(userLoc.getLongitude())
                 .build();
 
-        long duration = naverApiDirection5.calculateDurationValAsTesting(directions5RequestDto);
+        long duration = naverApiService.getDurationThruDirect5Api(naverApiRequestDto);
 
         Delivery delivery = Delivery.builder()
                 .deliveryStatus(DeliveryStatus.DELIVERING)
@@ -117,13 +118,13 @@ public class DeliveryApiService {
     /**
      * VIP일 시 혜택가 적용하기
      *
-     * @param paymentDto
+     * @param paymentFormDto
      * @param member
      * @return
      */
-    private double ifVIPGetDiscountPrice(PaymentDto paymentDto, Member member) {
+    private double ifVIPGetDiscountPrice(PaymentFormDto paymentFormDto, Member member) {
 
-        double discountPrice = vipDiscountPolicy.apply(paymentDto.getTotalUsePoint(), member.getRole());
+        double discountPrice = smallBusinessPeopleDiscountPolicyService.apply(paymentFormDto.getTotalUsePoint(), member.getRole());
 
         if(member.getPoint() < discountPrice){
             throw new OutOfPointException("포인트가 부족합니다.");
@@ -143,6 +144,11 @@ public class DeliveryApiService {
             Item item = cartItem.getItem();
             item.decreaseStock(cartItem.getCount());
             item.addPurchaseCount(cartItem.getCount());
+
+            if (item.getStock() == 0) {
+                itemRepository.getSoldOut(item.getId());
+            }
+
             itemRepository.save(item);
         }
 

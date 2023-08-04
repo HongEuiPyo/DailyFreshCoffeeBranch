@@ -27,7 +27,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:if="not ${deliveryDtoPage?.isEmpty()}" th:each="deliveryItem : ${deliveryDtoPage}">
+                                    <tr th:if="not ${result?.isEmpty()}" th:each="deliveryItem : ${result}">
                                         <td class="text-center">
                                             <a th:text="${deliveryItem.id}"
                                                th:href="@{/admin/deliveriesMng/{id}(id = ${deliveryItem.id})}"></a>
@@ -38,7 +38,7 @@
                                             class="text-center"></td>
                                         <td th:text="${deliveryItem.deliveryStatus.title}" class="text-center"></td>
                                     </tr>
-                                    <tr th:if="${deliveryDtoPage?.isEmpty()}" class="text-center">
+                                    <tr th:if="${result?.isEmpty()}" class="text-center">
                                         <td colspan="4">조회된 배송 목록이 없습니다.</td>
                                     </tr>
                                     </tbody>
@@ -46,13 +46,13 @@
                             </div>
                         </div>
 
-                        <div class="row" th:if="not ${deliveryDtoPage?.isEmpty()}">
+                        <div class="row" th:if="not ${result?.isEmpty()}">
                             <div class="dataTables_paginate paging_simple_numbers">
                                 <ul class="pagination"
-                                    th:with="start=${T(java.lang.Math).floor(deliveryDtoPage.number/10)*10 + 1},last=(${start + 9 < deliveryDtoPage.totalPages ? start + 9 : deliveryDtoPage.totalPages})">
-                                    <li th:class="${deliveryDtoPage.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                                    th:with="start=${T(java.lang.Math).floor(result.number/10)*10 + 1},last=(${start + 9 < result.totalPages ? start + 9 : result.totalPages})">
+                                    <li th:class="${result.first} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
                                         <a class="page-link"
-                                           th:href="@{/admin/deliveriesMng(page=${deliveryDtoPage.number})}"
+                                           th:href="@{/admin/deliveriesMng(page=${result.number})}"
                                            aria-label="이전">
                                           <span aria-hidden="true">
                                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -65,12 +65,12 @@
                                         </a>
                                     </li>
                                     <li th:each="page: ${#numbers.sequence(start, last)}"
-                                        th:class="${page == deliveryDtoPage.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
+                                        th:class="${page == result.number + 1} ? 'paginate_button page-item active' : 'paginate_button page-item'">
                                         <a class="page-link" th:text="${page}" th:href="@{/admin/deliveriesMng(page=${page})}"></a>
                                     </li>
-                                    <li th:class="${deliveryDtoPage.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
+                                    <li th:class="${result.last} ? 'paginate_button page-item disabled' : 'paginate_button page-item'">
                                         <a class="page-link"
-                                           th:href="@{/admin/deliveriesMng(page=${deliveryDtoPage.number + 2})}"
+                                           th:href="@{/admin/deliveriesMng(page=${result.number + 2})}"
                                            aria-label="다음">
                                         <span aria-hidden="true">
                                             다음
@@ -85,7 +85,6 @@
                                 </ul>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

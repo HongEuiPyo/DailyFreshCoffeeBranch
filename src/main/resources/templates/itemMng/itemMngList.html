@@ -45,10 +45,10 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:if="not ${itemDtoList?.isEmpty()}" th:each="item : ${itemDtoList}">
+                                    <tr th:if="not ${resultList?.isEmpty()}" th:each="item : ${resultList}">
                                         <td th:text="${item.id}" class="text-center"></td>
                                         <td>
-                                            <img th:src="${item.imageFileDtoList.get(0).getImageUrl()}" style="width:30px; height:30px">
+                                            <img th:src="${item.imageFileFormDtoList.get(0).getImageUrl()}" style="width:30px; height:30px">
                                         </td>
                                         <td class="text-center">
                                             <a th:text="${item.title}"
@@ -64,14 +64,14 @@
                                         <td th:text="${#temporals.format(item.modifiedTime, 'yyyy-MM')}"
                                             class="text-center"></td>
                                     </tr>
-                                    <tr th:if="${itemDtoList?.isEmpty()}" class="text-center">
+                                    <tr th:if="${resultList?.isEmpty()}" class="text-center">
                                         <td colspan="4">조회된 배송 목록이 없습니다.</td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <th:block th:if="${itemDtoList?.isEmpty()}">
+                        <th:block th:if="${resultList?.isEmpty()}">
                         <div class="row mt-5 mb-5" style="text-align: center;">
                             <h5>검색결과가 없습니다.</h5>
                         </div>

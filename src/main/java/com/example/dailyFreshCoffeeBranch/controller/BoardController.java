@@ -1,8 +1,8 @@
 package com.example.dailyFreshCoffeeBranch.controller;
 
 import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
-import com.example.dailyFreshCoffeeBranch.dto.BoardDto;
-import com.example.dailyFreshCoffeeBranch.dto.UserInfoDto;
+import com.example.dailyFreshCoffeeBranch.dto.BoardFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.LoginUserDto;
 import com.example.dailyFreshCoffeeBranch.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -23,67 +23,91 @@ public class BoardController {
 
 
     /**
-     * 이벤트 목록
+     * 공지사항 목록
+     *
       * @param model
      * @return
      */
     @GetMapping("/boards")
-    public String boards(Model model, Pageable pageable) {
-        model.addAttribute("boardList", boardService.getBoardList(pageable));
+    public String boards(
+            Model model,
+            Pageable pageable
+    ) {
+        model.addAttribute("resultList", boardService.getBoardList(pageable));
         model.addAttribute("boardListCnt", boardService.getBoardListCnt());
+
         return "board/boardList";
     }
 
     /**
-     * 이벤트 상세
+     * 공지사항 상세
+     *
      * @param id
      * @return
      */
     @GetMapping("/boards/{id}")
-    public String findBoardByBoardId(@PathVariable long id, Model model) {
-        model.addAttribute("boardDto", boardService.findBoardByBoardId(id));
+    public String findBoardByBoardId(
+            @PathVariable long id,
+            Model model
+    ) {
+        model.addAttribute("result", boardService.findBoardByBoardId(id));
+
         return "board/boardDetail";
     }
 
     /**
-     * 이벤트 등록 폼
+     * 공지사항 등록 폼
+     *
      * @return
      */
     @GetMapping("/admin/boards/create")
     public String boardForm(Model model) {
-        BoardDto boardDto = new BoardDto();
-        model.addAttribute("boardDto", boardDto);
+        BoardFormDto result = new BoardFormDto();
+        model.addAttribute("result", result);
+
         return "board/boardCreateForm";
     }
 
     /**
-     * 이벤트 수정 폼
+     * 공지사항 수정 폼
+     *
      * @param id
      * @param model
      * @return
      */
     @GetMapping("/admin/boards/{id}/update")
     public String boardUpdateForm(@PathVariable Long id, Model model) {
-        BoardDto boardDto = boardService.findBoardByBoardId(id);
-        model.addAttribute("boardDto", boardDto);
+        BoardFormDto result = boardService.findBoardByBoardId(id);
+        model.addAttribute("result", result);
+
         return "board/boardUpdateForm";
     }
 
     /**
-     * 이벤트 등록 처리
-     * @param boardDto
+     * 공지사항 등록 처리
+     *
+     * @param boardFormDto
      * @return
      */
     @PostMapping("/admin/boards/create")
-    public String createBoard(@Valid BoardDto boardDto, BindingResult bindingResult, @LoginUser UserInfoDto userInfoDto, Model model) {
+    public String createBoard(
+            @Valid BoardFormDto boardFormDto,
+            BindingResult bindingResult,
+            @LoginUser LoginUserDto loginUserDto,
+            Model model
+    ) {
         if (bindingResult.hasErrors()) {
+
             return "board/boardUpdateForm";
         }
 
         try {
-            boardService.createBoard(boardDto, userInfoDto.getEmail());
+
+            boardService.createBoard(boardFormDto, loginUserDto.getEmail());
+
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
+
             return "board/boardUpdateForm";
         }
 
@@ -91,20 +115,31 @@ public class BoardController {
     }
 
     /**
-     * 이벤트 수정 처리
-     * @param boardDto
+     * 공지사항 수정 처리
+     *
+     * @param boardFormDto
      * @return
      */
     @PostMapping("/admin/boards/{id}/update")
-    public String updateBoard(@PathVariable Long id, @Valid BoardDto boardDto, BindingResult bindingResult, @LoginUser UserInfoDto userInfoDto, Model model) {
+    public String updateBoard(
+            @PathVariable Long id,
+            @Valid BoardFormDto boardFormDto,
+            BindingResult bindingResult,
+            @LoginUser LoginUserDto loginUserDto,
+            Model model
+    ) {
         if (bindingResult.hasErrors()) {
+
             return "board/boardUpdateForm";
         }
 
         try {
-            boardService.updateBoard(id, boardDto, userInfoDto.getEmail());
+
+            boardService.updateBoard(id, boardFormDto, loginUserDto.getEmail());
+
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
+
             return "board/boardUpdateForm";
         }
 
@@ -112,13 +147,15 @@ public class BoardController {
     }
 
     /**
-     * 이벤트 삭제 처리
+     * 공지사항 삭제 처리
+     *
      * @param id
      * @return
      */
     @PostMapping("/admin/boards/{id}/delete")
     public String deleteBoard(@PathVariable Long id) {
         boardService.deleteBoard(id);
+
         return "redirect:/boards";
     }
 

@@ -1,7 +1,6 @@
 package com.example.dailyFreshCoffeeBranch.repository;
 
-import com.example.dailyFreshCoffeeBranch.entity.Member;
-import com.example.dailyFreshCoffeeBranch.repository.impl.MemberRepositoryCustom;
+import com.example.dailyFreshCoffeeBranch.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
