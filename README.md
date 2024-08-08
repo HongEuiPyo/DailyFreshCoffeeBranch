@@ -2,7 +2,7 @@
 
 http://dailyfreshcoffee.duckdns.org
 
-id: admin@gmail.ocm
+id: admin@gmail.com
 pw: Ghddmlvy93!
 
 감사합니다.
