@@ -1,4 +1,8 @@
 매일 신선한 커피점 
 
-남궁성님의 JPA강의를 듣고 만든 스프링 부트 프로젝트입니다.
+http://dailyfreshcoffee.duckdns.org
 
+id: admin@gmail.ocm
+pw: Ghddmlvy93!
+
+감사합니다.
