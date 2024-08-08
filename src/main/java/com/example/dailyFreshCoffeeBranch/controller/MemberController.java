@@ -4,6 +4,7 @@ import com.example.dailyFreshCoffeeBranch.annotation.LoginUser;
 import com.example.dailyFreshCoffeeBranch.dto.MemberFormDto;
 import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateFormDto;
 import com.example.dailyFreshCoffeeBranch.dto.LoginUserDto;
+import com.example.dailyFreshCoffeeBranch.dto.SnsMemberUpdateFormDto;
 import com.example.dailyFreshCoffeeBranch.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -102,9 +103,18 @@ public class MemberController {
      */
     @GetMapping("/{id}/update")
     public String memberForm(@PathVariable Long id, Model model) {
-        model.addAttribute("result", memberService.getMemberDetailByMemberId(id));
+        MemberUpdateFormDto memberUpdateFormDto = memberService.getMemberDetailByMemberId(id);
+        String returnUrl = "";
 
-        return "member/memberForm";
+        model.addAttribute("result", memberUpdateFormDto);
+
+        if (memberUpdateFormDto.getSns().isEmpty()) {
+            returnUrl = "member/memberForm";
+        } else {
+            returnUrl = "member/memberSnsUpdateForm";
+        }
+
+        return returnUrl;
     }
 
     /**
@@ -116,12 +126,29 @@ public class MemberController {
     @PostMapping("/{id}/update")
     public String updateMember(@PathVariable Long id, @Valid MemberUpdateFormDto memberUpdateFormDto, BindingResult result) {
         if (result.hasErrors()) {
+            return "member/memberForm";
+        }
+
+        memberService.updateMember(id, memberUpdateFormDto);
+
+        return "redirect:/members/myPage";
+    }
+
+    /**
+     * 소셜 로그인 회원 수정 처리
+     *
+     * @param id
+     * @return
+     */
+    @PostMapping("/{id}/snsMemberUpdate")
+    public String updateSnsMember(@PathVariable Long id, @Valid SnsMemberUpdateFormDto snsMemberUpdateFormDto, BindingResult result) {
+        if (result.hasErrors()) {
 
             return "member/memberForm";
         }
-        memberService.updateMember(id, memberUpdateFormDto);
+        memberService.updateSnsMember(id, snsMemberUpdateFormDto);
 
-        return "redirect:/members/logout";
+        return "redirect:/members/myPage";
     }
 
     /**
@@ -134,7 +161,7 @@ public class MemberController {
     public String deleteMember(@PathVariable Long id) {
         memberService.deleteMember(id);
 
-        return "redirect:/";
+        return "redirect:/members/logout";
     }
 
 }

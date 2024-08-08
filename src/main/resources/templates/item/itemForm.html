@@ -28,7 +28,7 @@
                                             <col style="width: auto;">
                                         </colgroup>
                                         <tr th:if="${result?.id}">
-                                            <th scope="col">번호</th>
+                                            <th scope="col">ID</th>
                                             <td th:text="${result.id}"></td>
                                         </tr>
                                         <tr>
@@ -194,7 +194,7 @@
 
     function deleteFile(imageFileId){
         if (confirm('이미지 첨부파일을 삭제하시겠습니까? 삭제하신 후 되돌리실 수 없습니다.')) {
-            let url = 'http://localhost:8080/admin/imageFiles/' + imageFileId + '/delete';
+            let url = 'http://localhost:8082/admin/imageFiles/' + imageFileId + '/delete';
             fetch(url, {
                 method: 'DELETE'
             }).then(response => {

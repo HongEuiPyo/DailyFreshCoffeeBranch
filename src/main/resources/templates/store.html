@@ -15,6 +15,8 @@
 <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=k18d8834sg&submodules=geocoder"></script>
 
 <script th:script="javascript">
+    /*<![CDATA[*/
+    // 네이버 지도 API 호출
     var latitude = '[[${result.latitude}]]';
     var longitude = '[[${result.longitude}]]';
     var roadAddress = '[[${result.roadAddress}]]';
@@ -47,6 +49,7 @@
         position: shopLocation
     });
 
+    // 맵만 호출
     naver.maps.Event.addListener(marker, "click", function(e) {
         if (infoWindow.getMap()) {
             infoWindow.close();
@@ -55,7 +58,7 @@
         }
     });
 
-    document.onload = function (){
-        marker.click();
-    }
+    // 시작 시 도로 주소명 호출
+    window.onload = infoWindow.open(map, marker);
+    /*]]>*/
 </script>

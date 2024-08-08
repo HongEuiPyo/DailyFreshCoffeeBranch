@@ -27,7 +27,7 @@
                                         <col style="width: auto;">
                                     </colgroup>
                                     <tr>
-                                        <th scope="col">번호</th>
+                                        <th scope="col">ID</th>
                                         <td th:text="${result.id}"></td>
                                     </tr>
                                     <tr>
@@ -96,7 +96,7 @@
     }
 
     function goPage(page){
-        let url = 'http://localhost:8080/boards/' + boardId + '/comments?page='+page;
+        let url = 'http://localhost:8082/boards/' + boardId + '/comments?page='+page;
         fetch(url)
             .then((response) => response.text())
             .then((result) => {
@@ -106,7 +106,7 @@
     }
 
     function getCommentList(boardId, page){
-        let url = 'http://localhost:8080/boards/' + boardId + '/comments?page='+page;
+        let url = 'http://localhost:8082/boards/' + boardId + '/comments?page='+page;
         fetch(url)
             .then((response) => response.text())
             .then((result) => document.getElementById('commentDiv').innerHTML = (result))
@@ -114,7 +114,7 @@
 
     function goCreateComment(){
         if (confirm('댓글을 작성하시겠습니까?')){
-            let url = 'http://localhost:8080/api/boards/'+boardId+'/comments/create';
+            let url = 'http://localhost:8082/api/boards/'+boardId+'/comments/create';
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -143,7 +143,7 @@
                 return false;
             }
 
-            let url = 'http://localhost:8080/api/boards/' + boardId + '/comments/' + commentId + '/update';
+            let url = 'http://localhost:8082/api/boards/' + boardId + '/comments/' + commentId + '/update';
             fetch(url, {
                 method: 'PUT',
                 headers: {
@@ -165,7 +165,7 @@
     function goDeleteComment(commentId){
         if (confirm('댓글을 삭제하시겠습니까?')){
             let input = document.getElementById('commentContent@'+commentId);
-            let url = 'http://localhost:8080/api/boards/' + boardId + '/comments/' + commentId + '/delete';
+            let url = 'http://localhost:8082/api/boards/' + boardId + '/comments/' + commentId + '/delete';
             fetch(url, {
                 method: 'DELETE'
             })

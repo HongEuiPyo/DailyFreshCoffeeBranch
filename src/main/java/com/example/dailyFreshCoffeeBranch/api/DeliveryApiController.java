@@ -57,7 +57,7 @@ public class DeliveryApiController {
             return ResponseEntity.badRequest().body(resultMap);
         }
 
-        resultMap.put("msg", "'배송'을 완료하였습니다.");
+        resultMap.put("msg", "'배송'을 시작하였습니다.");
 
         return ResponseEntity.ok().body(resultMap);
     }

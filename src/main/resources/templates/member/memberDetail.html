@@ -28,7 +28,7 @@
                                     <col style="width: auto;">
                                 </colgroup>
                                 <tr>
-                                    <th scope="col">번호</th>
+                                    <th scope="col">ID</th>
                                     <td th:text="${result.id}"></td>
                                 </tr>
                                 <tr>
@@ -142,7 +142,7 @@
 
             isFunctionAddPointRunning = true;
 
-            let url = 'http://localhost:8080/api/payment/addPoint';
+            let url = 'http://localhost:8082/api/payment/addPoint';
             fetch(url, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -169,7 +169,7 @@
 
     function goCartItemList(){
         $.ajax({
-            url: "http://localhost:8080/cart/itemsAjax", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+            url: "http://localhost:8082/cart/itemsAjax", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
             method: "GET",   // HTTP 요청 메소드(GET, POST 등)
             dataType: "text", // 서버에서 보내줄 데이터의 타입
             error: function() {
@@ -183,7 +183,7 @@
 
     function updateCartItem(cartItemId){
         if (confirm('장바구니 상품을 수정하시겠습니까?')){
-            let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/update';
+            let url = 'http://localhost:8082/api/cart/items/' + cartItemId + '/update';
             fetch(url, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -208,7 +208,7 @@
 
     function deleteCartItem(cartItemId){
         if (confirm('장바구니 상품을 취소하시겠습니까?')){
-            let url = 'http://localhost:8080/api/cart/items/' + cartItemId + '/delete';
+            let url = 'http://localhost:8082/api/cart/items/' + cartItemId + '/delete';
             fetch(url, {
                 method: 'DELETE',
             })
@@ -226,7 +226,7 @@
 
     function goDelivery(){
         if (confirm('장바구니 상품을 \'배송\' 하시겠습니까?')){
-            let url = 'http://localhost:8080/api/delivery/deliverCartItems';
+            let url = 'http://localhost:8082/api/delivery/deliverCartItems';
 
             let itemNameArray = document.getElementsByClassName('itemName');
             let itemNames = '';
@@ -263,7 +263,7 @@
 
     function goPaymentList(page){
         $.ajax({
-            url: "http://localhost:8080/paymentListAjax", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+            url: "http://localhost:8082/paymentListAjax", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
             method: "GET",   // HTTP 요청 메소드(GET, POST 등)
             data: {"page": page},
             dataType: "text", // 서버에서 보내줄 데이터의 타입
@@ -278,7 +278,7 @@
 
     function goDeliveryList(page){
         $.ajax({
-            url: "http://localhost:8080/deliveriesAjax", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+            url: "http://localhost:8082/deliveriesAjax", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
             method: "GET",   // HTTP 요청 메소드(GET, POST 등)
             data: {"page": page},
             dataType: "text", // 서버에서 보내줄 데이터의 타입
@@ -293,7 +293,7 @@
 
     function goDeliveryDetail(id) {
         $.ajax({
-            url: "http://localhost:8080/deliveriesAjax/" + id, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+            url: "http://localhost:8082/deliveriesAjax/" + id, // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
             method: "GET",   // HTTP 요청 메소드(GET, POST 등)
             dataType: "text", // 서버에서 보내줄 데이터의 타입
             error: function() {

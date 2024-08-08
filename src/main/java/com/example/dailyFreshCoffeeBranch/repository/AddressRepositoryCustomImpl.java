@@ -24,7 +24,7 @@ public class AddressRepositoryCustomImpl implements AddressRepositoryCustom {
     @Override
     public Optional<AddressResponseDto> findStoreLocation() {
         AddressResponseDto result = queryFactory
-                .select(new QAddressResponseDto(address.id, address.longitude, address.latitude, address.roadAddress, address.createdTime, address.modifiedTime))
+                .select(new QAddressResponseDto(address.id, address.latitude, address.longitude, address.roadAddress, address.createdTime, address.modifiedTime))
                 .from(address)
                 .where(address.member.role.eq(Role.ADMIN))
                 .fetchOne();
@@ -40,7 +40,7 @@ public class AddressRepositoryCustomImpl implements AddressRepositoryCustom {
     @Override
     public Optional<AddressResponseDto> findLoginUserLocationByEmail(String email) {
         AddressResponseDto result = queryFactory
-                .select(new QAddressResponseDto(address.id, address.longitude, address.latitude, address.roadAddress, address.createdTime, address.modifiedTime))
+                .select(new QAddressResponseDto(address.id, address.latitude, address.longitude, address.roadAddress, address.createdTime, address.modifiedTime))
                 .from(address)
                 .where(address.member.email.eq(email))
                 .fetchOne();

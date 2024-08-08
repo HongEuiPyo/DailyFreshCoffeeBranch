@@ -26,7 +26,7 @@
         <td th:text="${paymentItem.getTotalUsePoint() - paymentItem.getTotalUsePoint() * paymentItem.getDiscount()}" class="text-right"></td>
         <td th:text="${#temporals.format(paymentItem.getModifiedTime(), 'yyyy-MM-dd HH:mm:ss')}" class="text-center"></td>
     </tr>
-    <tr th:if="${paymentDtoPage.isEmpty()}" class="text-center">
+    <tr th:if="${paymentDtoPage?.isEmpty()}" class="text-center">
         <td colspan="5">회원님의 구매내역이 존재하지 않습니다.</td>
     </tr>
     </tbody>

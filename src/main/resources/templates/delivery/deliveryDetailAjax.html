@@ -8,7 +8,7 @@
     <col style="width: auto;">
   </colgroup>
   <tr>
-    <th scope="col">배송번호</th>
+    <th scope="col">배송 ID</th>
     <td th:text="${result.id}"></td>
   </tr>
   <tr>
@@ -20,11 +20,11 @@
     <td th:text="${result.deliveryDestinationRoadLocation}"></td>
   </tr>
   <tr>
-    <th scope="col">예상배송소요시간(분)</th>
+    <th scope="col">배송소요시간</th>
     <td id="content" th:utext="${((result.deliveryTakenTime / (1000 * 60 )) % 60 )}"></td>
   </tr>
   <tr>
-    <th scope="col">배송요청일시</th>
+    <th scope="col">배송시작일시</th>
     <td th:text="${#temporals.format(result.deliveryStartTime, 'yyyy년 MM월 dd일 HH시 mm분 ss초')}"></td>
   </tr>
 </table>
@@ -40,13 +40,13 @@
   </colgroup>
   <thead>
   <tr>
-    <th scope="col" style="text-align: center">배송번호</th>
+    <th scope="col" style="text-align: center">배송 ID</th>
     <th scope="col" style="text-align: center">상품번호</th>
     <th scope="col" style="text-align: center">상품사진</th>
     <th scope="col" style="text-align: center">상품명</th>
     <th scope="col" style="text-align: center">가격</th>
     <th scope="col" style="text-align: center">수량</th>
-    <th scope="col" style="text-align: center">배송상태</th>
+    <th scope="col" style="text-align: center">상태</th>
   </tr>
   </thead>
   <tbody>

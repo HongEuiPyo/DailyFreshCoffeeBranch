@@ -10,4 +10,6 @@ public interface CartItemRepositoryCustom {
 
     Optional<CartItem> findByItemId(Long itemId);
 
+    Optional<CartItem> findByItemIdAndCartId(Long itemId, Long cartId);
+
 }

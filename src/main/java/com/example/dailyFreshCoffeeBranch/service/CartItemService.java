@@ -48,7 +48,12 @@ public class CartItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException("상품을 조회할 수 없습니다."));
 
-        cartItemRepository.findByItemId(itemId)
+//        cartItemRepository.findByItemId(itemId)
+//                .ifPresentOrElse(
+//                        cartItem -> cartItem.addCount(cartItemFormDto.getCount()), // 이미 상품 존재 시 수량 증가
+//                        () -> cartItemRepository.save(cartItemFormDto.toEntity(cart, item))); // 없을 시 장바구니에 상품 추가;
+
+        cartItemRepository.findByItemIdAndCartId(itemId, cart.getId())
                 .ifPresentOrElse(
                         cartItem -> cartItem.addCount(cartItemFormDto.getCount()), // 이미 상품 존재 시 수량 증가
                         () -> cartItemRepository.save(cartItemFormDto.toEntity(cart, item))); // 없을 시 장바구니에 상품 추가;

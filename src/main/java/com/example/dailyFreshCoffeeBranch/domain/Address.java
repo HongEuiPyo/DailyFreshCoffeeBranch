@@ -1,6 +1,7 @@
 package com.example.dailyFreshCoffeeBranch.domain;
 
 import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.SnsMemberUpdateFormDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +36,12 @@ public class Address extends BaseEntity {
         this.latitude = updateDto.getLatitude();
         this.longitude = updateDto.getLongitude();
         this.roadAddress = updateDto.getRoadAddress();
+    }
+
+    public void update(SnsMemberUpdateFormDto snsMemberUpdateFormDto) {
+        this.latitude = snsMemberUpdateFormDto.getLatitude();
+        this.longitude = snsMemberUpdateFormDto.getLongitude();
+        this.roadAddress = snsMemberUpdateFormDto.getRoadAddress();
     }
 
 }

@@ -5,8 +5,11 @@ import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateFormDto;
 import com.example.dailyFreshCoffeeBranch.domain.Address;
 import com.example.dailyFreshCoffeeBranch.domain.Cart;
 import com.example.dailyFreshCoffeeBranch.domain.Member;
+import com.example.dailyFreshCoffeeBranch.dto.SnsMemberUpdateFormDto;
+import com.example.dailyFreshCoffeeBranch.exception.DeleteMemberException;
 import com.example.dailyFreshCoffeeBranch.exception.MemberNotFoundException;
 import com.example.dailyFreshCoffeeBranch.repository.AddressRepository;
+import com.example.dailyFreshCoffeeBranch.repository.CartItemRepository;
 import com.example.dailyFreshCoffeeBranch.repository.CartRepository;
 import com.example.dailyFreshCoffeeBranch.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -119,11 +122,8 @@ public class MemberService implements UserDetailsService {
      */
     @Transactional
     public void deleteMember(Long id) {
-        Cart cart = cartRepository.findByMemberId(id)
-                .orElseThrow();
-        cartRepository.deleteById(cart.getId());
-
-        memberRepository.deleteById(id);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("회원을 조회하실 수 없습니다."));
+        member.delete();
     }
 
     /**
@@ -156,13 +156,43 @@ public class MemberService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Could not found user" + email));
+                .orElseThrow(() -> new UsernameNotFoundException("회원을 찾을 수 없습니다. 관리자에게 문의하세요."));
+
+        if (member.getUseYn() != "Y"){
+            throw new DeleteMemberException("탈퇴한 회원입니다. 관리자에게 문의하세요.");
+        }
 
         return User.builder()
                 .username(member.getEmail())
                 .password(member.getPassword())
                 .roles(member.getRole().toString())
                 .build();
+    }
+
+    /**
+     * SNS 로그인 회원 수정 처리
+     *
+     * @param id
+     * @param snsMemberUpdateFormDto
+     */
+    public void updateSnsMember(Long id, SnsMemberUpdateFormDto snsMemberUpdateFormDto) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new MemberNotFoundException("회원을 조회하실 수 없습니다."));
+
+        member.updateWithSnsMemberUpdateDto(snsMemberUpdateFormDto);
+        memberRepository.save(member);
+
+        if (member.getAddress() != null) {
+            member.getAddress().update(snsMemberUpdateFormDto);
+        } else {
+            Address address = Address.builder()
+                    .latitude(snsMemberUpdateFormDto.getLatitude())
+                    .longitude(snsMemberUpdateFormDto.getLongitude())
+                    .roadAddress(snsMemberUpdateFormDto.getRoadAddress())
+                    .member(member)
+                    .build();
+            addressRepository.save(address);
+        }
     }
 
 }

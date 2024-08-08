@@ -3,6 +3,7 @@ package com.example.dailyFreshCoffeeBranch.domain;
 import com.example.dailyFreshCoffeeBranch.constant.Role;
 import com.example.dailyFreshCoffeeBranch.dto.MemberFormDto;
 import com.example.dailyFreshCoffeeBranch.dto.MemberUpdateFormDto;
+import com.example.dailyFreshCoffeeBranch.dto.SnsMemberUpdateFormDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,6 +48,9 @@ public class Member extends BaseEntity implements UserDetails {
     @Column
     private String sns;
 
+    @Column(columnDefinition = "varchar(255) DEFAULT 'Y'")
+    private String useYn;
+
     @Column(columnDefinition = "double DEFAULT '0'")
     private Double point;
 
@@ -85,8 +89,9 @@ public class Member extends BaseEntity implements UserDetails {
         role = memberFormDto.getRole();
     }
 
-    public Member update(String name) {
+    public Member update(String name, String sns) {
         this.name = name;
+        if (sns != null) {this.sns = sns;}
         return this;
     }
 
@@ -98,6 +103,15 @@ public class Member extends BaseEntity implements UserDetails {
         gender = memberUpdateFormDto.getGender();
         sns = memberUpdateFormDto.getSns();
         role = memberUpdateFormDto.getRole();
+    }
+
+    public void updateWithSnsMemberUpdateDto(SnsMemberUpdateFormDto snsMemberUpdateFormDto) {
+        email = snsMemberUpdateFormDto.getEmail();
+        name = snsMemberUpdateFormDto.getName();
+        phone = snsMemberUpdateFormDto.getPhone();
+        gender = snsMemberUpdateFormDto.getGender();
+        sns = snsMemberUpdateFormDto.getSns();
+        role = snsMemberUpdateFormDto.getRole();
     }
 
     public void setCart(Cart cart) {
@@ -113,6 +127,10 @@ public class Member extends BaseEntity implements UserDetails {
     public double payPoint(double point) {
         this.point -= point;
         return this.point;
+    }
+
+    public void delete() {
+        this.useYn = "N";
     }
 
     @Override

@@ -30,7 +30,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         , board.createdTime
                         , board.modifiedTime))
                 .from(board)
-                .orderBy(board.modifiedTime.desc())
+                .orderBy(board.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

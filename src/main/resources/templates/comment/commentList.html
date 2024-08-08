@@ -17,12 +17,14 @@
 </div>
 <table class="table table-bordered dataTable" id="commentTable">
     <colgroup>
-        <col style="width: 20%;">
+        <col style="width: 10%;">
+        <col style="width: 15%;">
         <col style="width: auto;">
-        <col style="width: 20%;">
+        <col style="width: 15%;">
     </colgroup>
     <thead>
     <tr>
+        <th scope="col" style="text-align: center">ID</th>
         <th scope="col" style="text-align: center">작성자</th>
         <th scope="col" style="text-align: center">내용</th>
         <th scope="col" style="text-align: center">작성일시</th>
@@ -30,6 +32,7 @@
     </thead>
     <tbody>
     <tr th:if="!${result?.isEmpty()}" th:each="commentItem : ${result}">
+        <td th:text="${commentItem.id}" style="text-align: center"></td>
         <td th:text="${commentItem.writer}" style="text-align: center"></td>
         <td>
             <div class="input-group mb-3">
